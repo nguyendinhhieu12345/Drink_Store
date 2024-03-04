@@ -15,7 +15,7 @@ import { AppDispatch } from "@/redux/store";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     document.title = "Shopfee | login";
@@ -29,17 +29,20 @@ const Login = () => {
     navigate(configRouter.signUp);
   };
 
-  const handleLogin =async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string) => {
     setLoading(true);
     const auth: Auth = { username: email, password: password };
     const loginSuccess = await dispatch(login(auth));
 
     if (loginSuccess.type === "auth/login/fulfilled") {
-      toast.success("Login successful")
-      navigate(configRouter.dashboardAdmin)
+      toast.success("Login successful");
     } else {
-      console.log((loginSuccess as { error: { message: string } }).error?.message)
-      toast.error((loginSuccess as { error: { message: string } }).error?.message)
+      console.log(
+        (loginSuccess as { error: { message: string } }).error?.message
+      );
+      toast.error(
+        (loginSuccess as { error: { message: string } }).error?.message
+      );
     }
     setLoading(false);
   };
