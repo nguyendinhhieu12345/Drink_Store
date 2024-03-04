@@ -33,7 +33,6 @@ const Sidebar = React.forwardRef<Ref, Props>(
               </div>
             </div>
           </div>
-          {/* item  */}
         </div>
       </div>
     );

@@ -15,7 +15,9 @@ export default withMT({
     extend: {
       colors: {},
       backgroundColor: {
-        primary: "#F4EFEB"
+        primary: "#F4EFEB",
+        btnDisable: "#A1887F",
+        btnActive: "#5D4037"
       },
       width: {
         90: "360px",
