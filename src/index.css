@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+a {
+  text-decoration: none;
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.05rem;
+}
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.05rem;
+}
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.05rem;
+}
+h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.05rem;
+}
+h5 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.05rem;
+}
+h6 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.05rem;
+}
+
+ul {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+ol {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+@layer components {
+  .button-logo {
+    @apply flex items-center w-[120px] h-9 border-[1px] border-gray-600 text-gray-600 rounded-md text-sm;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@src/*": ["./src/*"],
+      "@api/*": ["./src/api/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@layout/*": ["./src/layout/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@store/*": ["./src/store/*"],
+      "@features/*": ["./src/features/*"],
+      "@types/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"]
+    }
+  }
+}
