@@ -11,35 +11,33 @@ import { AppDispatch } from "@/redux/store";
 import { logoutThunk } from "@/features/auth/authSlice";
 
 const AccountHeader = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  
-  const handleLogout = async()=>{
-    await dispatch(logoutThunk())
-  }
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleLogout = async () => {
+    await dispatch(logoutThunk());
+  };
 
   return (
     <div>
-      <div className="flex items-center justify-center px-3 py-2 gap-3 bg-white">
-        <div className="account-info flex flex-col justify-center items-end">
-          <h5 className="text-sm font-medium">Nguyễn Đình Hiếu</h5>
-          <p className="text-xs font-normal text-gray-600">Admin</p>
-        </div>
+      <div className="flex items-center justify-center px-3 py-2 gap-3">
         <Menu>
           <MenuHandler>
             <div className="cursor-pointer">
               <ImageWithError
-                src={assets.images.noAvatar}
+                src={assets.images.imgUser}
                 fallbackSrc={assets.images.noAvatar}
                 alt="avatar"
-                className="rounded-full h-[40px] w-[40px]"
+                className="rounded-full h-10 w-10 bg-btnDisable"
               />
             </div>
           </MenuHandler>
           <MenuList placeholder="">
-            <MenuItem placeholder="">DashBoard</MenuItem>
-            <MenuItem placeholder="">Profile</MenuItem>
+            <MenuItem placeholder="">Default Address</MenuItem>
+            <MenuItem placeholder="">History Order</MenuItem>
             <hr className="my-3" />
-            <MenuItem placeholder="" onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem placeholder="" onClick={handleLogout}>
+              Logout
+            </MenuItem>
           </MenuList>
         </Menu>
       </div>

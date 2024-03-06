@@ -22,6 +22,7 @@ const ImageWithError = (props: IProps): React.ReactElement => {
             src={props.fallbackSrc}
             alt={props.alt}
             className={props.className}
+            loading="lazy"
           />
         ) : (
           <p>Failed to load image</p>
@@ -32,6 +33,7 @@ const ImageWithError = (props: IProps): React.ReactElement => {
           alt={props.alt}
           onError={handleImageError}
           className={props.className}
+          loading="lazy"
         />
       ) : (
         <img
@@ -39,6 +41,7 @@ const ImageWithError = (props: IProps): React.ReactElement => {
           alt={props.alt}
           onError={handleImageError}
           className={props.className}
+          loading="lazy"
         />
       )}
     </>
