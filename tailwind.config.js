@@ -35,6 +35,22 @@ export default withMT({
         30: "120px"
       }
     },
+    fontFamily: {
+      sans: ["Nunito", "sans-serif"],
+      ConcertOne: ["Concert One", "cursive"],
+      DancingScript: ["Dancing Script", "cursive"],
+      Inconsolata: ["Inconsolata", "monospace"],
+      Lato: ["Lato", "sans-serif"],
+      Montserrat: ["Montserrat", "serif"],
+      NotoSans: ["Noto Sans", "sans-serif"],
+      OpenSans: ["Open Sans", "sans-serif"],
+      Merriweather: ["Merriweather", "sans-serif"],
+      Oswald: ["Oswald", "sans-serif"],
+      Roboto: ["Roboto", "sans-serif"],
+      Slabo27px: ["Slabo 27px", "serif"],
+      Raleway: ["Raleway", "sans-serif"],
+      Poppings: ["Poppings", "serif"],
+    },
     screens: {
       'sm': '640px',
       // => @media (min-width: 640px) { ... }
