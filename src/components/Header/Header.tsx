@@ -12,6 +12,7 @@ import {
 import assets from "@/assets";
 import AccountHeader from "./AccountHeader";
 import CartHeader from "./CartHeader";
+import Search from "../SVG/Search";
 
 const navListMenuItems = [
   {
@@ -184,7 +185,7 @@ const Header = (): React.ReactElement => {
   }, []);
 
   return (
-    <header className="w-full px-20 py-10 h-16 bg-white fixed">
+    <header className="w-full px-20 py-10 h-16 bg-white fixed z-9999 shadow-lg border border-gray-300">
       <div className="flex items-center justify-between text-blue-gray-900 h-full">
         <Typography
           placeholder=""
@@ -195,6 +196,26 @@ const Header = (): React.ReactElement => {
         >
           <img src={assets.images.shopfeeIconNoBg} className="w-full h-16" />
         </Typography>
+        <div>
+          <form>
+            <label
+              htmlFor="search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white w-96"
+            >
+              Search
+            </label>
+            <div className="relative w-96">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3  cursor-pointer z-999999">
+                <Search />
+              </div>
+              <input
+                type="text"
+                className="block w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                placeholder="Enter product ..."
+              />
+            </div>
+          </form>
+        </div>
         <div className="flex items-center justify-center">
           <div className="hidden lg:block">
             <NavList />
