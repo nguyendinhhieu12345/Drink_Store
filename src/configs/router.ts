@@ -6,4 +6,5 @@ export const configRouter = {
   resetPassword: "/reset-password",
   optConfirm: "/otp-signup",
   // customer router
+  store: "/store",
 };

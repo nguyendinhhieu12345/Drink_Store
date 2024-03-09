@@ -144,7 +144,7 @@ function NavList() {
       <Typography
         placeholder=""
         as="a"
-        href="/"
+        href="/store"
         variant="small"
         color="blue-gray"
       >
@@ -185,7 +185,7 @@ const Header = (): React.ReactElement => {
   }, []);
 
   return (
-    <header className="w-full px-20 py-10 h-16 bg-white fixed z-9999 shadow-lg border border-gray-300">
+    <header className="w-full px-20 py-10 h-16 bg-white fixed z-50 shadow-lg border border-gray-300">
       <div className="flex items-center justify-between text-blue-gray-900 h-full">
         <Typography
           placeholder=""
