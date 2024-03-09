@@ -57,11 +57,11 @@ const publicRoutes: IRouter[] = [
     role: null,
   },
 
-  // {
-  //   path: configRouter.course,
-  //   component: lazy(() => import("../pages/OverviewCourse")),
-  //   layout: DefaultLayout,
-  //   role: null,
-  // },
+  {
+    path: configRouter.store,
+    component: lazy(() => import("../pages/CustomerPage/Store")),
+    layout: DefaultLayout,
+    role: null,
+  },
 ];
 export { publicRoutes };
