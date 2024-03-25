@@ -7,4 +7,5 @@ export const configRouter = {
   optConfirm: "/otp-signup",
   // customer router
   store: "/store",
+  productDetail: "/product/:id",
 };

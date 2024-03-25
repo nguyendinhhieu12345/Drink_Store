@@ -17,13 +17,15 @@ export default withMT({
       backgroundColor: {
         primary: "#F4EFEB",
         btnDisable: "#A1887F",
-        btnActive: "#5D4037"
+        btnActive: "#5D4037",
+        select: "#E57905"
       },
       width: {
         90: "360px",
         15: "60px",
         25: "100px",
-        30: "120px"
+        30: "120px",
+        142: "572px"
       },
       zIndex: {
         99: "99",
@@ -32,8 +34,12 @@ export default withMT({
       },
       height: {
         25: "100px",
-        30: "120px"
-      }
+        30: "120px",
+        142: "572px"
+      },
+      margin: {
+        25: "100px"
+      },
     },
     fontFamily: {
       Poppings: ["Poppins", "sans-serif"],
