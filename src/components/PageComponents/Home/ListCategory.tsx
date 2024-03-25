@@ -2,8 +2,10 @@ import assets from "@/assets";
 
 const ListCategory = () => {
   return (
-    <div className="flex flex-col items-start justify-center my-4 py-6 w-full h-auto bg-white rounded-lg">
-      <div className="mb-2 font-semibold text-start px-3 text-2xl">Category</div>
+    <div className="flex flex-col items-start justify-center my-10 py-6 w-full h-auto bg-white rounded-lg">
+      <div className="mb-2 font-semibold text-start px-3 text-2xl">
+        Category
+      </div>
       <div className="flex overflow-auto items-center justify-between flex-wrap w-full">
         {Array.from({ length: 16 }, (_, index) => (
           <button

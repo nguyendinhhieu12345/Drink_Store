@@ -63,5 +63,11 @@ const publicRoutes: IRouter[] = [
     layout: DefaultLayout,
     role: null,
   },
+  {
+    path: configRouter.productDetail,
+    component: lazy(() => import("../pages/CustomerPage/ProductDetail")),
+    layout: DefaultLayout,
+    role: null,
+  },
 ];
 export { publicRoutes };

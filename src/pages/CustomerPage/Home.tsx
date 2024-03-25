@@ -7,7 +7,7 @@ function Home() {
     <div className="h-auto mt-20 mx-10">
       <BannerHome />
       <ListCategory />
-      <div className="flex flex-col gap-2 px-2 w-full space-y-4 bg-white rounded-lg py-6 my-2">
+      <div className="flex flex-col gap-2 px-2 w-full space-y-4 bg-white rounded-lg py-6 my-10">
         <div className="w-full flex items-center justify-between px-1">
           <h5 className="text-lg font-bold uppercase">Top Rating</h5>
         </div>
@@ -17,7 +17,7 @@ function Home() {
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-2 px-2 w-full space-y-4 bg-white rounded-lg py-6 my-4">
+      <div className="flex flex-col gap-2 px-2 w-full space-y-4 bg-white rounded-lg py-6 my-10">
         <div className="w-full flex items-center justify-between px-1">
           <h5 className="text-lg font-bold uppercase">Top Sales</h5>
         </div>

@@ -1,8 +1,7 @@
 import { configRouter } from "@/configs/router";
-import { Basket } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 
-function ListProductTop() {
+function ListProductRecommend() {
   const nav = useNavigate();
 
   const handleRedirectProductDetail = (productId: string) => {
@@ -11,7 +10,7 @@ function ListProductTop() {
 
   return (
     <button
-      className="flex items-center justify-center"
+      className="flex items-center justify-start"
       onClick={() => handleRedirectProductDetail("id")}
     >
       <div
@@ -29,16 +28,11 @@ function ListProductTop() {
           <h5 className="text-base font-medium break-all">
             Trà Xanh Latte (Nóng)
           </h5>
-        </div>
-        <div className="flex flex-row items-center justify-around w-full mb-2">
           <p className="text-sm font-light text-gray-600">45.000đ</p>
-          <button className="focus:outline-none z-10 text-white hover:bg-btnActive hover:text-white bg-btnDisable p-2.5 rounded-lg">
-            <Basket />
-          </button>
         </div>
       </div>
     </button>
   );
 }
 
-export default ListProductTop;
+export default ListProductRecommend;
