@@ -2,7 +2,7 @@ import { Carousel } from "@material-tailwind/react";
 
 function BannerHome() {
   return (
-    <div className="w-full h-[500px]">
+    <div className="w-full pt-5 h-[500px]">
       <Carousel
         placeholder=""
         className="rounded-xl"

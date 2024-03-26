@@ -8,4 +8,5 @@ export const configRouter = {
   // customer router
   store: "/store",
   productDetail: "/product/:id",
+  searchProduct: "/search"
 };
