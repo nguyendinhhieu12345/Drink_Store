@@ -2,7 +2,7 @@ import assets from "@/assets"
 import ListProductRecommend from "@/components/PageComponents/Home/ListProductRecommend"
 import Reviews from "@/components/PageComponents/ProductDetail/Reviews"
 import Cup from "@/components/SVG/Cup.svg"
-import { formatVND } from "@/utils/const"
+import { formatVND } from "@/utils/hepler"
 import { Breadcrumbs } from "@material-tailwind/react"
 import { Notebook, Truck } from "@phosphor-icons/react"
 
@@ -73,7 +73,7 @@ function ProductDetail() {
           <div className="my-10 flex">
             <button className="w-1/2 mr-5 flex justify-center text-white px-4 py-2 rounded-md font-medium items-center gap-3 bg-select active:bg-select focus:bg-select visited:bg-select hover:bg-select">
               <img src={assets?.images?.imgCart} alt="img add to cart " className="w-5 h-5 object-contain" />
-              Add to card
+              Add to cart
             </button>
             <button className="w-1/2 flex justify-center text-white px-4 py-2 rounded-md font-medium items-center gap-3 bg-select active:bg-select focus:bg-select visited:bg-select hover:bg-select">
               <Truck size={25} />
