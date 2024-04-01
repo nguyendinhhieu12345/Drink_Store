@@ -8,9 +8,8 @@ export const formatVND = (value: number): string => {
 export const convertTime = (value: number): string => {
   return value / 60 / 60 < 1
     ? `${value / 60} phút`
-    : `${Math.floor(value / 60 / 60)} giờ ${
-        value / 60 - Math.floor(value / 60) * 60
-      } phút`;
+    : `${Math.floor(value / 60 / 60)} giờ ${value / 60 - Math.floor(value / 60) * 60
+    } phút`;
 };
 
 export const convertTimeToTemplate = (seconds: number): string => {
@@ -70,3 +69,9 @@ export const imageUrlToFile = async (imageUrl: string): Promise<File | null> => 
     return null;
   }
 };
+
+export const dataInitResponseApi = {
+  timestamp: '',
+  success: false,
+  message: ''
+}

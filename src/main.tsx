@@ -9,14 +9,14 @@ import { BrowserRouter } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <Provider store={store}>
-        <BrowserRouter>
-          <ToastContainer />
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </ThemeProvider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <ThemeProvider>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <ToastContainer />
+                    <App />
+                </BrowserRouter>
+            </Provider>
+        </ThemeProvider>
+    </React.StrictMode>
 );

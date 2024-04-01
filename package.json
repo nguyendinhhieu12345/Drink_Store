@@ -37,7 +37,9 @@
     "redux-persist": "^6.0.0",
     "socket.io-client": "^4.7.4",
     "surge": "^0.23.1",
-    "swiper": "^11.0.7"
+    "swiper": "^11.0.7",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.0.3",

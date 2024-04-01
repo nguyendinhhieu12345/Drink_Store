@@ -1,10 +1,20 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import eslint from "vite-plugin-eslint";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    tsconfigPaths(),
+    eslint(
+      {
+        cache: false,
+        include: ["./src/**/*.ts", "./src/**/*.tsx"],
+      }
+    )],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src/"),
@@ -21,5 +31,10 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    open: true
   },
+  build: {
+    sourcemap: false,
+    chunkSizeWarningLimit: 1000
+  }
 });

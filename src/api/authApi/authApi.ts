@@ -8,8 +8,8 @@ export const loginPass = async (params: Auth) => {
       password: params.password,
     });
     return res;
-  } catch (error: any) {
-    return Promise.reject(error?.response?.data);
+  } catch (error) {
+    return Promise.reject(error);
   }
 };
 export const signup = async (params: signupState) => {
@@ -50,7 +50,7 @@ export const forgetPassword = async (email: string) => {
       email: email,
     });
     return res;
-  } catch (error: any) {
+  } catch (error) {
     return Promise.reject(error);
   }
 };
@@ -74,7 +74,7 @@ export const changePassword = async (username: string, password: string) => {
       password: password,
     });
     return res;
-  } catch (error: any) {
+  } catch (error) {
     return Promise.reject(error);
   }
 };
