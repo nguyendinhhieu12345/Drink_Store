@@ -35,7 +35,8 @@ export default withMT({
       height: {
         25: "100px",
         30: "120px",
-        142: "572px"
+        142: "572px",
+        125: "500px"
       },
       margin: {
         25: "100px"
