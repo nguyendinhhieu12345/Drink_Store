@@ -69,11 +69,11 @@ function ListProductTop({ title }: IListProductTop) {
                 {
                     title === "Rating" ?
                         products?.rating && products?.rating?.success && products?.rating?.data?.map((product) => (
-                            <ProductItem {...product} />
+                            <ProductItem {...product} key={product?.id} />
                         ))
                         :
                         products?.sales && products?.sales?.success && products?.sales?.data?.map((product) => (
-                            <ProductItem {...product} />
+                            <ProductItem {...product} key={product?.id} />
                         ))
                 }
             </div>

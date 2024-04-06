@@ -80,18 +80,22 @@ export const setupInterceptor = (store: Store, dispatch: AppDispatch): void => {
 
       const user: User = store.getState().authSlice?.currentUser;
       // store.dispatch(refetchTokenStore(accessToken));
-      if (user?.accessToken) {
-        const accessToken: IAccessToken = jwtDecode(user?.accessToken);
+      if (user?.data?.accessToken) {
+        const accessToken: IAccessToken = jwtDecode(user?.data?.accessToken);
         if (accessToken?.exp < getTimeNow()) {
           if (!isRefreshing) {
             isRefreshing = true;
             if (!refreshPromise) {
               refreshPromise = refetchToken();
             }
+            // call refresh token => sau dos set lai access token
             const data = await refreshPromise;
             const dataTemplate: User = {
               ...user,
-              accessToken: data.accessToken,
+              data: {
+                userId: user?.data?.userId,
+                accessToken: user?.data?.accessToken,
+              },
             };
             dispatch(refetchTokenStore(dataTemplate));
             config.headers.Authorization = "Bearer " + data.accessToken;
@@ -100,7 +104,7 @@ export const setupInterceptor = (store: Store, dispatch: AppDispatch): void => {
             return config;
           }
         }
-        config.headers.Authorization = "Bearer " + user.accessToken;
+        config.headers.Authorization = "Bearer " + user?.data?.accessToken;
       }
 
       isRefreshing = false;
@@ -121,7 +125,7 @@ export const setupInterceptor = (store: Store, dispatch: AppDispatch): void => {
         error.config?.url?.includes("user/refreshToken")
       ) {
         console.log("test");
-        await dispatch(logoutThunk());
+        await dispatch(logoutThunk(localStorage.getItem("fcmTokenId") as string));
         redirect("/login");
         toast.error("Phiên đăng nhập đã hết hạn");
       }

@@ -38,7 +38,7 @@ function Map(props: IMap) {
     }
   );
 
-  const onMarkerDragEnd = useCallback(async (event: any) => {
+  const onMarkerDragEnd = useCallback(async (event: { lngLat: number[] }) => {
     setMarker({
       longitude: event.lngLat[0],
       latitude: event.lngLat[1],

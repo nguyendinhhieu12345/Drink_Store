@@ -75,3 +75,8 @@ export const dataInitResponseApi = {
   success: false,
   message: ''
 }
+
+export const messageToast = {
+  fillInput: "Please fill out all fields completely!"
+}
+

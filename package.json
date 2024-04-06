@@ -21,6 +21,7 @@
     "@types/react-redux": "^7.1.25",
     "@typescript-eslint/eslint-plugin": "^6.18.1",
     "axios": "^1.4.0",
+    "firebase": "^10.10.0",
     "flowbite": "^1.8.1",
     "flowbite-react": "^0.6.1",
     "framer-motion": "^10.16.4",
