@@ -1,82 +1,143 @@
 import { configRouter } from "@/configs/router";
+import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import * as signupApi from "@/api/authApi/authApi"
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { signup } from "@/features/auth/authSlice";
 
 function OTPPage() {
-  useEffect(() => {
-    document.title = "Shopfee | OTP Confirm";
-  }, []);
+    useEffect(() => {
+        document.title = "Shopfee | OTP Confirm";
+    }, []);
 
-  const [inputs, setInputs] = useState<string[]>(["", "", "", "", "", ""]);
-  const inputRefs = useRef<HTMLInputElement[]>([]);
-  const navigate = useNavigate();
+    const [inputs, setInputs] = useState<string[]>(["", "", "", "", "", ""]);
+    const inputRefs = useRef<HTMLInputElement[]>([]);
+    const navigate = useNavigate();
+    const [seconds, setSeconds] = useState<number>(30);
+    const DataSignUp = JSON.parse(localStorage.getItem("user") as string)
+    const dispatch = useDispatch<AppDispatch>()
 
-  const handleChange = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    if (/^[1-9]$/.test(value)) {
-      const newInputs = [...inputs];
-      newInputs[index] = value;
-      setInputs(newInputs);
-    } else {
-      e.preventDefault();
+    const handleChange = (
+        index: number,
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const value = e.target.value;
+        if (/^[0-9]$/.test(value)) {
+            const newInputs = [...inputs];
+            newInputs[index] = value;
+            setInputs(newInputs);
+        } else {
+            e.preventDefault();
+        }
+
+        if (
+            index < inputs.length - 1 &&
+            value.trim() !== "" &&
+            /^[0-9]$/.test(value)
+        ) {
+            inputRefs.current[index + 1].focus();
+        } else {
+            e.preventDefault();
+        }
+    };
+
+    const handleConfirmOTP = async () => {
+        try {
+            const data = await signupApi.verifyCode(DataSignUp?.email, inputs.join(""))
+            if (data?.success) {
+                const result = await dispatch(signup({
+                    email: DataSignUp.email,
+                    code: inputs.join(""),
+                    password: DataSignUp.password,
+                    firstName: DataSignUp.firstName,
+                    lastName: DataSignUp.lastName,
+                    fcmTokenId: localStorage?.getItem("fcmTokenId") as string
+                }))
+                if (result.type === "auth/signup/fulfilled") {
+                    localStorage.removeItem("user")
+                    navigate(configRouter.home);
+                } else {
+                    toast.error(
+                        (result as { error: { message: string } }).error?.message
+                    );
+                }
+            }
+        }
+        catch (e: unknown) {
+            if (e instanceof AxiosError && e.response) {
+                toast.error(e.response.data?.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (seconds > 0) {
+                setSeconds(prevSeconds => prevSeconds - 1);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [seconds]);
+
+    const handleResendVerifyCode = async () => {
+        if (seconds <= 0) {
+            try {
+                const data = await signupApi.sendCodeRegister(DataSignUp?.email)
+                if (data?.success) {
+                    toast.success(data?.message);
+                    setSeconds(0)
+                }
+            }
+            catch (e: unknown) {
+                if (e instanceof AxiosError && e.response) {
+                    toast.error(e.response.data?.message);
+                }
+            }
+        }
     }
 
-    if (
-      index < inputs.length - 1 &&
-      value.trim() !== "" &&
-      /^[1-9]$/.test(value)
-    ) {
-      inputRefs.current[index + 1].focus();
-    } else {
-      e.preventDefault();
-    }
-  };
-
-  const handleConfirmOTP = () => {
-    navigate(configRouter.home);
-  };
-
-  return (
-    <div className="w-full h-full bg-gray-400">
-      <div className="w-auto h-[350px] flex flex-col justify-center text-black absolute top-1/4 left-[30%] shadow-md bg-white rounded-lg p-3">
-        <div className="flex flex-col items-center justify-center">
-          <div className="font-semibold text-2xl my-2">Test@gmail.com</div>
-          <div className="mt-2">
-            Enter the 6-digit OTP code that has been sent from email to complete
-            your account registration
-          </div>
+    return (
+        <div className="w-full h-full bg-gray-400">
+            <div className="w-auto h-[350px] flex flex-col justify-center text-black absolute top-1/4 left-[25%] shadow-md bg-white rounded-lg p-3">
+                <div className="flex flex-col items-center justify-center">
+                    <div className="font-semibold text-2xl my-2">Test@gmail.com</div>
+                    <div className="mt-2">
+                        Enter the 6-digit OTP code that has been sent from email to complete
+                        your account registration
+                    </div>
+                </div>
+                <div className="container mx-auto mt-8 text-center">
+                    {inputs.map((input, index) => (
+                        <input
+                            key={index}
+                            ref={(ref) =>
+                                (inputRefs.current[index] = ref as HTMLInputElement)
+                            }
+                            type="text"
+                            value={input}
+                            onChange={(e) => handleChange(index, e)}
+                            className="border border-gray-300 rounded-md px-2 py-2 mb-4 mr-4 w-12 h-12 text-center"
+                        />
+                    ))}
+                </div>
+                <div className="text-center mt-2 text-sm">
+                    Haven't got the confirmation code yet? <button className="font-semibold italic" onClick={handleResendVerifyCode}>{seconds > 0 ? `${seconds}s` : "resend"}</button>
+                </div>
+                <div className="text-center my-3 w-full">
+                    <button
+                        className="bg-btnDisable text-white rounded-lg px-3 py-2 w-[45%]"
+                        onClick={handleConfirmOTP}
+                    >
+                        Confirm
+                    </button>
+                </div>
+            </div>
         </div>
-        <div className="container mx-auto mt-8 text-center">
-          {inputs.map((input, index) => (
-            <input
-              key={index}
-              ref={(ref) =>
-                (inputRefs.current[index] = ref as HTMLInputElement)
-              }
-              type="text"
-              value={input}
-              onChange={(e) => handleChange(index, e)}
-              className="border border-gray-300 rounded-md px-2 py-2 mb-4 mr-4 w-12 h-12 text-center"
-            />
-          ))}
-        </div>
-        <div className="text-center mt-2">
-          Haven't got the confirmation code yet? <button>resend</button>
-        </div>
-        <div className="text-center my-3 w-full">
-          <button
-            className="bg-btnDisable text-white rounded-lg px-3 py-2 w-[45%]"
-            onClick={handleConfirmOTP}
-          >
-            Confirm
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default OTPPage;

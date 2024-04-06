@@ -1,34 +1,34 @@
 export interface Auth {
-	username: string;
+	email: string;
 	password: string;
+	fcmTokenId: string
 }
 export interface signupState {
-	username: string;
 	email: string;
+	code: string;
 	password: string;
-	full_name: string;
+	firstName: string;
+	lastName: string;
+	phoneNumber?: string;
+	fcmTokenId?: string;
 }
 export interface User {
-	userId: string;
-	username: string;
-	role: string | null;
-	full_name: string;
-	createdAt: string;
-	updatedAt: string;
-	avatar: string | FileList;
-	phone: string;
-	email: string;
-	accessToken: string;
-	user_id: string;
-	address?: string;
-	birthday?: string;
-	address: string;
-	birthday: string;
-	status?: string;
+	timestamp: string;
+	status: boolean;
+	message: string;
+	data: {
+		userId: string;
+		accessToken: string;
+	};
 }
 
 export interface BaseResponseApi {
 	timestamp: string;
 	success: boolean;
+	message: string;
+}
+
+export interface IResponseGetTokenFCM {
+	status: boolean;
 	message: string;
 }
