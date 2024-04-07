@@ -66,15 +66,6 @@ export const signupPass = async (params: signupState) => {
     }
 };
 
-export const test = async () => {
-    try {
-        const res = await httpRequest.get("/user/listServerOfUser");
-        return res?.result;
-    } catch (error) {
-        return Promise.reject(error);
-    }
-};
-
 export const logout = async (fcmTokenId: string) => {
     try {
         const res = await httpRequest.post("/auth/user/logout", {
@@ -88,7 +79,7 @@ export const logout = async (fcmTokenId: string) => {
 
 export const forgetPassword = async (email: string) => {
     try {
-        const res = await httpRequest.post("/user/forgetpassword", {
+        const res = await httpRequest.post("/auth/user/password/send-code", {
             email: email,
         });
         return res;
@@ -97,11 +88,12 @@ export const forgetPassword = async (email: string) => {
     }
 };
 
-export const resetPassword = async (newPass: string, token: string) => {
+export const resetPassword = async (email: string, code: string, password: string) => {
     try {
-        const res = await httpRequest.post("/user/reset-password", {
-            newPassword: newPass,
-            token: token,
+        const res = await httpRequest.patch("/auth/user/change-password", {
+            email,
+            code,
+            password
         });
         return res;
     } catch (error) {
@@ -109,11 +101,11 @@ export const resetPassword = async (newPass: string, token: string) => {
     }
 };
 
-export const changePassword = async (username: string, password: string) => {
+export const changePassword = async (userId: string, oldPassword: string, newPassword: string) => {
     try {
-        const res = await httpRequest.post("/user/change-password", {
-            username: username,
-            password: password,
+        const res = await httpRequest.patch(`/auth/user/${userId}/change-password`, {
+            oldPassword: oldPassword,
+            newPassword: newPassword
         });
         return res;
     } catch (error) {
