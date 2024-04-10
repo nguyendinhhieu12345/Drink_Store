@@ -37,6 +37,7 @@ export const logoutThunk = createAsyncThunk<any, string>(
         return res;
     }
 );
+
 export const signup = createAsyncThunk(
     "auth/signup",
     async (params: signupState) => {
@@ -51,10 +52,7 @@ export const signup = createAsyncThunk(
         return res;
     }
 );
-export const test = createAsyncThunk("auth/test", async () => {
-    const res = await authApi.test();
-    return res;
-});
+
 export const authSlice = createSlice({
     name: "auth",
     initialState,

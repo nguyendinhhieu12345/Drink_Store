@@ -24,9 +24,9 @@ const AccountHeader = () => {
 
     const handleLogout = async () => {
         const data = await dispatch(logoutThunk(localStorage.getItem("fcmTokenId") as string));
-        console.log(data)
         if (data?.type === "auth/logout/fulfilled") {
             nav(configRouter.home)
+            localStorage.removeItem("profile")
         }
         else {
             toast.error(
@@ -55,8 +55,8 @@ const AccountHeader = () => {
                     </MenuHandler>
                     {currentUser?.data?.userId ?
                         <MenuList placeholder="">
-                            <MenuItem placeholder="">Default Address</MenuItem>
-                            <MenuItem placeholder="">History Order</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.dashboard)}>Default Address</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.myOrder)}>History Order</MenuItem>
                             <hr className="my-3" />
                             <MenuItem placeholder="" onClick={handleLogout}>
                                 Logout

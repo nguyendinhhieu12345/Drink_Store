@@ -41,6 +41,12 @@ export default withMT({
       margin: {
         25: "100px"
       },
+      maxHeight: {
+        65: "260px"
+      }
+    },
+    boxShadow: {
+      "base": "rgba(0, 0, 0, 0.16) 0px 1px 4px"
     },
     fontFamily: {
       Poppings: ["Poppins", "sans-serif"],
