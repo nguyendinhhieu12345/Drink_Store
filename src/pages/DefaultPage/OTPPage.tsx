@@ -18,6 +18,7 @@ function OTPPage() {
     const navigate = useNavigate();
     const [seconds, setSeconds] = useState<number>(30);
     const DataSignUp = JSON.parse(localStorage.getItem("user") as string)
+    const emailForgetPass = JSON.parse(localStorage.getItem("emailForgetPass") as string)
     const dispatch = useDispatch<AppDispatch>()
 
     const handleChange = (
@@ -46,23 +47,32 @@ function OTPPage() {
 
     const handleConfirmOTP = async () => {
         try {
-            const data = await signupApi.verifyCode(DataSignUp?.email, inputs.join(""))
+            const data = await signupApi.verifyCode(emailForgetPass?.email ? emailForgetPass?.email : DataSignUp?.email, inputs.join(""))
             if (data?.success) {
-                const result = await dispatch(signup({
-                    email: DataSignUp.email,
-                    code: inputs.join(""),
-                    password: DataSignUp.password,
-                    firstName: DataSignUp.firstName,
-                    lastName: DataSignUp.lastName,
-                    fcmTokenId: localStorage?.getItem("fcmTokenId") as string
-                }))
-                if (result.type === "auth/signup/fulfilled") {
-                    localStorage.removeItem("user")
-                    navigate(configRouter.home);
-                } else {
-                    toast.error(
-                        (result as { error: { message: string } }).error?.message
-                    );
+                if (emailForgetPass) {
+                    localStorage.setItem("emailForgetPass", JSON.stringify({
+                        email: emailForgetPass,
+                        code: inputs.join("")
+                    }))
+                    navigate(configRouter.resetPassword)
+                }
+                else {
+                    const result = await dispatch(signup({
+                        email: DataSignUp.email,
+                        code: inputs.join(""),
+                        password: DataSignUp.password,
+                        firstName: DataSignUp.firstName,
+                        lastName: DataSignUp.lastName,
+                        fcmTokenId: localStorage?.getItem("fcmTokenId") as string
+                    }))
+                    if (result.type === "auth/signup/fulfilled") {
+                        localStorage.removeItem("user")
+                        navigate(configRouter.home);
+                    } else {
+                        toast.error(
+                            (result as { error: { message: string } }).error?.message
+                        );
+                    }
                 }
             }
         }
@@ -86,10 +96,18 @@ function OTPPage() {
     const handleResendVerifyCode = async () => {
         if (seconds <= 0) {
             try {
-                const data = await signupApi.sendCodeRegister(DataSignUp?.email)
-                if (data?.success) {
-                    toast.success(data?.message);
-                    setSeconds(0)
+                if (emailForgetPass?.email) {
+                    const data = await signupApi.forgetPassword(emailForgetPass?.email)
+                    if (data?.success) {
+                        toast.success(data?.message);
+                        setSeconds(0)
+                    }
+                } else {
+                    const data = await signupApi.sendCodeRegister(DataSignUp?.email)
+                    if (data?.success) {
+                        toast.success(data?.message);
+                        setSeconds(0)
+                    }
                 }
             }
             catch (e: unknown) {

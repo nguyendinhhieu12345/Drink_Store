@@ -75,5 +75,41 @@ const publicRoutes: IRouter[] = [
     layout: DefaultLayout,
     role: null,
   },
+  {
+    path: configRouter.profile,
+    component: lazy(() => import("../pages/CustomerPage/UserPage")),
+    layout: DefaultLayout,
+    role: null,
+  },
+  {
+    path: configRouter.dashboard,
+    component: lazy(() => import("../pages/CustomerPage/UserPage")),
+    layout: DefaultLayout,
+    role: null,
+  },
+  {
+    path: configRouter.changePassword,
+    component: lazy(() => import("../pages/CustomerPage/UserPage")),
+    layout: DefaultLayout,
+    role: null,
+  },
+  {
+    path: configRouter.myOrder,
+    component: lazy(() => import("../pages/CustomerPage/UserPage")),
+    layout: DefaultLayout,
+    role: null,
+  },
+  {
+    path: configRouter.defaultAddress,
+    component: lazy(() => import("../pages/CustomerPage/UserPage")),
+    layout: DefaultLayout,
+    role: null,
+  },
+  {
+    path: configRouter.coupon,
+    component: lazy(() => import("../pages/CustomerPage/Coupon")),
+    layout: DefaultLayout,
+    role: null,
+  },
 ];
 export { publicRoutes };

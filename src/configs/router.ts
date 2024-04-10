@@ -8,5 +8,11 @@ export const configRouter = {
   // customer router
   store: "/store",
   productDetail: "/product/:id",
-  searchProduct: "/search"
+  searchProduct: "/search",
+  profile: "/profile",
+  dashboard: "/dashboard",
+  changePassword: "/change-password",
+  myOrder: "/my-order",
+  defaultAddress: "/default-address",
+  coupon: "/coupon",
 };

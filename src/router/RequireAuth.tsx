@@ -21,30 +21,30 @@ export default function RequireAuth({ children, requiredRole, user }: Props) {
   } else {
     if (user) {
       // redirects to home if not teacher
-      if (requiredRole === "1") {
-        if (user?.role === "1") return children;
-        else
-          return (
-            <Navigate
-              to={configRouter.home}
-              state={{ from: location }}
-              replace
-            />
-          );
-      }
+      // if (requiredRole === "1") {
+      //   if (user?.role === "1") return children;
+      //   else
+      //     return (
+      //       <Navigate
+      //         to={configRouter.home}
+      //         state={{ from: location }}
+      //         replace
+      //       />
+      //     );
+      // }
 
       // redirects to home if not admin
-      if (requiredRole === "2") {
-        if (user?.role === "2") return children;
-        else
-          return (
-            <Navigate
-              to={configRouter.home}
-              state={{ from: location }}
-              replace
-            />
-          );
-      }
+      // if (requiredRole === "2") {
+      //   if (user?.role === "2") return children;
+      //   else
+      //     return (
+      //       <Navigate
+      //         to={configRouter.home}
+      //         state={{ from: location }}
+      //         replace
+      //       />
+      //     );
+      // }
       return children;
     } else {
       return (

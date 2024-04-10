@@ -4,10 +4,10 @@
 @tailwind utilities;
 
 /* font */
-body {
+/* body {
   margin: 0;
   font-family: "Poppins", sans-serif;
-}
+} */
 
 a {
   text-decoration: none;

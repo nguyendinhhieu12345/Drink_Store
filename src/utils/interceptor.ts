@@ -56,25 +56,22 @@ export const setupInterceptor = (store: Store, dispatch: AppDispatch): void => {
   // handle request call aceess token
   httpRequest.default.interceptors.request.use(
     async (config) => {
-      if (config.url?.includes("user/refreshToken")) {
+      if (config.url?.includes("/auth/user/refresh-token")) {
         return config;
       }
-      if (config.url?.includes("user/login")) {
-        return config;
-      }
-      if (config.url?.includes("user/logout")) {
+      if (config.url?.includes("/auth/user/login")) {
         return config;
       }
 
-      if (config.url?.includes("user/register")) {
+      if (config.url?.includes("/auth/user/register")) {
         return config;
       }
 
-      if (config.url?.includes("user/forgetpassword")) {
+      if (config.url?.includes("/auth/user/change-password")) {
         return config;
       }
 
-      if (config.url?.includes("user/reset-password")) {
+      if (config.url?.includes("/auth/user/reset-password")) {
         return config;
       }
 
@@ -121,8 +118,8 @@ export const setupInterceptor = (store: Store, dispatch: AppDispatch): void => {
       // logout system
 
       if (
-        error.response?.status === 401 &&
-        error.config?.url?.includes("user/refreshToken")
+        // error.response?.status === 401 &&
+        error.config?.url?.includes("/auth/user/refresh-token")
       ) {
         console.log("test");
         await dispatch(logoutThunk(localStorage.getItem("fcmTokenId") as string));
