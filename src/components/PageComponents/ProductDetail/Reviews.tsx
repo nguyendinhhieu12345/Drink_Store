@@ -84,11 +84,11 @@ function Reviews() {
                                     <Progress
                                         color="amber"
                                         placeholder=""
-                                        value={(total.count / statistiProduct?.data?.reviewCountTotal) * 100}
+                                        value={statistiProduct?.data?.reviewCountTotal === 0 ? 0 : (total.count / statistiProduct?.data?.reviewCountTotal) * 100}
                                         className="border-2 border-gray-900/10 bg-blue-100"
                                     />
                                     <div className="space-x-2">
-                                        <p className="w-5">{(total.count / statistiProduct?.data?.reviewCountTotal) * 100}%</p>
+                                        <p className="w-5">{statistiProduct?.data?.reviewCountTotal === 0 ? 0 : (total.count / statistiProduct?.data?.reviewCountTotal) * 100}%</p>
                                     </div>
                                 </div>
                             ))
@@ -97,6 +97,7 @@ function Reviews() {
                 </div>
                 <div className="w-[60%] ml-20">
                     <div className="flex flex-col items-center justify-center">
+                        {reviews?.data?.productReviewList?.length === 0 && <p className="w-full mb-5 pb-5 italic">No reviews</p>}
                         {reviews?.success && reviews?.data?.productReviewList.map((review) => (
                             <div key={review.id} className="w-full mb-5 pb-5">
                                 <div className="flex items-center">

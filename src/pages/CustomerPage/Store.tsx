@@ -2,6 +2,16 @@ import Search from "@/components/SVG/Search";
 import { MapTrifold, Storefront } from "@phosphor-icons/react";
 import Map from "@/components/Map/Map";
 import { useState } from "react";
+import {
+    Button,
+    Dialog,
+    Card,
+    CardBody,
+    CardFooter,
+} from "@material-tailwind/react";
+import StoreDetail from "@/components/PageComponents/Store/StoreDetail";
+import { useNavigate } from "react-router-dom";
+import { configRouter } from "@/configs/router";
 
 function Store() {
     const [openMap, setOpenMap] = useState<boolean>(false);
@@ -9,6 +19,14 @@ function Store() {
     const [latitude, setLatitude] = useState<number>(0);
     const [longitude, setLongitude] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
+    const [open, setOpen] = useState<boolean>(false);
+    const navigator = useNavigate()
+
+    const handleOpen = () => setOpen((cur) => !cur);
+    const handleRedirectProduct = () => {
+        setOpen((cur) => !cur)
+        navigator(configRouter?.searchProduct)
+    }
 
     const handleGetGeocode = async (
         event: React.KeyboardEvent<HTMLInputElement>
@@ -98,9 +116,10 @@ function Store() {
                 </div>
                 <div className="flex flex-wrap">
                     {Array?.from({ length: 6 }).map((_, index) => (
-                        <div
+                        <button
+                            onClick={handleOpen}
                             key={index}
-                            className="w-[48%] flex my-3 mx-3 rounded-lg shadow-xl border border-gray-200 px-5 py-2"
+                            className="w-[48%] flex items-center my-3 mx-3 rounded-lg shadow-xl border border-gray-200 px-5 py-2"
                         >
                             <img
                                 src="https://minio.thecoffeehouse.com/image/admin/42125551_2192693434338004_6795198411906744320_n_191298.jpeg"
@@ -111,10 +130,28 @@ function Store() {
                                 <p className="font-semibold">Vo Van Ngan</p>
                                 <p className="break-all">No 1 Vo Van Ngan Q9 TPHCM</p>
                             </div>
-                        </div>
+                        </button>
                     ))}
                 </div>
             </div>
+            <Dialog
+                size="sm"
+                open={open}
+                handler={handleOpen}
+                className="bg-transparent shadow-none"
+                placeholder=""
+            >
+                <Card placeholder="" className="mx-auto w-full">
+                    <CardBody placeholder="" className="flex flex-col gap-4">
+                        <StoreDetail />
+                    </CardBody>
+                    <CardFooter placeholder="" className="pt-0">
+                        <Button placeholder="" variant="gradient" onClick={handleRedirectProduct} fullWidth>
+                            Order Product
+                        </Button>
+                    </CardFooter>
+                </Card>
+            </Dialog>
         </div>
     );
 }

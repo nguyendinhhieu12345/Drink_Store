@@ -7,6 +7,7 @@ import shopfeeIconNoBg from "./images/shopfee_icon-nobg.png";
 import imgUser from "./images/img_user.png";
 import imgCart from "./images/img_cart.png";
 import coin from "./images/coin.png";
+import delivery from "./images/Delivery2.png"
 
 const assets = {
   images: {
@@ -18,7 +19,8 @@ const assets = {
     shopfeeIconNoBg: shopfeeIconNoBg,
     imgUser: imgUser,
     imgCart: imgCart,
-    coin: coin
+    coin: coin,
+    delivery: delivery
   },
   audios: {},
 

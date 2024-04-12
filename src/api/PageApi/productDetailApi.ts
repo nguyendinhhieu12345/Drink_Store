@@ -2,7 +2,7 @@ import * as httpRequest from "../../utils/httpRequest";
 
 export const getProductDetail = async (productId: string) => {
     try {
-        const res = await httpRequest.get(`/product/${productId}/details`);
+        const res = await httpRequest.get(`/product/${productId}/view`);
         return res;
     } catch (error) {
         return Promise.reject(error);
