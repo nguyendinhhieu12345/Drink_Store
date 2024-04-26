@@ -1,16 +1,50 @@
-import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { BaseResponseApi, User } from "@/type";
+// import { CaretLeft, CaretRight } from "@phosphor-icons/react";
+import { useEffect, useState } from "react";
+import * as userApi from "@/api/PageApi/userApi"
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+
+interface IOrdersResponse extends BaseResponseApi {
+    data: {
+        id: string,
+        total: number,
+        productQuantity: number,
+        orderType: string,
+        productName: string,
+        statusLastEvent: string,
+        timeLastEvent: string
+    }[]
+}
 
 function MyOrderOfUser() {
+    const [orders, setOrders] = useState<IOrdersResponse>()
+    const useCurrentUser = useSelector<RootState, User>(
+        (state) => state.authSlice.currentUser as User
+    );
+
+    const handleGetOrder = async (statusOrder: string) => {
+        const data = await userApi?.getAllOrderByUserId(useCurrentUser?.data?.userId, 10, statusOrder)
+        if (data?.success) {
+            setOrders(data)
+        }
+    }
+
+    useEffect(() => {
+        handleGetOrder("WAITING")
+    }, [])
+
     return (
         <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold mb-5">My Orders</h2>
-                <select className="rounded-lg">
-                    <option>All</option>
-                    <option>Waiting</option>
-                    <option>Processing</option>
-                    <option>Succeed</option>
-                    <option>Canceled</option>
+                <select className="rounded-lg"
+                    onChange={(e) => handleGetOrder(e.target.value)}
+                >
+                    <option value="WAITING">Waiting</option>
+                    <option value="IN_PROCESS">Processing</option>
+                    <option value="SUCCEED">Succeed</option>
+                    <option value="CANCELED">Canceled</option>
                 </select>
             </div>
             <div className="w-full my-5 overflow-hidden border border-gray-200 rounded-lg mb-8 rounded-b-lg">
@@ -28,7 +62,7 @@ function MyOrderOfUser() {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {Array.from({ length: 10 }).map((_, index) => (
+                            {orders?.data?.map((_, index) => (
                                 <tr key={index}>
                                     <td className="px-5 py-3 leading-6 whitespace-nowrap"><span className="uppercase text-sm font-medium">2960</span></td>
                                     <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm">April 8, 2024</span></td>
@@ -42,7 +76,7 @@ function MyOrderOfUser() {
                     </table>
                 </div>
                 {/* paging */}
-                <div className="px-4 py-3 border-t border-gray-200  bg-white text-gray-500 ">
+                {/* <div className="px-4 py-3 border-t border-gray-200  bg-white text-gray-500 ">
                     <div className="flex flex-col justify-end text-xs sm:flex-row text-gray-600 ">
                         <div className="flex mt-2 sm:mt-auto sm:justify-end">
                             <nav aria-label="Product Page Navigation">
@@ -91,7 +125,7 @@ function MyOrderOfUser() {
                             </nav>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     )

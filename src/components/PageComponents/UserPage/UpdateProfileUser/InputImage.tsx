@@ -21,7 +21,7 @@ function InputImage() {
                         toast.success(data?.message)
                         localStorage.setItem("profile", JSON.stringify({
                             ...profileUser,
-                            avatarUrl: data?.data
+                            avatarUrl: data?.data?.avatarUrl
                         }))
                     }
                 }

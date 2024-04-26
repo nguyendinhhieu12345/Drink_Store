@@ -53,6 +53,28 @@ export const signup = createAsyncThunk(
     }
 );
 
+export const signupWithFirebase = createAsyncThunk(
+    "auth/signupWithFirebase",
+    async ({ fcmTokenId, idToken }: { fcmTokenId: string, idToken: string }) => {
+        const res = await authApi.signupWithFirebase(
+            fcmTokenId,
+            idToken
+        );
+        return res;
+    }
+);
+
+export const loginWithFirebase = createAsyncThunk(
+    "auth/loginWithFirebase",
+    async ({ fcmTokenId, idToken }: { fcmTokenId: string, idToken: string }) => {
+        const res = await authApi.loginWithFirebase(
+            fcmTokenId,
+            idToken
+        );
+        return res;
+    }
+);
+
 export const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -108,6 +130,41 @@ export const authSlice = createSlice({
         });
 
         builder.addCase(signup.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isError = false;
+            state.error = undefined;
+            state.currentUser = action.payload;
+        });
+
+        // signup with firebase
+        builder.addCase(signupWithFirebase.pending, (state) => {
+            state.loading = true;
+        });
+
+        builder.addCase(signupWithFirebase.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+            state.isError = true;
+        });
+
+        builder.addCase(signupWithFirebase.fulfilled, (state, action) => {
+            state.loading = false;
+            state.isError = false;
+            state.error = undefined;
+            state.currentUser = action.payload;
+        });
+        // login with firebase
+        builder.addCase(loginWithFirebase.pending, (state) => {
+            state.loading = true;
+        });
+
+        builder.addCase(loginWithFirebase.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+            state.isError = true;
+        });
+
+        builder.addCase(loginWithFirebase.fulfilled, (state, action) => {
             state.loading = false;
             state.isError = false;
             state.error = undefined;

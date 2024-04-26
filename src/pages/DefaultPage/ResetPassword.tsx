@@ -22,11 +22,11 @@ function ResetPassword() {
     }, []);
 
     const handleResetPass = async () => {
-        if (password === "" || confirmPassword === "") {
+        if (password.trim() === "" || confirmPassword.trim() === "") {
             toast.error(messageToast?.fillInput);
             inputRef.current?.focus();
         } else {
-            if (password !== confirmPassword) {
+            if (password.trim() !== confirmPassword.trim()) {
                 toast.error("Password doesn't match!!!");
                 inputRef.current?.focus();
             } else {

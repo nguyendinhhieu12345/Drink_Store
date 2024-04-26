@@ -23,17 +23,17 @@ function BannerHome() {
     }, [])
 
     return (
-        <div className="w-full pt-5 h-auto">
+        <div className="w-full pt-5 h-auto ">
             <Carousel
                 placeholder=""
-                className="rounded-xl"
+                className="rounded-xl max-h-[650px] w-full"
             >
                 {banners?.success && banners?.data?.length > 0 && banners?.data?.map((banner, index) => (
                     <img
                         key={index}
                         src={banner?.imageUrl}
                         alt="image 1"
-                        className="h-full w-full object-contain"
+                        className="h-full w-full object-cover"
                         loading="lazy"
                     />
                 ))}

@@ -23,13 +23,14 @@ function Home() {
     }
 
     useEffect(() => {
+        document.title = "Shopfee | Home"
         if (!localStorage.getItem("fcmTokenId")) {
             requestPermissions((currentUser?.success && currentUser?.data?.userId !== "") ? currentUser?.data?.userId : null)
         }
         if (currentUser?.success) {
             getProfileUser(currentUser?.data?.userId)
         }
-    }, [currentUser])
+    }, [])
 
     return (
         <div className="h-auto mt-20 mx-20">

@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import { SignIn } from "@phosphor-icons/react";
 import { toast } from "react-toastify";
+import { resetStoreCart } from "@/features/cart/cartSlice";
 
 const AccountHeader = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -26,6 +27,7 @@ const AccountHeader = () => {
         const data = await dispatch(logoutThunk(localStorage.getItem("fcmTokenId") as string));
         if (data?.type === "auth/logout/fulfilled") {
             nav(configRouter.home)
+            await dispatch(resetStoreCart())
             localStorage.removeItem("profile")
         }
         else {
@@ -46,8 +48,8 @@ const AccountHeader = () => {
                     <MenuHandler>
                         <div className="cursor-pointer">
                             <ImageWithError
-                                src={assets.images.imgUser}
-                                fallbackSrc={assets.images.noAvatar}
+                                src={localStorage?.getItem("profile") ? JSON.parse(localStorage?.getItem("profile") as string)?.avatarUrl : assets.images.imgUser}
+                                fallbackSrc={localStorage?.getItem("profile") ? JSON.parse(localStorage?.getItem("profile") as string)?.avatarUrl : assets.images.noAvatar}
                                 alt="avatar"
                                 className="rounded-full h-10 w-10 bg-btnDisable"
                             />

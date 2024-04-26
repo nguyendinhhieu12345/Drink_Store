@@ -2,17 +2,64 @@ import DisplayCategory from "@/components/PageComponents/SearchProduct/DisplayCa
 import DisplayFollowGrid from "@/components/PageComponents/SearchProduct/DisplayFollowGrid"
 import DisplayFollowList from "@/components/PageComponents/SearchProduct/DisplayFollowList"
 import FilterProduct from "@/components/PageComponents/SearchProduct/FilterProduct"
+import { BaseResponseApi } from "@/type"
 import { Breadcrumbs } from "@material-tailwind/react"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
+import * as searchApi from "@/api/PageApi/searchApi"
+
+export interface ISearchProduct extends BaseResponseApi {
+    data: {
+        totalPage: number;
+        productList: {
+            id: string;
+            name: string;
+            price: number;
+            description: string;
+            thumbnailUrl: string;
+            status: string;
+            ratingSummary: {
+                star: number;
+                quantity: number
+            }
+        }[]
+    }
+}
 
 function SearchProduct() {
-    const [keySearch, setKeySearch] = useState<string>("")
+    const [products, setProducts] = useState<ISearchProduct>()
     const [activeDisplay, setActiveDisplay] = useState<boolean>(true)
     const location = useLocation()
 
+    const handleGetProduct = async (categoryId: string, keySearch: string) => {
+        if (categoryId === "") {
+            const data = await searchApi.getProductByKeyName(1, "", 0, 0, 0, "")
+            if (data?.success) {
+                setProducts(data)
+                localStorage.removeItem("categorySearch")
+            }
+        }
+        else {
+            const data = await searchApi.getProductByKeyName(1, keySearch, 0, 0, 0, "")
+            if (data?.success) {
+                setProducts(data)
+            }
+        }
+    }
+
     useEffect(() => {
-        setKeySearch(location.search.split("?key=")[1])
+        handleGetProduct(localStorage.getItem("categorySearch") as string, location.search.split("?key=")[1] ? location.search.split("?key=")[1] : "")
+
+        const clearLocalStorage = () => {
+            localStorage.removeItem("categorySearch");
+        };
+
+        window.addEventListener('beforeunload', clearLocalStorage);
+
+        return () => {
+            window.removeEventListener('beforeunload', clearLocalStorage);
+            clearLocalStorage(); // Ensure clearing even if unmount event is not triggered
+        };
     }, [location])
 
     return (
@@ -22,12 +69,12 @@ function SearchProduct() {
                     <a href="/" className="font-semibold">
                         Home
                     </a>
-                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">Search "{keySearch}"</p>
+                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">Search "{location.search.split("?key=")[1]}"</p>
                 </Breadcrumbs>
             </div >
-            {!keySearch && <DisplayCategory />}
-            <FilterProduct activeDisplay={activeDisplay} setActiveDisplay={setActiveDisplay} />
-            {activeDisplay ? <DisplayFollowGrid /> : <DisplayFollowList />}
+            {!location.search.split("?key=")[1] && <DisplayCategory setProducts={setProducts} />}
+            <FilterProduct setProducts={setProducts} activeDisplay={activeDisplay} setActiveDisplay={setActiveDisplay} />
+            {activeDisplay ? <DisplayFollowGrid products={products} /> : <DisplayFollowList products={products} />}
         </div>
     )
 }

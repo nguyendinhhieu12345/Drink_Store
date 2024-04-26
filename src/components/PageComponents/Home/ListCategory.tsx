@@ -29,7 +29,13 @@ const ListCategory = () => {
     const nav = useNavigate()
 
     const handleRedirectAllCategory = () => {
+        localStorage?.setItem("categorySearch", "")
         nav(configRouter.searchProduct)
+    }
+
+    const handleSeeProductOfCategory = (categoryId: string) => {
+        localStorage?.setItem("categorySearch", categoryId)
+        nav(configRouter?.searchProduct)
     }
 
     return (
@@ -41,17 +47,18 @@ const ListCategory = () => {
                 {categorys?.success && categorys?.data?.length > 0 && categorys?.data?.slice(0, 5)?.map((category, index) => (
                     <button
                         key={index}
+                        onClick={() => handleSeeProductOfCategory(category?.id)}
                         className="flex flex-col items-center justify-center max-h-40 w-1/6 my-2 mx-3 py-2 border hover:border-gray-300 cursor-pointer rounded-md"
                     >
                         <div className="h-20 w-20 rounded-full p-0.5">
                             <img
-                                className="h-full w-full rounded-full border-2 border-white object-cover hover:ease-in-out hover:duration-300 hover:delay-100 hover:scale-[1.2]"
+                                className="shadow-base h-full w-full rounded-full border-2 border-white object-cover hover:ease-in-out hover:duration-300 hover:delay-100 hover:scale-[1.2]"
                                 src={category?.imageUrl}
                                 loading="lazy"
                                 alt="avatar"
                             />
                         </div>
-                        <p className="mt-1 break-words text-center text-sm text-slate-600 line-clamp-1">
+                        <p className="mt-4 break-words text-center text-base text-slate-600 line-clamp-1">
                             {category?.name}
                         </p>
                     </button>
@@ -68,7 +75,7 @@ const ListCategory = () => {
                             loading="lazy"
                         />
                     </div>
-                    <p className="mt-1 w-14 break-words text-center text-sm text-slate-600 line-clamp-1">
+                    <p className="mt-4 w-14 break-words text-center text-base text-slate-600 line-clamp-1">
                         See All
                     </p>
                 </button>

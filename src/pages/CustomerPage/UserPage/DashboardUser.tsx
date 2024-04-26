@@ -17,7 +17,7 @@ function DashboardUser() {
                         Your coin
                     </h2>
                     <div className=" mr-0 bg-btnActive min-h-20 flex items-center p-3 rounded-lg">
-                        <p className="text-white min-w-32 text-lg">Your coin: {profileUser?.coin}</p>
+                        <p className="text-white min-w-32 text-lg">Your coin: {profileUser?.coin ?? 0}</p>
                         <img src={assets?.images?.coin} alt="coin" className="max-w-52 w-full h-full object-contain -ml-3" loading="lazy" />
                     </div>
                 </div>

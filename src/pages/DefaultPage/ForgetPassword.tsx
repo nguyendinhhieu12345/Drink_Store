@@ -24,7 +24,7 @@ function ForgetPassword() {
 
     const handleForgetPass = async () => {
         setLoading(true);
-        if (email !== "" && isEmail(email)) {
+        if (email.trim() !== "" && isEmail(email.trim())) {
             try {
                 const data = await authApi.forgetPassword(email);
                 if (data?.success) {
