@@ -19,7 +19,8 @@ const navStyle: React.CSSProperties = {
 interface IMap {
     latitude?: number;
     longitude?: number;
-    setNewAddress?: React.Dispatch<React.SetStateAction<IAddNewAddress>>
+    setNewAddress?: React.Dispatch<React.SetStateAction<IAddNewAddress>>,
+    getAllStore?: (lat: number, long: number, key: string) => Promise<void>
 }
 
 function Map(props: IMap) {
@@ -61,7 +62,7 @@ function Map(props: IMap) {
             district: addressDetails,
             ward: addressDetails
         }))
-        !props?.setNewAddress && toast.success(addressDetails);
+        !props?.setNewAddress && (props?.getAllStore && props?.getAllStore(event.lngLat[1], event.lngLat[0], ""));
     }, []);
 
     const reverseGeocode = async (latitude: number, longitude: number) => {

@@ -1,7 +1,7 @@
 import Search from "@/components/SVG/Search";
 import { MapTrifold, Storefront } from "@phosphor-icons/react";
 import Map from "@/components/Map/Map";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Button,
     Dialog,
@@ -12,6 +12,27 @@ import {
 import StoreDetail from "@/components/PageComponents/Store/StoreDetail";
 import { useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
+import { BaseResponseApi } from "@/type";
+import * as storeApi from "@/api/PageApi/StoreApi"
+import { toast } from "react-toastify";
+
+export interface IBranchList {
+    id: string,
+    imageUrl: string,
+    name: string,
+    fullAddress: string,
+    longitude: number,
+    latitude: number,
+    distance: string,
+    openTime: string,
+    closeTime: string
+}
+
+interface IResponseStore extends BaseResponseApi {
+    data: {
+        branchList: IBranchList[]
+    }
+}
 
 function Store() {
     const [openMap, setOpenMap] = useState<boolean>(false);
@@ -20,44 +41,83 @@ function Store() {
     const [longitude, setLongitude] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const [open, setOpen] = useState<boolean>(false);
-    const navigator = useNavigate()
+    const nav = useNavigate()
+    const [stores, setStores] = useState<IResponseStore>()
+    const [storeId, setStoreId] = useState<string>("")
+    const [currentPosition, setCurrentPosition] = useState<{
+        lat: number,
+        lng: number
+    }>({
+        lat: 0,
+        lng: 0
+    })
 
     const handleOpen = () => setOpen((cur) => !cur);
     const handleRedirectProduct = () => {
         setOpen((cur) => !cur)
-        navigator(configRouter?.searchProduct)
+        nav(configRouter?.searchProduct)
     }
 
     const handleGetGeocode = async (
         event: React.KeyboardEvent<HTMLInputElement>
     ) => {
         if (event.key === "Enter") {
-            const API_KEY = "2tgHvZJswyFkLug62ynzpCrs8RlqMcmzFVtoUjEL";
-            const encodedAddress = encodeURIComponent(address);
-            const url = `https://rsapi.goong.io/Geocode?address=${encodedAddress}&api_key=${API_KEY}`;
+            if (openMap) {
+                const API_KEY = "2tgHvZJswyFkLug62ynzpCrs8RlqMcmzFVtoUjEL";
+                const encodedAddress = encodeURIComponent(address);
+                const url = `https://rsapi.goong.io/Geocode?address=${encodedAddress}&api_key=${API_KEY}`;
 
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data?.results && data?.results?.length > 0) {
-                    const location = data.results[0] && data.results[0].geometry && data.results[0].geometry.location;
-                    if (location) {
-                        const { lat, lng } = location;
-                        setLatitude(lat);
-                        setLongitude(lng);
-                        setError(null);
+                try {
+                    const response = await fetch(url);
+                    const data = await response.json();
+                    if (data?.results && data?.results?.length > 0) {
+                        const location = data.results[0] && data.results[0].geometry && data.results[0].geometry.location;
+                        if (location) {
+                            const { lat, lng } = location;
+                            setLatitude(lat);
+                            setLongitude(lng);
+                            setError(null);
+                        } else {
+                            setError("Location not found in response");
+                        }
                     } else {
-                        setError("Location not found in response");
+                        setError("Address not found");
                     }
-                } else {
-                    setError("Address not found");
+                } catch (error) {
+                    console.error("Error geocoding:", error);
+                    setError("Error geocoding");
                 }
-            } catch (error) {
-                console.error("Error geocoding:", error);
-                setError("Error geocoding");
+            }
+            else {
+                getAllStore(currentPosition?.lat, currentPosition?.lng, address)
             }
         }
     };
+
+    const getCurrentPosition = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setCurrentPosition({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                })
+                getAllStore(position.coords.latitude, position.coords.longitude, "")
+            });
+        } else {
+            toast.error("Geolocation is not supported by this browser.");
+        }
+    }
+
+    const getAllStore = async (lat: number, long: number, key: string) => {
+        const data = await storeApi.getStores(lat, long, key)
+        if (data?.success) {
+            setStores(data)
+        }
+    }
+
+    useEffect(() => {
+        getCurrentPosition()
+    }, [])
 
     const handleOpenMap = () => {
         if (openMap) {
@@ -106,29 +166,33 @@ function Store() {
                     </button>
                 </div>
             </div>
-            {openMap && <Map latitude={latitude} longitude={longitude} />}
+            {openMap && <Map latitude={latitude} longitude={longitude} getAllStore={getAllStore} />}
             {error && (
                 <div className="text-center italic text-red-500 text-sm">{error}</div>
             )}
-            <div className="my-6 text-left">
+            <div className="my-6 text-left w-full">
                 <div className="text-left px-4 font-semibold text-xl">
-                    Found 4 stores
+                    Found {stores?.data?.branchList?.length} stores
                 </div>
-                <div className="flex flex-wrap">
-                    {Array?.from({ length: 6 }).map((_, index) => (
+                <div className="flex flex-wrap w-full justify-start">
+                    {stores?.data?.branchList?.map((store, index) => (
                         <button
-                            onClick={handleOpen}
+                            onClick={() => {
+                                setOpen(prev => !prev)
+                                setStoreId(store?.id)
+                            }}
                             key={index}
                             className="w-[48%] flex items-center my-3 mx-3 rounded-lg shadow-xl border border-gray-200 px-5 py-2"
                         >
                             <img
-                                src="https://minio.thecoffeehouse.com/image/admin/42125551_2192693434338004_6795198411906744320_n_191298.jpeg"
+                                src={store?.imageUrl}
                                 alt="store"
-                                className="w-25 h-25 rounded-lg"
+                                className="w-25 h-25 rounded-lg object-contain"
                             />
                             <div className="flex flex-col items-start justify-center ml-5">
-                                <p className="font-semibold">Vo Van Ngan</p>
-                                <p className="break-all">No 1 Vo Van Ngan Q9 TPHCM</p>
+                                <p className="font-semibold">{store?.name}</p>
+                                <p className="break-all text-start">{store?.fullAddress}</p>
+                                <p className="break-all text-start">Away: {store?.distance}</p>
                             </div>
                         </button>
                     ))}
@@ -143,7 +207,7 @@ function Store() {
             >
                 <Card placeholder="" className="mx-auto w-full">
                     <CardBody placeholder="" className="flex flex-col gap-4">
-                        <StoreDetail />
+                        <StoreDetail storeDetail={storeId} />
                     </CardBody>
                     <CardFooter placeholder="" className="pt-0">
                         <Button placeholder="" variant="gradient" onClick={handleRedirectProduct} fullWidth>

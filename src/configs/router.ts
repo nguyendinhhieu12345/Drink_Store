@@ -16,5 +16,5 @@ export const configRouter = {
   defaultAddress: "/default-address",
   coupon: "/coupon",
   checkout: "/checkout",
-  thanks: "/thanks/:id",
+  orderDetail: "/order/:id",
 };

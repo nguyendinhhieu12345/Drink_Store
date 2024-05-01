@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import * as userApi from "@/api/PageApi/userApi"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { formatVND } from "@/utils/hepler";
 
 interface IOrdersResponse extends BaseResponseApi {
     data: {
@@ -13,7 +14,7 @@ interface IOrdersResponse extends BaseResponseApi {
         orderType: string,
         productName: string,
         statusLastEvent: string,
-        timeLastEvent: string
+        timeLastEvent: number
     }[]
 }
 
@@ -24,7 +25,7 @@ function MyOrderOfUser() {
     );
 
     const handleGetOrder = async (statusOrder: string) => {
-        const data = await userApi?.getAllOrderByUserId(useCurrentUser?.data?.userId, 10, statusOrder)
+        const data = await userApi?.getAllOrderByUserId(useCurrentUser?.data?.userId, 1, statusOrder)
         if (data?.success) {
             setOrders(data)
         }
@@ -62,14 +63,14 @@ function MyOrderOfUser() {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {orders?.data?.map((_, index) => (
+                            {orders?.data?.map((order, index) => (
                                 <tr key={index}>
-                                    <td className="px-5 py-3 leading-6 whitespace-nowrap"><span className="uppercase text-sm font-medium">2960</span></td>
-                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm">April 8, 2024</span></td>
-                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm">Cash</span></td>
-                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap font-medium text-sm"><span className="text-green-500">Delivered</span></td>
-                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm font-bold">5463.43</span></td>
-                                    <td className="px-5 py-3 whitespace-nowrap text-right text-sm"><a className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all font-semibold rounded-full" href="/order/6613e8b4a915df00082d2960">Details</a></td>
+                                    <td className="px-5 py-3 leading-6 whitespace-nowrap"><span className="uppercase text-sm font-medium">{order?.id}</span></td>
+                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm">{new Date(order?.timeLastEvent as number).toLocaleString().split(", ")[0]}</span></td>
+                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm">{order?.orderType}</span></td>
+                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap font-medium text-sm"><span className="text-green-500">{order?.statusLastEvent}</span></td>
+                                    <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm font-bold">{formatVND(order?.total ?? 0)}</span></td>
+                                    <td className="px-5 py-3 whitespace-nowrap text-right text-sm"><a className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all font-semibold rounded-full" href={`/order/${order?.id}`}>Details</a></td>
                                 </tr>
                             ))}
                         </tbody>

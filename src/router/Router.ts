@@ -118,8 +118,8 @@ const publicRoutes: IRouter[] = [
         role: null,
     },
     {
-        path: configRouter.thanks,
-        component: lazy(() => import("../pages/CustomerPage/Thanks")),
+        path: configRouter.orderDetail,
+        component: lazy(() => import("../pages/CustomerPage/OrderDetail")),
         layout: DefaultLayout,
         role: null,
     },
