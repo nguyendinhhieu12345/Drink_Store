@@ -39,9 +39,10 @@ export const orderShipping = async (data: ICheckout) => {
     }
 };
 
+
 export const orderOnsite = async (data: ICheckout) => {
     try {
-        const res = await httpRequest.post(`/order/shipping`, data);
+        const res = await httpRequest.post(`/order/onsite`, data);
         return res;
     } catch (error) {
         return Promise.reject(error);
@@ -80,6 +81,24 @@ export const reviewProductOrder = async (orderItemId: string, star: number, cont
 export const getReviewOrderDetail = async (orderId: string) => {
     try {
         const res = await httpRequest.get(`/order/${orderId}/order-item`);
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const updateTransaction = async (transactionId: string) => {
+    try {
+        const res = await httpRequest.patch(`/transaction/${transactionId}`);
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const getBranchNearest = async (lat: number, lng: number, time: string) => {
+    try {
+        const res = await httpRequest.get(`/branch/nearest?lat=${lat}&lng=${lng}&time=${time}`);
         return res;
     } catch (error) {
         return Promise.reject(error);

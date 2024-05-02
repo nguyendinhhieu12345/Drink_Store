@@ -5,7 +5,7 @@ import * as userApi from "@/api/PageApi/userApi"
 import { IAddNewAddress, IShowAddressResponse } from "@/pages/CustomerPage/UserPage/DefaultAddress"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
-import { User } from "@/type"
+import { BaseResponseApi, User } from "@/type"
 import { ICheckout, IPropsCheckout } from "./CheckoutDetail"
 import * as checkoutApi from "@/api/PageApi/checkoutApi"
 import * as addressApi from "@/api/PageApi/userApi"
@@ -22,6 +22,16 @@ import useLoading from "@/hooks/useLoading"
 import { toast } from "react-toastify"
 import { messageToast } from "@/utils/hepler"
 import { Cart } from "@/features/cart/cartSlice"
+
+interface IBranchNearest extends BaseResponseApi {
+    data: {
+        id: string,
+        name: string,
+        openTime: string,
+        closeTime: string,
+        fullAddress: string
+    }
+}
 
 function AddAddress(props: IPropsCheckout) {
     const [addresss, setAddresss] = useState<IShowAddressResponse>()
@@ -41,6 +51,7 @@ function AddAddress(props: IPropsCheckout) {
         ,
         phoneNumber: JSON.parse(localStorage?.getItem("profile") as string) ? JSON.parse(localStorage?.getItem("profile") as string)?.phoneNumber : ""
     })
+    const [allBranch, setAllBranch] = useState<IBranchNearest>()
 
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
@@ -269,6 +280,19 @@ function AddAddress(props: IPropsCheckout) {
         ))
     }
 
+    const handleAddTakeAway = async () => {
+        props?.setDataCheckout((prev: ICheckout | undefined) => (
+            {
+                ...prev!,
+                type: "Take Away",
+                recipientName: JSON.parse(localStorage?.getItem("profile") as string)?.firstName + " " + JSON.parse(localStorage?.getItem("profile") as string)?.lastName,
+                phoneNumber: JSON.parse(localStorage?.getItem("profile") as string)?.phoneNumber,
+                shippingFee: 0,
+                total: (prev?.total as number) - (prev?.shippingFee as number)
+            }
+        ))
+    }
+
     useEffect(() => {
         getAllAddresUser()
     }, [])
@@ -282,31 +306,110 @@ function AddAddress(props: IPropsCheckout) {
                         <button className="px-3 py-1.5 hover:bg-gray-50 border rounded-xl">{props?.dataCheckout?.type}</button>
                     </MenuHandler>
                     <MenuList placeholder="">
-                        <MenuItem placeholder="" onClick={() => props?.setDataCheckout((prev: ICheckout | undefined) => (
-                            {
-                                ...prev!,
-                                type: "Home Delivery"
-                            }
-                        ))}>Home Delivery</MenuItem>
-                        <MenuItem placeholder="" onClick={() => props?.setDataCheckout((prev: ICheckout | undefined) => (
-                            {
-                                ...prev!,
-                                type: "Take Away"
-                            }
-                        ))}>Take Away</MenuItem>
+                        <MenuItem placeholder="" onClick={() => {
+                            props?.setDataCheckout((prev: ICheckout | undefined) => (
+                                {
+                                    ...prev!,
+                                    type: "Home Delivery"
+                                }
+                            ))
+                            getAllAddresUser()
+                        }}>Home Delivery</MenuItem>
+                        <MenuItem placeholder="" onClick={() => handleAddTakeAway()}>Take Away</MenuItem>
                     </MenuList>
                 </Menu>
             </div>
-            <div className="flex items-center my-2">
-                <div className="flex items-center">
-                    <img src={assets.images.delivery} alt="delivery" className="w-7 h-7 object-contain mr-2" />
-                    <div className="ml-2">
-                        <p className="font-semibold text-default">{addresss?.data?.filter((add) => add.id == props?.dataCheckout?.addressId)[0]?.recipientName} | {addresss?.data?.filter((add) => add.id == props?.dataCheckout?.addressId)[0]?.phoneNumber}</p>
-                        <p>{addresss?.data?.filter((add) => add.id == props?.dataCheckout?.addressId)[0]?.detail}</p>
+            {
+                props?.dataCheckout?.type === "Home Delivery" ?
+                    <div className="flex items-center my-2">
+                        <div className="flex items-center">
+                            <img src={assets.images.delivery} alt="delivery" className="w-7 h-7 object-contain mr-2" />
+                            <div className="ml-2">
+                                <p className="font-semibold text-default">{addresss?.data?.filter((add) => add.id == props?.dataCheckout?.addressId)[0]?.recipientName} | {addresss?.data?.filter((add) => add.id == props?.dataCheckout?.addressId)[0]?.phoneNumber}</p>
+                                <p>{addresss?.data?.filter((add) => add.id == props?.dataCheckout?.addressId)[0]?.detail}</p>
+                            </div>
+                        </div>
+                        <button onClick={() => setOpen(prev => !prev)} className="px-4 py-2 bg-btnActive text-white rounded-lg">Change</button>
                     </div>
-                </div>
-                <button onClick={() => setOpen(prev => !prev)} className="px-4 py-2 bg-btnActive text-white rounded-lg">Change</button>
-            </div>
+                    :
+                    <div>
+                        <div className="flex items-center">
+                            <p>Time Receive: </p>
+                            <input
+                                className="ml-5 block h-10 border px-3 py-1 text-sm rounded-md  focus:bg-white border-gray-600"
+                                type="datetime-local"
+                                placeholder="Time start"
+                                onChange={(e) => {
+                                    props?.setDataCheckout((prev: ICheckout | undefined) => (
+                                        {
+                                            ...prev!,
+                                            receiveTime: e.target.value
+                                        }
+                                    ))
+                                    if (navigator.geolocation) {
+                                        navigator.geolocation.getCurrentPosition(async (position) => {
+                                            try {
+                                                const data = await checkoutApi.getBranchNearest(position.coords.latitude, position.coords.longitude, new Date(e.target.value).toLocaleTimeString(undefined, { hour12: false }))
+                                                if (data?.success) {
+                                                    setAllBranch(data)
+                                                    props?.setDataCheckout((prev: ICheckout | undefined) => (
+                                                        {
+                                                            ...prev!,
+                                                            branchId: data?.data?.id
+                                                        }
+                                                    ))
+                                                    setError("")
+                                                }
+                                            }
+                                            catch (e: unknown) {
+                                                if (e instanceof AxiosError && e.response) {
+                                                    setError(e?.response?.data?.devResponse?.message)
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        toast.error("Geolocation is not supported by this browser.");
+                                    }
+                                }
+                                }
+                            />
+                        </div>
+                        <div className="flex items-center my-5">
+                            <p>Recipient Name: </p>
+                            <input
+                                className="ml-5 block h-10 border px-3 py-1 text-sm rounded-md  focus:bg-white border-gray-600"
+                                type="text"
+                                placeholder="Recipient Name"
+                                value={props?.dataCheckout?.recipientName}
+                                onChange={e => props?.setDataCheckout((prev: ICheckout | undefined) => (
+                                    {
+                                        ...prev!,
+                                        recipientName: e.target.value,
+                                    }
+                                ))}
+                            />
+                        </div>
+                        <div className="flex items-center">
+                            <p>Phone Number: </p>
+                            <input
+                                className="ml-5 block h-10 border px-3 py-1 text-sm rounded-md  focus:bg-white border-gray-600"
+                                type="text"
+                                placeholder="Phone Number"
+                                value={props?.dataCheckout?.phoneNumber}
+                                onChange={e => props?.setDataCheckout((prev: ICheckout | undefined) => (
+                                    {
+                                        ...prev!,
+                                        phoneNumber: e.target.value,
+                                    }
+                                ))}
+                            />
+                        </div>
+                        <div className="flex items-center my-5">
+                            <p>Branch Receive: </p>
+                            <p className="ml-2">{allBranch?.data?.fullAddress}</p>
+                        </div>
+                    </div>
+            }
             {error && <p className="text-sm italic text-red-500">{error}</p>}
             <Dialog size="md" placeholder="" open={open} handler={handleOpen}>
                 <DialogHeader placeholder="">{isAddAddress ? "Add Address" : "Add Coupon"}</DialogHeader>

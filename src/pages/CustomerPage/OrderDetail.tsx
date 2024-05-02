@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import { ArrowLeft } from "@phosphor-icons/react";
-import { formatVND } from "@/utils/hepler";
+import { formatVND, messageToast } from "@/utils/hepler";
 import { Edit } from "@/components/SVG/Edit.svg";
 import {
     Button,
@@ -95,20 +95,35 @@ interface OrderStatusData extends BaseResponseApi {
     }[]
 }
 
+interface IOrderItemReview extends BaseResponseApi {
+    data: {
+        id: string;
+        name: string;
+        thumbnailUrl: string;
+        review: {
+            content: string;
+            star: number;
+            createdAt: string
+        } | null;
+    }[]
+}
+
 function OrderDetail() {
     const [orderDetail, setOrderDetail] = useState<IOrderDetail>()
     const [open, setOpen] = useState<boolean>(false);
     const [statusOrderLine, setStatusOrderLine] = useState<OrderStatusData>()
     const [productReview, setProductReview] = useState<{
-        productId: string,
+        itemId: string,
         star: number,
-        content: string
+        content: string,
     }>({
-        productId: "",
+        itemId: "",
         star: 0,
         content: ""
     })
+    const [orderItemReview, setOrderItemReview] = useState<IOrderItemReview>()
     const { isLoading, startLoading, stopLoading } = useLoading()
+    const [error, setError] = useState<string>("")
 
     const handleOpen = () => setOpen((cur) => !cur);
 
@@ -116,25 +131,72 @@ function OrderDetail() {
     const { id } = useParams()
 
     const handleRedirectOrders = () => {
-        nav(configRouter.home);
+        nav(configRouter.myOrder);
     };
 
     const handleAddreview = async () => {
-        console.log(productReview)
-        try {
-            startLoading()
-            const data = await checkoutApi?.reviewProductOrder(productReview?.productId, productReview?.star, productReview?.content)
-            if (data?.success) {
-                stopLoading()
-                setOrderDetail(data)
+        if (!(orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId) && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)?.length > 0)) {
+            try {
+                if (productReview?.content !== "" && productReview?.star !== 0) {
+                    startLoading()
+                    const data = await checkoutApi?.reviewProductOrder(productReview?.itemId, productReview?.star, productReview?.content)
+                    if (data?.success) {
+                        stopLoading()
+                        setProductReview({
+                            itemId: "",
+                            star: 0,
+                            content: ""
+                        })
+                        setError("")
+                        setOpen(prev => !prev)
+                        toast.success("Review product success")
+                    }
+                }
+                else {
+                    setError(messageToast?.fillInput)
+                }
+            }
+            catch (e: unknown) {
+                if (e instanceof AxiosError && e.response) {
+                    stopLoading()
+                    setError(e?.response?.data?.error?.errorMessage)
+                }
             }
         }
-        catch (e: unknown) {
-            if (e instanceof AxiosError && e.response) {
-                stopLoading()
-                nav(configRouter.myOrder);
-                toast.error("Order not found with id: " + id);
-            }
+        else {
+            setError("")
+            setOpen(prev => !prev)
+            setProductReview({
+                itemId: "",
+                star: 0,
+                content: ""
+            })
+        }
+    }
+
+    const handleOpenReview = (itemId: string) => {
+        setOpen(prev => !prev)
+        if (orderItemReview?.data?.filter((product) => product?.id === itemId) && orderItemReview?.data?.filter((product) => product?.id === itemId)?.length > 0) {
+            setProductReview((prev: {
+                itemId: string,
+                star: number,
+                content: string
+            }) => ({
+                ...prev!,
+                itemId: itemId,
+                star: orderItemReview?.data?.filter((product) => product?.id === itemId)[0]?.review?.star ?? 0,
+                content: orderItemReview?.data?.filter((product) => product?.id === itemId)[0]?.review?.content ?? ""
+            }))
+        }
+        else {
+            setProductReview((prev: {
+                itemId: string,
+                star: number,
+                content: string
+            }) => ({
+                ...prev!,
+                itemId: itemId
+            }))
         }
     }
 
@@ -153,14 +215,24 @@ function OrderDetail() {
                 }
             }
         }
+
         const getOrderStatusLine = async () => {
             const data = await checkoutApi?.getOrderStatusLine(id as string)
             if (data?.success) {
                 setStatusOrderLine(data)
             }
         }
+
+        const getOrderItemReview = async () => {
+            const data = await checkoutApi?.getReviewOrderDetail(id as string)
+            if (data?.success) {
+                setOrderItemReview(data)
+            }
+        }
+
         id && getOrderDetails()
         id && getOrderStatusLine()
+        id && getOrderItemReview()
     }, [id])
 
     return (
@@ -175,7 +247,7 @@ function OrderDetail() {
                 <h1 className="my-6 text-lg font-bold text-gray-700"> Invoice </h1>
             </div>
 
-            <div className="bg-white mb-4 p-6 lg:p-8 rounded-xl shadow-base overflow-hidden">
+            <div className="bg-white p-6 lg:p-8 rounded-xl shadow-base overflow-hidden">
                 <div>
                     <div className="flex lg:flex-row md:flex-row flex-col lg:items-center justify-between pb-4 border-b border-gray-50 ">
                         <h1 className="font-bold text-xl uppercase">
@@ -232,7 +304,7 @@ function OrderDetail() {
                     </div>
                 </div>
                 <div>
-                    <div className="w-full overflow-hidden border border-gray-200  rounded-lg my-8">
+                    <div className="w-full overflow-hidden border border-gray-200  rounded-lg my-4">
                         <div className="w-full overflow-x-auto">
                             <table className="w-full whitespace-nowrap">
                                 <thead className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200  bg-gray-100 ">
@@ -240,6 +312,7 @@ function OrderDetail() {
                                         <td className="px-4 py-2 text-center">SR.</td>
                                         <td className="px-4 py-2 text-center">Product Title</td>
                                         <td className="px-4 py-2 text-center">DETAIL</td>
+                                        {statusOrderLine?.data[0]?.orderStatus === "SUCCEED" && <td className="px-4 py-2 text-center">Review</td>}
                                     </tr>
                                 </thead>
                                 <tbody className="text-gray-800  bg-white  divide-y divide-gray-100 text-serif text-sm my-2">
@@ -257,22 +330,30 @@ function OrderDetail() {
                                                 <ul>
                                                     {item?.itemDetailList?.map((size, index) => (
                                                         <li key={index}>
-                                                            Size: {size?.size} -Quantity: {size?.quantity} -
+                                                            {size?.size && <>Size: {size?.size} -</>} Quantity: {size?.quantity} -
                                                             price: {formatVND(size?.price)}{" "}
                                                             <br></br>
-                                                            Topping list: {
-                                                                size?.toppingList?.map((topping, index) => (
-                                                                    <span key={index}>
-                                                                        {topping?.name} -{" "}
-                                                                        {formatVND(
-                                                                            topping?.price ?? 0
-                                                                        )}
-                                                                    </span>
-                                                                ))}
+                                                            {size?.toppingList?.length > 0 && <>
+                                                                Topping list: {
+                                                                    size?.toppingList?.map((topping, index) => (
+                                                                        <span key={index}>
+                                                                            {topping?.name} -{" "}
+                                                                            {formatVND(
+                                                                                topping?.price ?? 0
+                                                                            )}
+                                                                        </span>
+                                                                    ))}</>
+                                                            }
                                                         </li>
                                                     ))}
                                                 </ul>
                                             </td>
+                                            {
+                                                statusOrderLine?.data[0]?.orderStatus === "SUCCEED" &&
+                                                <td className="whitespace-nowrap font-normal text-gray-500 text-center my-2">
+                                                    <button onClick={() => handleOpenReview(orderItemReview?.data?.filter((product) => product?.name === item?.name)[0]?.id ?? "")}><Edit /></button>
+                                                </td>
+                                            }
                                         </tr>
                                     ))}
                                 </tbody>
@@ -287,7 +368,14 @@ function OrderDetail() {
                                 PAYMENT METHOD
                             </span>
                             <span className="text-sm text-gray-500  font-semibold font-serif block">
-                                {orderDetail?.data?.transaction?.paymentType} <span className="text-yellow-300 px-2.5 py-1 border border-yellow-300 rounded-xl">{orderDetail?.data?.transaction?.status}</span>
+                                {orderDetail?.data?.transaction?.paymentType}
+                                <span className="text-yellow-300 px-2.5 py-1 border border-yellow-300 rounded-xl">{orderDetail?.data?.transaction?.status}</span>
+                                {(orderDetail?.data?.transaction?.status === "UNPAID" && orderDetail?.data?.transaction?.paymentUrl) &&
+                                    <button className="ml-2" onClick={() => {
+                                        localStorage.setItem("orderId", orderDetail?.data?.id)
+                                        window.location.href = (orderDetail?.data?.transaction?.paymentUrl as string)
+                                    }}><Edit /></button>
+                                }
                             </span>
                         </div>
                         <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
@@ -337,9 +425,9 @@ function OrderDetail() {
                             <p className="font-semibold text-lg my-2">Leave a review</p>
                             <div className="text-left w-full">
                                 <p>Rating</p>
-                                <Rating onChange={(e) => {
+                                <Rating value={productReview?.star} onChange={(e) => {
                                     setProductReview((prev: {
-                                        productId: string,
+                                        itemId: string,
                                         star: number,
                                         content: string
                                     }) => (
@@ -353,7 +441,7 @@ function OrderDetail() {
                                 <p>Content</p>
                                 <input onChange={(e) => {
                                     setProductReview((prev: {
-                                        productId: string,
+                                        itemId: string,
                                         star: number,
                                         content: string
                                     }) => (
@@ -362,7 +450,10 @@ function OrderDetail() {
                                             content: e.target.value
                                         }
                                     ))
-                                }} placeholder="Additional review..." className="w-full px-4 py-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500 active:ring-blue-500 active:border-blue-500" />
+                                }}
+                                    value={productReview?.content}
+                                    placeholder="Additional review..." className="w-full px-4 py-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500 active:ring-blue-500 active:border-blue-500" />
+                                {error !== "" && <p className="italic text-sm text-red-500">{error}</p>}
                                 <p className="italic text-sm">*Review will be visible to the public</p>
                             </div>
                         </div>
@@ -375,7 +466,7 @@ function OrderDetail() {
                                     <Spinner className="h-4 w-4" />
                                 </p>
                             ) : (
-                                <span>Send Review</span>
+                                <span>{(orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId) && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)?.length > 0) ? "Close" : "Send Review"}</span>
                             )}
                         </Button>
                     </CardFooter>

@@ -1,16 +1,17 @@
 import { Edit } from "@/components/SVG/Edit.svg"
 import { configRouter } from "@/configs/router"
-import { formatVND } from "@/utils/hepler"
+import { formatVND, messageToast } from "@/utils/hepler"
 import { CaretLeft, Timer } from "@phosphor-icons/react"
 import { useNavigate } from "react-router-dom"
 import { ICheckout, IPropsCheckout } from "./CheckoutDetail"
-import { useSelector } from "react-redux"
-import { RootState } from "@/redux/store"
-import { Cart } from "@/features/cart/cartSlice"
+import { useDispatch, useSelector } from "react-redux"
+import { AppDispatch, RootState } from "@/redux/store"
+import { Cart, resetStoreCart } from "@/features/cart/cartSlice"
 import * as checkoutApi from "@/api/PageApi/checkoutApi"
 import useLoading from "@/hooks/useLoading"
 import { Spinner } from "@material-tailwind/react"
 import { AxiosError } from "axios"
+import { toast } from "react-toastify"
 
 function OrderSumary(props: IPropsCheckout) {
     const nav = useNavigate()
@@ -18,6 +19,7 @@ function OrderSumary(props: IPropsCheckout) {
         (state) => state?.cartSlice?.cartCurrent as Cart[]
     )
     const { isLoading, startLoading, stopLoading } = useLoading()
+    const dispatch = useDispatch<AppDispatch>()
 
     const handleAddProduct = () => {
         nav(configRouter.searchProduct)
@@ -28,21 +30,51 @@ function OrderSumary(props: IPropsCheckout) {
     }
 
     const handleRedirectThanksPage = async () => {
-        // console.log(props?.dataCheckout)
         if (props?.dataCheckout?.type === "Home Delivery") {
             try {
                 startLoading()
-                // const { type, ...order } = props?.dataCheckout
                 const data = await checkoutApi?.orderShipping(Object.fromEntries(Object.entries(props?.dataCheckout).filter(([key]) => key !== 'type')) as ICheckout)
                 if (data?.success) {
                     stopLoading()
-                    // setOrderResponse(data)
-                    if (data?.data?.paymentUrl) {
-                        nav(data?.data?.paymentUrl)
+                    if (props?.dataCheckout?.paymentType === "VNPAY" || props?.dataCheckout?.paymentType === "ZALOPAY") {
+                        localStorage.setItem("orderId", data?.data?.orderId)
+                        localStorage.setItem("transactionId", data?.data?.transactionId)
+                        dispatch(resetStoreCart())
+                        window.location.href = (data?.data?.paymentUrl as string)
                     }
                     else {
+                        dispatch(resetStoreCart())
                         nav(configRouter?.orderDetail.slice(0, -3) + data?.data?.orderId)
                     }
+                }
+            }
+            catch (e: unknown) {
+                if (e instanceof AxiosError && e.response) {
+                    stopLoading()
+                }
+            }
+        }
+        else {
+            try {
+                if (props?.dataCheckout?.branchId && props?.dataCheckout?.receiveTime && props?.dataCheckout?.phoneNumber && props?.dataCheckout?.recipientName) {
+                    startLoading()
+                    const data = await checkoutApi?.orderOnsite(Object.fromEntries(Object.entries(props?.dataCheckout).filter(([key]) => (key !== 'type' && key !== 'addressId' && key !== 'shippingFee'))) as ICheckout)
+                    if (data?.success) {
+                        stopLoading()
+                        if (props?.dataCheckout?.paymentType === "VNPAY" || props?.dataCheckout?.paymentType === "ZALOPAY") {
+                            localStorage.setItem("orderId", data?.data?.orderId)
+                            localStorage.setItem("transactionId", data?.data?.transactionId)
+                            dispatch(resetStoreCart())
+                            window.location.href = (data?.data?.paymentUrl as string)
+                        }
+                        else {
+                            dispatch(resetStoreCart())
+                            nav(configRouter?.orderDetail.slice(0, -3) + data?.data?.orderId)
+                        }
+                    }
+                }
+                else {
+                    toast.error(messageToast.fillInput)
                 }
             }
             catch (e: unknown) {
@@ -114,21 +146,21 @@ function OrderSumary(props: IPropsCheckout) {
                     <p className="text-black">Item price</p>
                     <p>{formatVND(calculateTotalPrice(cartCurrent) ?? 0)}</p>
                 </div>
-                <div className="flex items-center justify-between mb-2 text-default">
+                {props?.dataCheckout?.type === "Home Delivery" && <div className="flex items-center justify-between mb-2 text-default">
                     <p className="text-black">Shipping Fee</p>
                     <p>{formatVND(props?.dataCheckout?.shippingFee ?? 0)}</p>
-                </div>
+                </div>}
                 <div className="flex items-center justify-between mb-2">
                     <p className="text-black">Applied Coin</p>
                     <p className="text-yellow-300">-{formatVND(props?.dataCheckout?.coin ?? 0)}</p>
                 </div>
                 <div className="flex items-center justify-between mb-2">
                     <p className="text-black">Discount</p>
-                    <p className="text-yellow-300">-{formatVND(25000)}</p>
+                    <p className="text-yellow-300">-{formatVND(0)}</p>
                 </div>
                 <div className="flex items-center justify-between mb-2 text-default">
                     <p className="text-black font-semibold">Total</p>
-                    <p className="font-semibold">{formatVND(59700)}</p>
+                    <p className="font-semibold">{formatVND(props?.dataCheckout?.total ?? 0)}</p>
                 </div>
             </div>
             <button onClick={handleRedirectThanksPage} className="w-full py-4 px-2 text-center bg-btnActive rounded-lg text-white">

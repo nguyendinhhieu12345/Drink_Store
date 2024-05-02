@@ -21,7 +21,9 @@ export interface ICheckout {
     coin: number,
     type?: string,
     receiveTime?: string,
-    branchId?: string
+    branchId?: string,
+    phoneNumber?: string,
+    recipientName?: string
 }
 
 export interface IPropsCheckout {

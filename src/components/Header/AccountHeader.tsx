@@ -29,6 +29,7 @@ const AccountHeader = () => {
             nav(configRouter.home)
             await dispatch(resetStoreCart())
             localStorage.removeItem("profile")
+            localStorage.removeItem("orderId")
         }
         else {
             toast.error(
