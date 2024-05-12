@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import * as authApi from "../../api/authApi/authApi";
@@ -16,17 +16,12 @@ function ResetPassword() {
     const emailForgetPass = JSON.parse(localStorage.getItem("emailForgetPass") as string)
     const { isLoading, startLoading, stopLoading } = useLoading()
 
-    useEffect(() => {
-        console.log(emailForgetPass)
-        document.title = "Shopfee | Reset Password";
-    }, []);
-
     const handleResetPass = async () => {
-        if (password === "" || confirmPassword === "") {
+        if (password.trim() === "" || confirmPassword.trim() === "") {
             toast.error(messageToast?.fillInput);
             inputRef.current?.focus();
         } else {
-            if (password !== confirmPassword) {
+            if (password.trim() !== confirmPassword.trim()) {
                 toast.error("Password doesn't match!!!");
                 inputRef.current?.focus();
             } else {

@@ -29,7 +29,7 @@ function Home() {
         if (currentUser?.success) {
             getProfileUser(currentUser?.data?.userId)
         }
-    }, [currentUser])
+    }, [])
 
     return (
         <div className="h-auto mt-20 mx-20">

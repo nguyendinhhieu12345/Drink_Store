@@ -4,10 +4,6 @@ import {
     Typography,
     List,
     ListItem,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
 } from "@material-tailwind/react";
 import assets from "@/assets";
 import AccountHeader from "./AccountHeader";
@@ -15,112 +11,6 @@ import CartHeader from "./CartHeader";
 import Search from "../SVG/Search";
 import { useNavigate } from "react-router-dom";
 
-const navListMenuItems = [
-    {
-        title: "Coffe",
-        description: "Find the perfect solution for your needs.",
-    },
-    {
-        title: "Tea",
-        description: "Meet and learn about our dedication",
-    },
-    {
-        title: "Food",
-        description: "Find the perfect solution for your needs.",
-    },
-    {
-        title: "Plan",
-        description: "Learn how we can help you achieve your goals.",
-    },
-    {
-        title: "Support",
-        description: "Reach out to us for assistance or inquiries",
-    },
-    {
-        title: "Contact",
-        description: "Find the perfect solution for your needs.",
-    },
-    {
-        title: "News",
-        description: "Read insightful articles, tips, and expert opinions.",
-    },
-    {
-        title: "Products",
-        description: "Find the perfect solution for your needs.",
-    },
-    {
-        title: "Special Offers",
-        description: "Explore limited-time deals and bundles",
-    },
-];
-
-function NavListMenu() {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-    const renderItems = navListMenuItems.map(({ title, description }, key) => (
-        <a href="#" key={key}>
-            <MenuItem placeholder="" className="flex items-center gap-3 rounded-lg">
-                <div>
-                    <Typography
-                        placeholder=""
-                        variant="h4"
-                        color="blue-gray"
-                        className="flex items-center text-sm font-bold"
-                    >
-                        {title}
-                    </Typography>
-                    <Typography
-                        placeholder=""
-                        variant="paragraph"
-                        className="text-xs !font-medium text-blue-gray-500"
-                    >
-                        {description}
-                    </Typography>
-                </div>
-            </MenuItem>
-        </a>
-    ));
-
-    return (
-        <React.Fragment>
-            <Menu
-                open={isMenuOpen}
-                handler={setIsMenuOpen}
-                offset={{ mainAxis: 20 }}
-                placement="bottom"
-            >
-                <MenuHandler>
-                    <Typography
-                        placeholder=""
-                        as="div"
-                        variant="small"
-                        className="font-medium"
-                    >
-                        <ListItem
-                            placeholder=""
-                            className="text-md font-semibold flex items-center gap-2 py-2 pr-4 text-gray-900"
-                            selected={isMenuOpen || isMobileMenuOpen}
-                            onClick={() => setIsMobileMenuOpen((cur) => !cur)}
-                        >
-                            Category
-                        </ListItem>
-                    </Typography>
-                </MenuHandler>
-                <MenuList
-                    placeholder=""
-                    className="hidden max-w-screen-xl rounded-xl lg:block"
-                >
-                    <ul className="grid grid-cols-3 gap-y-2 outline-none outline-0">
-                        {renderItems}
-                    </ul>
-                </MenuList>
-            </Menu>
-            <div className="block lg:hidden">
-                <Collapse open={isMobileMenuOpen}>{renderItems}</Collapse>
-            </div>
-        </React.Fragment>
-    );
-}
 
 function NavList() {
     return (
@@ -156,7 +46,6 @@ function NavList() {
                     Store
                 </ListItem>
             </Typography>
-            <NavListMenu />
             <Typography
                 placeholder=""
                 as="a"

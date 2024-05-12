@@ -1,12 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import * as cartApi from "@/api/cartApi/cartApi"
+import { toast } from "react-toastify";
 
 export interface Cart {
-    cart_id?: string;
-    product_id?: string;
-    price: number;
-    title: string;
-    image: string;
+    productId: string;
+    itemDetailList: IItemDetailList[],
+    name?: string,
+    imageUrl?: string
+}
+
+export interface IItemDetailList {
+    quantity: number;
+    toppingNameList?: string[];
+    size?: string;
+    note?: string;
+    price?: number
 }
 
 export interface CartState {
@@ -15,37 +22,30 @@ export interface CartState {
     error: boolean | null;
 }
 
-interface AddCart {
-    product_id: string;
-}
-
 const initialState: CartState = {
     cartCurrent: null,
     loading: false,
     error: false,
 };
 
-export const getCarts = createAsyncThunk<Cart[], string>(
-    "/cart/getcart",
-    async (student_id: string) => {
-        const res = await cartApi.getCarts(student_id);
-        return res;
-    }
-);
-
-export const addToCart = createAsyncThunk<Cart, AddCart>(
+export const addToCart = createAsyncThunk<Cart, Cart>(
     "/cart/addtocart",
-    async (addCart: AddCart) => {
-        const res = await cartApi.addToCart(addCart.product_id);
-        return res;
+    (addCart: Cart) => {
+        return addCart;
     }
 );
 
-export const removeToCart = createAsyncThunk<Cart, string>(
+export const updateCart = createAsyncThunk(
+    "/cart/updateCart",
+    (editCart: { productId: string, itemDetail: IItemDetailList }) => {
+        return editCart;
+    }
+);
+
+export const removeToCart = createAsyncThunk(
     "/cart/removetocart",
-    async (cart_id: string) => {
-        const res = await cartApi.removeToCart(cart_id);
-        return res;
+    (productId: string) => {
+        return productId;
     }
 );
 
@@ -60,19 +60,6 @@ export const cartSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(getCarts.pending, (state) => {
-            state.loading = true;
-        });
-
-        builder.addCase(getCarts.rejected, (state) => {
-            state.loading = false;
-            state.error = true;
-        });
-
-        builder.addCase(getCarts.fulfilled, (state, action) => {
-            state.loading = false;
-            state.cartCurrent = action.payload;
-        });
 
         builder.addCase(addToCart.pending, (state) => {
             state.loading = true;
@@ -83,9 +70,81 @@ export const cartSlice = createSlice({
             state.error = true;
         });
 
-        builder.addCase(addToCart.fulfilled, (state) => {
+        builder.addCase(addToCart.fulfilled, (state, action) => {
             state.loading = false;
-            // state.cartCurrent?.push(action.payload);
+            if (state.cartCurrent) {
+                state.cartCurrent.push(action.payload);
+            } else {
+                state.cartCurrent = [action.payload];
+            }
+        });
+
+        builder.addCase(updateCart.pending, (state) => {
+            state.loading = true;
+        });
+
+        builder.addCase(updateCart.rejected, (state) => {
+            state.loading = false;
+            state.error = true;
+        });
+
+        builder.addCase(updateCart.fulfilled, (state, action) => {
+            state.loading = false;
+            if (state.cartCurrent) {
+                const productId = action?.payload?.productId;
+                const newItemDetail = action?.payload?.itemDetail;
+
+                // Tìm kiếm sản phẩm trong giỏ hàng
+                let foundProductIndex = -1;
+                for (let i = 0; i < state.cartCurrent.length; i++) {
+                    const product = state.cartCurrent[i];
+                    if (product.productId === productId) {
+                        foundProductIndex = i;
+                        break;
+                    }
+                }
+
+                // Nếu sản phẩm đã tồn tại trong giỏ hàng
+                if (foundProductIndex !== -1) {
+                    const currentData = state.cartCurrent[foundProductIndex];
+
+                    // Kiểm tra xem có sản phẩm cùng kích thước không
+                    let sameSizeItemIndex = -1;
+                    for (let j = 0; j < currentData.itemDetailList.length; j++) {
+                        const item = currentData.itemDetailList[j];
+                        if (item.size === newItemDetail.size) {
+                            sameSizeItemIndex = j;
+                            break;
+                        }
+                    }
+
+                    // Nếu đã có sản phẩm cùng kích thước
+                    if (sameSizeItemIndex !== -1) {
+                        const existingItem = currentData.itemDetailList[sameSizeItemIndex];
+                        // Kiểm tra nếu cùng topping
+                        if (existingItem.toppingNameList === newItemDetail.toppingNameList) {
+                            toast.error("The product already exists in the shopping cart!");
+                        } else {
+                            // Cập nhật topping
+                            // currentData.itemDetailList[sameSizeItemIndex].toppingNameList = newItemDetail.toppingNameList;
+                            // Ghi đè lên phần tử hiện tại
+                            // state.cartCurrent[foundProductIndex] = currentData;
+                            // Cập nhật topping
+                            currentData.itemDetailList[sameSizeItemIndex].toppingNameList = newItemDetail.toppingNameList;
+                            currentData.itemDetailList[sameSizeItemIndex].price = newItemDetail.price;
+                            currentData.itemDetailList[sameSizeItemIndex].note = newItemDetail.note;
+                            currentData.itemDetailList[sameSizeItemIndex].quantity = newItemDetail.quantity;
+
+                            // Ghi đè lên phần tử hiện tại trong giỏ hàng   
+                            state.cartCurrent[foundProductIndex] = currentData;
+
+                        }
+                    } else {
+                        // Không có sản phẩm cùng kích thước, thêm mới
+                        state.cartCurrent[foundProductIndex].itemDetailList.push(newItemDetail);
+                    }
+                }
+            }
         });
 
         builder.addCase(removeToCart.pending, (state) => {
@@ -97,11 +156,11 @@ export const cartSlice = createSlice({
             state.error = true;
         });
 
-        builder.addCase(removeToCart.fulfilled, (state) => {
+        builder.addCase(removeToCart.fulfilled, (state, action) => {
             state.loading = false;
-            // state.cartCurrent?.filter(
-            //   (data) => data?.cart_id !== action.payload?.cart_id
-            // );
+            if (state.cartCurrent) {
+                state.cartCurrent = state?.cartCurrent?.filter(product => product?.productId !== action?.payload)
+            }
         });
     },
 });

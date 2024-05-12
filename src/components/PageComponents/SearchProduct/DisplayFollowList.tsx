@@ -1,9 +1,14 @@
 import { configRouter } from "@/configs/router"
+import { ISearchProduct } from "@/pages/CustomerPage/SearchProduct"
 import { formatVND } from "@/utils/hepler"
 import { Rating } from "@material-tailwind/react"
 import { useNavigate } from "react-router-dom"
 
-function DisplayFollowList() {
+interface IDisplayFollowList {
+    products: ISearchProduct | undefined
+}
+
+function DisplayFollowList(props: IDisplayFollowList) {
     const nav = useNavigate()
 
     const handleRedirectProductDetail = () => {
@@ -12,21 +17,20 @@ function DisplayFollowList() {
 
     return (
         <div className="flex flex-col">
-            {Array.from({ length: 15 }).map((_, index) => (
+            {props?.products?.success && props?.products?.data?.productList.length > 0 && props?.products?.data?.productList?.map((product, index) => (
                 <div key={index} className="flex my-5">
-                    <img src="https://product.hstatic.net/1000075078/product/1697441914_phin-gato_304446dce9ec4fe0a5527536b93f6eda.png"
+                    <img src={product?.thumbnailUrl}
                         alt="image product"
-                        className="w-60 h-w-60 object-contain rounded-lg shadow-lg"
+                        className="w-auto h-auto max-w-64 max-h-64 object-contain rounded-lg shadow-lg"
                     />
                     <div className="flex flex-col space-y-2 justify-start p-2.5">
                         <h5 className="text-base font-medium break-all cursor-pointer" onClick={handleRedirectProductDetail}>
-                            Trà Xanh Latte (Nóng)
+                            {product?.name}
                         </h5>
-                        <p className="text-sm text-gray-600">Đá Xay Frosty Phin-Gato là lựa chọn không thể bỏ lỡ cho tín đồ cà phê. Cà phê nguyên chất pha phin truyền thống, thơm đậm đà, đắng mượt mà, quyện cùng kem sữa béo ngậy và đá xay mát lạnh. Nhân đôi vị cà phê nhờ có thêm thạch cà phê đậm đà, giòn dai. Thức uống khơi ngay sự tỉnh táo tức thì. Lưu ý: Khuấy đều phần đá xay trước khi dùng
-                        </p>
-                        <p className="flex items-center text-base">1,1K Sold| <Rating value={5} ratedColor="amber" placeholder="" readonly /></p>
+                        <p className="text-sm text-gray-600">{product?.description}</p>
+                        <p className="flex items-center text-base">{product?.ratingSummary?.quantity} reviews| <Rating value={product?.ratingSummary?.star} ratedColor="amber" placeholder="" readonly /></p>
                     </div>
-                    <p className="text-sm text-gray-600">{formatVND(45000)}</p>
+                    <p className="text-sm text-gray-600">{formatVND(product?.price ? product?.price : 0)}</p>
                 </div>
             ))}
         </div>

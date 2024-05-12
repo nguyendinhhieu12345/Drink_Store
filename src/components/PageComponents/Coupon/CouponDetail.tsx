@@ -34,8 +34,8 @@ function CouponDetail(props: ICouponDetail) {
                                 after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                         <div className="w-full flex flex-col items-start justify-start">
                             <p className="font-semibold leading-5 text-lg break-words">{props?.coupon?.description}</p >
-                            <p className="text-base leading-5 text-gray-500 mt-2">Start: {formatBirthDay(props?.coupon?.startDate.split("T00")[0])}</p>
-                            <p className="text-base leading-5 text-gray-500 mt-2">Expire: {formatBirthDay(props?.coupon?.expirationDate.split("T00")[0])}</p>
+                            <p className="text-base leading-5 text-gray-500 mt-2">Start: {formatBirthDay(props?.coupon?.startDate)}</p>
+                            <p className="text-base leading-5 text-gray-500 mt-2">Expire: {formatBirthDay(props?.coupon?.expirationDate)}</p>
                         </div>
                     </div>
                 </div>

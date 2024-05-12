@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HandWaving } from "@phosphor-icons/react";
@@ -9,17 +9,16 @@ import FromWrap from "@/components/FormWrap/FromWrap";
 import InputWrap from "@/components/FormWrap/InputWrap";
 import { Auth } from "@/type";
 import { useDispatch } from "react-redux";
-import { login } from "@/features/auth/authSlice";
+import { login, loginWithFirebase } from "@/features/auth/authSlice";
 import { AppDispatch } from "@/redux/store";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { AxiosError } from "axios";
+import { messageToast } from "@/utils/hepler";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-
-    useEffect(() => {
-        document.title = "Shopfee | login";
-    }, []);
 
     const handleRedirectForgetPassword = () => {
         navigate(configRouter.forgetPassword);
@@ -30,25 +29,58 @@ const Login = () => {
     };
 
     const handleLogin = async (email: string, password: string) => {
-        setLoading(true);
-        const auth: Auth = { email: email, password: password, fcmTokenId: localStorage.getItem('fcmTokenId') as string };
-        const loginSuccess = await dispatch(login(auth));
+        if (email.trim() !== "" && password.trim() !== "") {
+            setLoading(true);
+            const auth: Auth = { email: email, password: password, fcmTokenId: localStorage.getItem('fcmTokenId') as string };
+            const loginSuccess = await dispatch(login(auth));
 
-        if (loginSuccess.type === "auth/login/fulfilled") {
-            toast.success("Login successful");
-            navigate(configRouter.home)
+            if (loginSuccess.type === "auth/login/fulfilled") {
+                toast.success("Login successful");
+                navigate(configRouter.home)
+                setLoading(false);
+            } else {
+                setLoading(false);
+                console.log(
+                    (loginSuccess as { error: { message: string } }).error?.message
+                );
+                toast.error(
+                    (loginSuccess as { error: { message: string } }).error?.message
+                );
+            }
             setLoading(false);
-        } else {
-            setLoading(false);
-            console.log(
-                (loginSuccess as { error: { message: string } }).error?.message
-            );
-            toast.error(
-                (loginSuccess as { error: { message: string } }).error?.message
-            );
         }
-        setLoading(false);
+        else {
+            toast.error(messageToast?.fillInput)
+        }
     };
+
+    const handleLoginWithFirebase = async () => {
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then(async (result) => {
+                try {
+                    const resultSignup = await dispatch(loginWithFirebase({
+                        fcmTokenId: localStorage?.getItem("fcmTokenId") as string,
+                        idToken: await result?.user?.getIdToken()
+                    }))
+                    if (resultSignup.type === "auth/loginWithFirebase/fulfilled") {
+                        navigate(configRouter.home);
+                    } else {
+                        toast.error(
+                            (resultSignup as { error: { message: string } }).error?.message
+                        );
+                    }
+                }
+                catch (e: unknown) {
+                    if (e instanceof AxiosError && e.response) {
+                        toast.error(e.response.data?.message);
+                    }
+                }
+            }).catch((error) => {
+                toast.error(error?.message)
+            });
+    }
 
     return (
         <div className="flex justify-center items-center h-screen bg-primary bg-[url('https://th.bing.com/th/id/R.2053e0d910bb9f2594ce2482e96070ec?rik=PLO4HYTyDm52hw&pid=ImgRaw&r=0')] bg-contain bg-repeat-round">
@@ -138,12 +170,8 @@ const Login = () => {
                             <p>OR</p>
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
                         </div>
-                        <div className="flex space-x-2 mt-3">
-                            <button className="w-[50%] h-10 border border-gray-200 rounded-lg shadow-2xl flex items-center justify-center font-normal ">
-                                <img src={assets.images.facebookLogo} className="mr-3" />
-                                <p className="text-blue-500">Facebook</p>
-                            </button>
-                            <button className="w-[50%] h-10 border border-gray-200 rounded-lg shadow-2xl flex items-center justify-center font-normal">
+                        <div className="flex items-center justify-center space-x-2 mt-3">
+                            <button onClick={handleLoginWithFirebase} className="w-[50%] h-10 border border-gray-200 rounded-lg shadow-2xl flex items-center justify-center font-normal">
                                 <img src={assets.images.googleLogo} className="mr-3" />
                                 <p>Google</p>
                             </button>
@@ -158,6 +186,11 @@ const Login = () => {
                                     Sign Up
                                 </span>
                             </p>
+                        </div>
+                        <div className="flex items-center justify-center mt-4">
+                            <a href="/" className="text-sm italic">
+                                Continue as guest
+                            </a>
                         </div>
                     </div>
                 </div>

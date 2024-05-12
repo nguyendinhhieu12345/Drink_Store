@@ -7,6 +7,7 @@ import {
 import MapGL from "@goongmaps/goong-map-react";
 import { toast } from "react-toastify";
 import { MapPin } from "@phosphor-icons/react";
+import { IAddNewAddress } from "@/pages/CustomerPage/UserPage/DefaultAddress";
 
 const navStyle: React.CSSProperties = {
     position: "absolute",
@@ -18,6 +19,8 @@ const navStyle: React.CSSProperties = {
 interface IMap {
     latitude?: number;
     longitude?: number;
+    setNewAddress?: React.Dispatch<React.SetStateAction<IAddNewAddress>>,
+    getAllStore?: (lat: number, long: number, key: string) => Promise<void>
 }
 
 function Map(props: IMap) {
@@ -43,11 +46,23 @@ function Map(props: IMap) {
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
         });
+        props?.setNewAddress && props?.setNewAddress((prev: IAddNewAddress) => ({
+            ...prev,
+            latitude: event.lngLat[1],
+            longitude: event.lngLat[0]
+        }))
         const addressDetails = await reverseGeocode(
             event.lngLat[1],
             event.lngLat[0]
         );
-        toast.success(addressDetails);
+        props?.setNewAddress && props?.setNewAddress((prev: IAddNewAddress) => ({
+            ...prev,
+            detail: addressDetails,
+            province: addressDetails,
+            district: addressDetails,
+            ward: addressDetails
+        }))
+        !props?.setNewAddress && (props?.getAllStore && props?.getAllStore(event.lngLat[1], event.lngLat[0], ""));
     }, []);
 
     const reverseGeocode = async (latitude: number, longitude: number) => {
@@ -90,6 +105,11 @@ function Map(props: IMap) {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                     });
+                    props?.setNewAddress && props?.setNewAddress((prev: IAddNewAddress) => ({
+                        ...prev,
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    }))
                 });
             } else {
                 toast.error("Geolocation is not supported by this browser.");

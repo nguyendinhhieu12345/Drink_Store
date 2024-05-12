@@ -13,7 +13,7 @@ export type Ref = HTMLDivElement;
 
 const ITEM_ADMIN_SIDEBAR = [
     {
-        title: "Dashboard",
+        title: "Statistics",
         icon: (
             <SquaresFour size={25} />
         ),

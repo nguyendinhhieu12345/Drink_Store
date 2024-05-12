@@ -19,7 +19,7 @@ RUN npm i
 COPY . /usr/src/app
 
 # Expose the port the app runs in
-EXPOSE 3001
+EXPOSE 3000
 
 CMD ["npm","run","dev"]
 

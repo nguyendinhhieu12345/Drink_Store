@@ -66,6 +66,34 @@ export const signupPass = async (params: signupState) => {
     }
 };
 
+export const signupWithFirebase = async (fcmTokenId: string, idToken: string) => {
+    try {
+        const res = await httpRequest.post("/auth/user/firebase/register", {
+            fcmTokenId
+        }, {
+            "Id-token": idToken,
+        });
+
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const loginWithFirebase = async (fcmTokenId: string, idToken: string) => {
+    try {
+        const res = await httpRequest.post("/auth/user/firebase/login", {
+            fcmTokenId
+        }, {
+            "Id-token": idToken,
+        });
+
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
 export const logout = async (fcmTokenId: string) => {
     try {
         const res = await httpRequest.post("/auth/user/logout", {

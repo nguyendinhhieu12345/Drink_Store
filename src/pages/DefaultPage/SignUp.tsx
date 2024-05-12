@@ -4,20 +4,20 @@ import InputWrap from "@/components/FormWrap/InputWrap";
 import { configRouter } from "@/configs/router";
 import useLoading from "@/hooks/useLoading";
 import { HandWaving } from "@phosphor-icons/react";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as signupApi from "@/api/authApi/authApi"
 import { toast } from "react-toastify";
 import { messageToast } from "@/utils/hepler";
 import { AxiosError } from "axios";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { signupWithFirebase } from "@/features/auth/authSlice";
 
 const SignUp = () => {
     const navigate = useNavigate();
     const { isLoading, startLoading, stopLoading } = useLoading()
-
-    useEffect(() => {
-        document.title = "Shopfee | signup";
-    }, []);
+    const dispatch = useDispatch<AppDispatch>()
 
     const handleLogin = async (
         email: string,
@@ -25,14 +25,13 @@ const SignUp = () => {
         firstName: string,
         lastName: string
     ) => {
-        if (email !== "" && password !== "" && firstName !== "" && lastName !== "") {
+        if (email.trim() !== "" && password.trim() !== "" && firstName.trim() !== "" && lastName.trim() !== "") {
             if (password.length >= 6) {
                 try {
                     startLoading()
                     const data = await signupApi.sendCodeRegister(email)
                     if (data?.success) {
                         stopLoading()
-                        console.log(data)
                         localStorage.setItem("user", JSON.stringify({
                             email, password, firstName, lastName
                         }))
@@ -54,6 +53,34 @@ const SignUp = () => {
             toast.error(messageToast.fillInput)
         }
     };
+
+    const handleSignupWithFirebase = async () => {
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then(async (result) => {
+                try {
+                    const resultSignup = await dispatch(signupWithFirebase({
+                        fcmTokenId: localStorage?.getItem("fcmTokenId") as string,
+                        idToken: await result?.user?.getIdToken()
+                    }))
+                    if (resultSignup.type === "auth/signupWithFirebase/fulfilled") {
+                        navigate(configRouter.home);
+                    } else {
+                        toast.error(
+                            (resultSignup as { error: { message: string } }).error?.message
+                        );
+                    }
+                }
+                catch (e: unknown) {
+                    if (e instanceof AxiosError && e.response) {
+                        toast.error(e.response.data?.message);
+                    }
+                }
+            }).catch((error) => {
+                toast.error(error?.message)
+            });
+    }
 
     const handleRedirectSignInPage = () => {
         navigate(configRouter.login);
@@ -193,12 +220,8 @@ const SignUp = () => {
                             <p>OR</p>
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
                         </div>
-                        <div className="flex space-x-2 mt-3">
-                            <button className="w-[50%] h-10 border border-gray-200 rounded-lg shadow-2xl flex items-center justify-center font-normal ">
-                                <img src={assets.images.facebookLogo} className="mr-3" />
-                                <p className="text-blue-500">Facebook</p>
-                            </button>
-                            <button className="w-[50%] h-10 border border-gray-200 rounded-lg shadow-2xl flex items-center justify-center font-normal">
+                        <div className="flex items-center justify-center space-x-2 mt-3">
+                            <button onClick={handleSignupWithFirebase} className="w-[50%] h-10 border border-gray-200 rounded-lg shadow-2xl flex items-center justify-center font-normal">
                                 <img src={assets.images.googleLogo} className="mr-3" />
                                 <p>Google</p>
                             </button>
