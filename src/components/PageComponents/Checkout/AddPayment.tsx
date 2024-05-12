@@ -1,8 +1,31 @@
 import { Radio, Switch, Typography } from "@material-tailwind/react";
 import { Coin, Money } from "@phosphor-icons/react";
 import { ICheckout, IPropsCheckout } from "./CheckoutDetail";
+import { Cart } from "@/features/cart/cartSlice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 function AddPayment(props: IPropsCheckout) {
+    const cartCurrent = useSelector<RootState, Cart[]>(
+        (state) => state?.cartSlice?.cartCurrent as Cart[]
+    )
+    const calculateTotalPrice = (cart: Cart[]): number => {
+        let totalPrice = 0;
+
+        // Iterate through each item in the cart
+        cart.forEach(item => {
+            // Calculate subtotal for each item
+            const subtotal = item.itemDetailList.reduce((acc, detail) => {
+                return acc + (detail.price || 0);
+            }, 0);
+
+            // Add subtotal to totalPrice
+            totalPrice += subtotal;
+        });
+
+        return totalPrice;
+    };
+
     return (
         <div className="border shadow-base mt-5 rounded-md p-3">
             <p className="font-semibold text-lg mb-2">Payment Method</p>
@@ -79,7 +102,8 @@ function AddPayment(props: IPropsCheckout) {
                                 props?.setDataCheckout((prev: ICheckout | undefined) => (
                                     {
                                         ...prev!,
-                                        coin: JSON.parse(localStorage.getItem("profile") as string)?.coin ?? 0
+                                        total: ((prev?.total as number) - (JSON.parse(localStorage.getItem("profile") as string)?.coin as number)) <= 0 ? 0 : ((prev?.total as number) - (JSON.parse(localStorage.getItem("profile") as string)?.coin as number)),
+                                        coin: ((prev?.total as number) - (JSON.parse(localStorage.getItem("profile") as string)?.coin as number)) <= 0 ? (calculateTotalPrice(cartCurrent as Cart[]) + (prev?.shippingFee as number)) : JSON.parse(localStorage.getItem("profile") as string)?.coin
                                     }
                                 ))
                             }
@@ -87,6 +111,7 @@ function AddPayment(props: IPropsCheckout) {
                                 props?.setDataCheckout((prev: ICheckout | undefined) => (
                                     {
                                         ...prev!,
+                                        total: (prev?.total as number) + (JSON.parse(localStorage.getItem("profile") as string)?.coin as number),
                                         coin: 0
                                     }
                                 ))

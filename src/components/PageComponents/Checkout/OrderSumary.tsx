@@ -15,6 +15,7 @@ import { toast } from "react-toastify"
 
 function OrderSumary(props: IPropsCheckout) {
     const nav = useNavigate()
+    const profileBase = JSON.parse(localStorage?.getItem("profile") as string)
     const cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
     )
@@ -33,7 +34,7 @@ function OrderSumary(props: IPropsCheckout) {
         if (props?.dataCheckout?.type === "Home Delivery") {
             try {
                 startLoading()
-                const data = await checkoutApi?.orderShipping(Object.fromEntries(Object.entries(props?.dataCheckout).filter(([key]) => key !== 'type')) as ICheckout)
+                const data = await checkoutApi?.orderShipping(Object.fromEntries(Object.entries(props?.dataCheckout).filter(([key]) => (key !== 'type' && key !== "recipientName" && key !== "phoneNumber" && key !== "receiveTime" && key !== "branchId"))) as ICheckout)
                 if (data?.success) {
                     stopLoading()
                     if (props?.dataCheckout?.paymentType === "VNPAY" || props?.dataCheckout?.paymentType === "ZALOPAY") {
@@ -41,6 +42,14 @@ function OrderSumary(props: IPropsCheckout) {
                         localStorage.setItem("transactionId", data?.data?.transactionId)
                         dispatch(resetStoreCart())
                         window.location.href = (data?.data?.paymentUrl as string)
+                        if (props?.dataCheckout?.coin > 0) {
+                            localStorage.setItem("profile", JSON.stringify(
+                                {
+                                    ...profileBase,
+                                    coin: profileBase?.coin - props?.dataCheckout?.coin
+                                }
+                            ))
+                        }
                     }
                     else {
                         dispatch(resetStoreCart())
@@ -92,7 +101,7 @@ function OrderSumary(props: IPropsCheckout) {
         cart.forEach(item => {
             // Calculate subtotal for each item
             const subtotal = item.itemDetailList.reduce((acc, detail) => {
-                return acc + (detail.quantity * (detail.price || 0));
+                return acc + (detail.price || 0);
             }, 0);
 
             // Add subtotal to totalPrice
@@ -156,7 +165,7 @@ function OrderSumary(props: IPropsCheckout) {
                 </div>
                 <div className="flex items-center justify-between mb-2">
                     <p className="text-black">Discount</p>
-                    <p className="text-yellow-300">-{formatVND(0)}</p>
+                    <p className="text-yellow-300">-{formatVND(parseInt(localStorage.getItem("discountValue") ?? "0"))}</p>
                 </div>
                 <div className="flex items-center justify-between mb-2 text-default">
                     <p className="text-black font-semibold">Total</p>

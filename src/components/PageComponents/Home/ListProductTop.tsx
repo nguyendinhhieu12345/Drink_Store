@@ -4,7 +4,7 @@ import { Basket } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as homeApi from "@/api/PageApi/homeApi"
-import { dataInitResponseApi } from '@/utils/hepler';
+import { dataInitResponseApi, formatVND } from '@/utils/hepler';
 
 interface IListProductTop {
     title: string;
@@ -95,7 +95,7 @@ const ProductItem = (product: IProductResponse) => {
             onClick={() => handleRedirectProductDetail(product?.id)}
         >
             <div
-                className={`rounded-md flex flex-col gap-3 justify-between items-center min-h-[100px] min-w-[70%] max-w-[80%] border border-gray-200 shadow-xl`}
+                className={`${product?.status === "TEMPORARY_SUSPENDED" && "opacity-60"} rounded-md flex flex-col gap-3 justify-between items-center min-h-[100px] min-w-[70%] max-w-[80%] border border-gray-200 shadow-xl relative`}
             >
                 <div className="h-40 w-40 bg-gray-300 rounded-lg mt-3">
                     <img
@@ -105,13 +105,16 @@ const ProductItem = (product: IProductResponse) => {
                         loading="lazy"
                     />
                 </div>
+                {product?.status === "TEMPORARY_SUSPENDED" && <div className="font-semibold text-red-500 text-sm italic bg-gray-300 px-1 py-1 rounded-tl-2xl rounded-br-2xl absolute left-0.5 top-5">
+                    Suspended
+                </div>}
                 <div className="flex flex-col space-y-2 justify-start p-2.5">
                     <h5 className="text-base font-medium break-all">
                         {product?.name}
                     </h5>
                 </div>
                 <div className="flex flex-row items-center justify-around w-full mb-2">
-                    <p className="text-sm font-light text-gray-600">{product?.price}đ</p>
+                    <p className="text-sm font-light text-gray-600">{formatVND(product?.price ?? 0)}</p>
                     <button className="focus:outline-none z-10 text-white hover:bg-btnActive hover:text-white bg-btnDisable p-2.5 rounded-lg">
                         <Basket />
                     </button>

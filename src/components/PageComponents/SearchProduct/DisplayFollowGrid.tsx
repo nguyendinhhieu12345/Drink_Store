@@ -20,7 +20,7 @@ function DisplayFollowGrid(props: IDisplayFollowGrid) {
                 <div key={index} className="m-1">
                     <img src={product?.thumbnailUrl}
                         alt="image product"
-                        className="w-auto h-auto max-w-64 max-h-64 object-contain rounded-lg shadow-lg"
+                        className="w-[260px] h-[175px] object-contain rounded-lg shadow-lg"
                     />
                     <div className="flex flex-col space-y-2 justify-start p-2.5">
                         <h5 className="text-base font-medium break-all cursor-pointer" onClick={() => handleRedirectProductDetail(product?.id)}>

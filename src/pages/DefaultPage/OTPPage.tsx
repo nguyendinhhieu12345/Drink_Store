@@ -9,9 +9,6 @@ import { AppDispatch } from "@/redux/store";
 import { signup } from "@/features/auth/authSlice";
 
 function OTPPage() {
-    useEffect(() => {
-        document.title = "Shopfee | OTP Confirm";
-    }, []);
 
     const [inputs, setInputs] = useState<string[]>(["", "", "", "", "", ""]);
     const inputRefs = useRef<HTMLInputElement[]>([]);

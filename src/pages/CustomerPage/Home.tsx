@@ -23,7 +23,6 @@ function Home() {
     }
 
     useEffect(() => {
-        document.title = "Shopfee | Home"
         if (!localStorage.getItem("fcmTokenId")) {
             requestPermissions((currentUser?.success && currentUser?.data?.userId !== "") ? currentUser?.data?.userId : null)
         }

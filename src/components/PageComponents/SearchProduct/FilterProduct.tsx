@@ -1,8 +1,9 @@
 import { ISearchProduct } from "@/pages/CustomerPage/SearchProduct"
 import { Popover, PopoverContent, PopoverHandler, Rating, Typography } from "@material-tailwind/react"
-import { Funnel, ListDashes, SquaresFour, Trash } from "@phosphor-icons/react"
+import { Broom, Funnel, ListDashes, SquaresFour } from "@phosphor-icons/react"
 import { useState } from "react"
 import * as searchApi from "@/api/PageApi/searchApi"
+import { toast } from "react-toastify"
 
 interface IFilterProduct {
     activeDisplay: boolean,
@@ -24,17 +25,22 @@ function FilterProduct(props: IFilterProduct) {
     })
 
     const handleApplyFilter = async () => {
-        if (localStorage?.getItem("categorySearch")) {
-            const data = await searchApi.getProductByCategoryId(localStorage.getItem("categorySearch") as string, 1, dataSearch?.min_price, dataSearch?.max_price, dataSearch?.min_star, dataSearch?.sort_type)
-            if (data?.success) {
-                props?.setProducts(data)
+        if (dataSearch?.min_price <= dataSearch?.max_price) {
+            if (localStorage?.getItem("categorySearch")) {
+                const data = await searchApi.getProductByCategoryId(localStorage.getItem("categorySearch") as string, 1, dataSearch?.min_price, dataSearch?.max_price, dataSearch?.min_star, dataSearch?.sort_type)
+                if (data?.success) {
+                    props?.setProducts(data)
+                }
+            }
+            else if (location.search.split("?key=")) {
+                const data = await searchApi.getProductByKeyName(1, location.search.split("?key=")[1] ? location.search.split("?key=")[1] : "", dataSearch?.min_price, dataSearch?.max_price, dataSearch?.min_star, dataSearch?.sort_type)
+                if (data?.success) {
+                    props?.setProducts(data)
+                }
             }
         }
-        else if (location.search.split("?key=")) {
-            const data = await searchApi.getProductByKeyName(1, location.search.split("?key=")[1] ? location.search.split("?key=")[1] : "", dataSearch?.min_price, dataSearch?.max_price, dataSearch?.min_star, dataSearch?.sort_type)
-            if (data?.success) {
-                props?.setProducts(data)
-            }
+        else {
+            toast.error("Please enter max price greater than min price!")
         }
     }
 
@@ -43,12 +49,24 @@ function FilterProduct(props: IFilterProduct) {
             const data = await searchApi.getProductByKeyName(1, "", 0, 0, 0, "")
             if (data?.success) {
                 props?.setProducts(data)
+                setDataSearch({
+                    min_price: 0,
+                    max_price: 0,
+                    min_star: 0,
+                    sort_type: "PRICE_DESC"
+                })
                 localStorage.removeItem("categorySearch")
             }
         }
         else {
             const data = await searchApi.getProductByKeyName(1, location.search.split("?key=")[1] ? location.search.split("?key=")[1] : "", 0, 0, 0, "")
             if (data?.success) {
+                setDataSearch({
+                    min_price: 0,
+                    max_price: 0,
+                    min_star: 0,
+                    sort_type: "PRICE_DESC"
+                })
                 props?.setProducts(data)
             }
         }
@@ -57,7 +75,7 @@ function FilterProduct(props: IFilterProduct) {
     return (
         <div className="flex items-center border-t py-3 justify-between">
             <div className="text-sm">
-                <p>{location.search.split("?key=")[1]}</p>
+                <p>{location.search.split("?key=")[1] && `Search "${location.search.split("?key=")[1].replace(/%/g, " ")}"`}</p>
             </div>
             <div className="flex items-center">
                 <div className="flex items-center">
@@ -111,6 +129,7 @@ function FilterProduct(props: IFilterProduct) {
                             </Typography>
                             <div className="flex items-center justify-between w-full">
                                 <input
+                                    value={dataSearch?.min_price}
                                     onChange={
                                         (e) => setDataSearch((prev: {
                                             min_price: number,
@@ -122,11 +141,14 @@ function FilterProduct(props: IFilterProduct) {
                                             min_price: parseInt(e.target.value)
                                         }))
                                     }
+                                    step={1000}
                                     type="number"
+                                    min={0}
                                     className="block w-25 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-none focus:border-gray-50 "
                                 />
                                 <p>-</p>
                                 <input
+                                    value={dataSearch?.max_price}
                                     onChange={
                                         (e) => setDataSearch((prev: {
                                             min_price: number,
@@ -138,6 +160,8 @@ function FilterProduct(props: IFilterProduct) {
                                             max_price: parseInt(e.target.value)
                                         }))
                                     }
+                                    step={1000}
+                                    min={dataSearch?.min_price}
                                     type="number"
                                     className="block w-25 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-none focus:border-gray-50 "
                                 />
@@ -169,7 +193,7 @@ function FilterProduct(props: IFilterProduct) {
                             </div>
                         </PopoverContent>
                     </Popover>
-                    <button onClick={handleResetFilter}><Trash size={25} /></button>
+                    <button onClick={handleResetFilter}><Broom size={25} /></button>
                 </div>
             </div>
         </div>

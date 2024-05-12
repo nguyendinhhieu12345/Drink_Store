@@ -123,5 +123,11 @@ const publicRoutes: IRouter[] = [
         layout: DefaultLayout,
         role: null,
     },
+    {
+        path: configRouter.requireRefundOrder,
+        component: lazy(() => import("../pages/CustomerPage/RequireRefundOrder")),
+        layout: DefaultLayout,
+        role: null,
+    },
 ];
 export { publicRoutes };

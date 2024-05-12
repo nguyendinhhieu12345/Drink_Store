@@ -5,6 +5,8 @@ import * as checkoutApi from "@/api/PageApi/checkoutApi"
 import { Radio } from "@material-tailwind/react";
 import { Cart } from "@/features/cart/cartSlice";
 import { formatVND } from "@/utils/hepler";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface Coupon {
     couponId: string;
@@ -36,8 +38,24 @@ interface CouponData extends BaseResponseApi {
 
 function ChooseCoupon(props: IPropsCheckout) {
     const [couponValid, setCouponValid] = useState<CouponData>()
+    const cartCurrent = useSelector<RootState, Cart[]>(
+        (state) => state?.cartSlice?.cartCurrent as Cart[]
+    )
 
     const getCouponValid = async () => {
+        const productCouponCode = props?.dataCheckout?.productCouponCode;
+        const orderCouponCode = props?.dataCheckout?.orderCouponCode;
+        const shippingCouponCode = props?.dataCheckout?.shippingCouponCode;
+        const couponCodes: { [key: string]: string } = {};
+        if (productCouponCode && productCouponCode !== "") {
+            couponCodes.productCouponCode = productCouponCode;
+        }
+        if (orderCouponCode && orderCouponCode !== "") {
+            couponCodes.orderCouponCode = orderCouponCode;
+        }
+        if (shippingCouponCode && shippingCouponCode !== "") {
+            couponCodes.shippingCouponCode = shippingCouponCode;
+        }
         const data = await checkoutApi.getValidateListCoupon({
             orderItemList: props?.dataCheckout?.itemList.map(item => {
                 const { productId, itemDetailList } = item;
@@ -63,21 +81,18 @@ function ChooseCoupon(props: IPropsCheckout) {
                 }
             }) as Cart[],
             shippingFee: props?.dataCheckout?.shippingFee as number ?? 0,
-            totalPayment: (props?.dataCheckout?.itemList ?? []).reduce((total, item) => {
-                return total + (item?.itemDetailList ?? []).reduce((subtotal, item) => {
+            totalPayment: ((cartCurrent)?.reduce((total, item) => {
+                return total + (item?.itemDetailList)?.reduce((subtotal, item) => {
                     return subtotal + (item?.price ?? 0);
                 }, 0);
-            }, 0) + (props?.dataCheckout?.shippingFee as number ?? 0),
-            totalItemPrice: (props?.dataCheckout?.itemList ?? []).reduce((total, item) => {
-                return total + (item?.itemDetailList ?? []).reduce((subtotal, item) => {
+            }, 0) ?? 0) + (props?.dataCheckout?.shippingFee as number ?? 0),
+            totalItemPrice: (cartCurrent)?.reduce((total, item) => {
+                return total + (item?.itemDetailList)?.reduce((subtotal, item) => {
                     return subtotal + (item?.price ?? 0);
                 }, 0);
-            }, 0),
-            productCouponCode: props?.dataCheckout?.productCouponCode,
-            orderCouponCode: props?.dataCheckout?.orderCouponCode,
-            shippingCouponCode: props?.dataCheckout?.shippingCouponCode
+            }, 0) ?? 0,
+            ...couponCodes
         })
-        console.log(data)
         if (data?.success) {
             setCouponValid(data)
         }
@@ -91,7 +106,7 @@ function ChooseCoupon(props: IPropsCheckout) {
         if (type === "product") {
             props?.setDataCheckout((prev: ICheckout | undefined) => ({
                 ...prev!,
-                productCouponCode: couponCode
+                productCouponCode: couponCode,
             }))
         }
         else if (type === "shipping") {
@@ -106,6 +121,7 @@ function ChooseCoupon(props: IPropsCheckout) {
                 orderCouponCode: couponCode
             }))
         }
+        getCouponValid()
     }
 
     return (

@@ -20,7 +20,7 @@ import {
 import AddNewAddress from "../UserPage/AddressDefault/AddNewAddress"
 import useLoading from "@/hooks/useLoading"
 import { toast } from "react-toastify"
-import { messageToast } from "@/utils/hepler"
+import { getCurrentDateTime, messageToast } from "@/utils/hepler"
 import { Cart } from "@/features/cart/cartSlice"
 
 interface IBranchNearest extends BaseResponseApi {
@@ -123,6 +123,7 @@ function AddAddress(props: IPropsCheckout) {
                     const shipping = await checkoutApi.getShippingFee(address?.data?.latitude ?? 0, address?.data?.longitude ?? 0)
                     if (shipping?.success) {
                         setError("")
+                        stopLoading()
                         props?.setDataCheckout((prev: ICheckout | undefined) => (
                             {
                                 ...prev!,
@@ -252,7 +253,8 @@ function AddAddress(props: IPropsCheckout) {
                         props?.setDataCheckout((prev: ICheckout | undefined) => (
                             {
                                 ...prev!,
-                                shippingFee: shipping?.data?.shippingFee
+                                shippingFee: shipping?.data?.shippingFee,
+                                total: ((prev?.total as number) - (prev?.shippingFee as number)) + shipping?.data?.shippingFee
                             }
                         ))
                     }
@@ -288,7 +290,8 @@ function AddAddress(props: IPropsCheckout) {
                 recipientName: JSON.parse(localStorage?.getItem("profile") as string)?.firstName + " " + JSON.parse(localStorage?.getItem("profile") as string)?.lastName,
                 phoneNumber: JSON.parse(localStorage?.getItem("profile") as string)?.phoneNumber,
                 shippingFee: 0,
-                total: (prev?.total as number) - (prev?.shippingFee as number)
+                total: (prev?.total as number) - (prev?.shippingFee as number),
+                receiveTime: getCurrentDateTime()
             }
         ))
     }
@@ -339,6 +342,8 @@ function AddAddress(props: IPropsCheckout) {
                                 className="ml-5 block h-10 border px-3 py-1 text-sm rounded-md  focus:bg-white border-gray-600"
                                 type="datetime-local"
                                 placeholder="Time start"
+                                value={props?.dataCheckout?.receiveTime}
+                                min={getCurrentDateTime()}
                                 onChange={(e) => {
                                     props?.setDataCheckout((prev: ICheckout | undefined) => (
                                         {

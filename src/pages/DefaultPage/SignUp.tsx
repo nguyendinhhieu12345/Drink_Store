@@ -4,7 +4,6 @@ import InputWrap from "@/components/FormWrap/InputWrap";
 import { configRouter } from "@/configs/router";
 import useLoading from "@/hooks/useLoading";
 import { HandWaving } from "@phosphor-icons/react";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import * as signupApi from "@/api/authApi/authApi"
 import { toast } from "react-toastify";
@@ -19,10 +18,6 @@ const SignUp = () => {
     const navigate = useNavigate();
     const { isLoading, startLoading, stopLoading } = useLoading()
     const dispatch = useDispatch<AppDispatch>()
-
-    useEffect(() => {
-        document.title = "Shopfee | signup";
-    }, []);
 
     const handleLogin = async (
         email: string,

@@ -17,6 +17,8 @@ import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { BaseResponseApi, User } from "@/type";
 import { messageToast } from "@/utils/hepler";
+import { configRouter } from "@/configs/router";
+import { useNavigate } from "react-router-dom";
 
 export interface IShowAddressResponse extends BaseResponseApi {
     data: {
@@ -63,6 +65,7 @@ function DefaultAddress() {
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
+    const nav = useNavigate()
 
     const handleOpen = () => {
         setAddressEdit("")
@@ -82,13 +85,19 @@ function DefaultAddress() {
     }
 
     useEffect(() => {
-        const getAddressDetail = async () => {
-            const data = await userApi.getAddressDetail(addressEdit as string)
-            if (data?.success) {
-                setNewAddress(data?.data)
-            }
+        if (!useCurrentUser?.success && !useCurrentUser?.data?.userId || !useCurrentUser) {
+            nav(configRouter.login)
+            toast.warning("Please login to continue using website services!")
         }
-        addressEdit && getAddressDetail()
+        else {
+            const getAddressDetail = async () => {
+                const data = await userApi.getAddressDetail(addressEdit as string)
+                if (data?.success) {
+                    setNewAddress(data?.data)
+                }
+            }
+            addressEdit && getAddressDetail()
+        }
     }, [addressEdit])
 
     const handleAddNewAddress = async () => {
@@ -100,7 +109,7 @@ function DefaultAddress() {
                 if (newAddress?.latitude !== 0 && newAddress?.longitude !== 0) {
                     startLoading()
                     let addressDetail: string = ""
-                    if (newAddress?.detail === newAddress?.district) {
+                    if (newAddress?.id) {
                         addressDetail = newAddress?.detail
                     }
                     else {
@@ -129,6 +138,7 @@ function DefaultAddress() {
                         }
                     }
                     else {
+                        console.log(newAddress)
                         const data = await userApi.updateAddressUser(newAddress?.id as string, newAddress?.longitude, newAddress?.latitude, newAddress?.note, newAddress?.recipientName, newAddress?.phoneNumber, addressDetail, newAddress?.default as boolean)
                         if (data?.success) {
                             setNewAddress({
@@ -233,8 +243,6 @@ function DefaultAddress() {
             }
         }
     }
-
-
 
     const getAllAddresUser = async () => {
         const data = await userApi.getAllAddresUser(useCurrentUser?.data?.userId)

@@ -17,4 +17,5 @@ export const configRouter = {
   coupon: "/coupon",
   checkout: "/checkout",
   orderDetail: "/order/:id",
+  requireRefundOrder: "/require-refund-order/:id"
 };

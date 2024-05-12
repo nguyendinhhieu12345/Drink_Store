@@ -8,6 +8,10 @@ import imgUser from "./images/img_user.png";
 import imgCart from "./images/img_cart.png";
 import coin from "./images/coin.png";
 import delivery from "./images/Delivery2.png"
+import processing_icon from "./images/processing_icon.svg"
+import home_icon from "./images/home_icon.svg"
+import delivery_icon from "./images/delivery_icon.svg"
+import succeed_icon from "./images/succeed_icon.svg"
 
 const assets = {
   images: {
@@ -20,7 +24,11 @@ const assets = {
     imgUser: imgUser,
     imgCart: imgCart,
     coin: coin,
-    delivery: delivery
+    delivery: delivery,
+    processing_icon: processing_icon,
+    home_icon: home_icon,
+    delivery_icon: delivery_icon,
+    succeed_icon: succeed_icon
   },
   audios: {},
 

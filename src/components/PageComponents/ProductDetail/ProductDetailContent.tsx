@@ -216,7 +216,7 @@ function ProductDetailContent() {
                     <div className="my-6">
                         <p className="font-medium">Quantity</p>
                         <div className="flex my-4">
-                            <input type="number" min={0}
+                            <input type="number" min={1}
                                 onChange={(e) => setDataAddCart((prev: IItemDetailList | undefined) => ({
                                     ...prev!,
                                     quantity: parseInt(e.target.value),
@@ -229,9 +229,11 @@ function ProductDetailContent() {
                     </div>
 
                     <div className="my-10 flex">
-                        <button onClick={handleAddToCart} className="w-full mr-5 flex justify-center text-white px-4 py-2 rounded-md font-medium items-center gap-3 bg-select active:bg-select focus:bg-select visited:bg-select hover:bg-select">
+                        <button disabled={productDetail?.data?.status === "TEMPORARY_SUSPENDED" ? true : false} onClick={handleAddToCart}
+                            className={`${productDetail?.data?.status === "TEMPORARY_SUSPENDED" && "cursor-not-allowed opacity-60"} w-full mr-5 flex justify-center text-white px-4 py-2 rounded-md font-medium items-center gap-3 bg-select active:bg-select focus:bg-select visited:bg-select hover:bg-select`}
+                        >
                             <img src={assets?.images?.imgCart} alt="img add to cart " className="w-5 h-5 object-contain" />
-                            Add to cart
+                            {productDetail?.data?.status === "TEMPORARY_SUSPENDED" ? "Suspended" : "Add to cart"}
                         </button>
                     </div>
                 </div>

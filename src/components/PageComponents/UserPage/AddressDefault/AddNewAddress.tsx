@@ -1,5 +1,6 @@
 import { IAddNewAddress } from "@/pages/CustomerPage/UserPage/DefaultAddress"
 import AddMapInAddress, { IAddMapInAddress } from "./AddMapInAddress"
+import { Switch } from "@material-tailwind/react"
 
 function AddNewAddress(props: IAddMapInAddress) {
     return (
@@ -59,7 +60,28 @@ function AddNewAddress(props: IAddMapInAddress) {
                         />
                     </div>
                 </div>
-                {props?.newAddress?.default && <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
+                <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
+                    <label className="block text-gray-800 col-span-2 sm:col-span-2 font-medium text-sm">
+                        Address Default
+                    </label>
+                    <div className="col-span-8 sm:col-span-6">
+                        <Switch color="green" crossOrigin="true" defaultChecked={props?.newAddress?.default} onChange={(e) => {
+                            if (e.target.checked) {
+                                props?.setNewAddress((prev: IAddNewAddress) => ({
+                                    ...prev,
+                                    default: true
+                                }))
+                            }
+                            else {
+                                props?.setNewAddress((prev: IAddNewAddress) => ({
+                                    ...prev,
+                                    default: false
+                                }))
+                            }
+                        }} />
+                    </div>
+                </div>
+                {props?.newAddress?.id && <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800 col-span-2 sm:col-span-2 font-medium text-sm">
                         Address Detail
                     </label>

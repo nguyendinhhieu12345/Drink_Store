@@ -30,6 +30,15 @@ export const getValidateListCoupon = async (data: IValidateCouponRequest) => {
     }
 };
 
+export const checkCouponIncart = async (data: IValidateCouponRequest) => {
+    try {
+        const res = await httpRequest.post(`/coupon/check-coupon-in-cart`, data);
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
 export const orderShipping = async (data: ICheckout) => {
     try {
         const res = await httpRequest.post(`/order/shipping`, data);
@@ -99,6 +108,28 @@ export const updateTransaction = async (transactionId: string) => {
 export const getBranchNearest = async (lat: number, lng: number, time: string) => {
     try {
         const res = await httpRequest.get(`/branch/nearest?lat=${lat}&lng=${lng}&time=${time}`);
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const requestCancelOrder = async (orderId: string, note: string) => {
+    try {
+        const res = await httpRequest.patch(`/order/${orderId}/user/cancel`, {
+            note
+        });
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const cancellationRequestOrder = async (orderId: string, note: string) => {
+    try {
+        const res = await httpRequest.post(`/order/${orderId}/cancellation-request`, {
+            note
+        });
         return res;
     } catch (error) {
         return Promise.reject(error);

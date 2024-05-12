@@ -136,3 +136,32 @@ export const generateRandomString = () => {
     }
     return result;
 };
+
+export const getOneMonthAgo = () => {
+    const now = new Date();
+    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    const year = oneMonthAgo.getFullYear();
+    let month = (oneMonthAgo.getMonth() + 1).toString();
+    let day = oneMonthAgo.getDate().toString();
+
+    // Đảm bảo rằng tháng và ngày luôn có hai chữ số
+    if (month.length === 1) {
+        month = '0' + month;
+    }
+    if (day.length === 1) {
+        day = '0' + day;
+    }
+
+    return `${year}-${month}-${day}`;
+}
+
+export function getCurrentDateTime() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = `${(now.getMonth() + 1) < 10 ? '0' : ''}${now.getMonth() + 1}`;
+    const day = `${now.getDate() < 10 ? '0' : ''}${now.getDate()}`;
+    const hours = `${now.getHours() < 10 ? '0' : ''}${now.getHours()}`;
+    const minutes = `${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}

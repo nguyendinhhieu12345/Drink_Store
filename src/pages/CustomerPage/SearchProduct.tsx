@@ -58,7 +58,7 @@ function SearchProduct() {
 
         return () => {
             window.removeEventListener('beforeunload', clearLocalStorage);
-            clearLocalStorage(); // Ensure clearing even if unmount event is not triggered
+            clearLocalStorage();
         };
     }, [location])
 
@@ -69,7 +69,7 @@ function SearchProduct() {
                     <a href="/" className="font-semibold">
                         Home
                     </a>
-                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">Search "{location.search.split("?key=")[1]}"</p>
+                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">Search {location.search.split("?key=")[1] && `"${location.search.split("?key=")[1].replace(/%/g, " ")}"`}</p>
                 </Breadcrumbs>
             </div >
             {!location.search.split("?key=")[1] && <DisplayCategory setProducts={setProducts} />}

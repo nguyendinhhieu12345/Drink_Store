@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { HandWaving } from "@phosphor-icons/react";
@@ -19,10 +19,6 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
-
-    useEffect(() => {
-        document.title = "Shopfee | login";
-    }, []);
 
     const handleRedirectForgetPassword = () => {
         navigate(configRouter.forgetPassword);
@@ -190,6 +186,11 @@ const Login = () => {
                                     Sign Up
                                 </span>
                             </p>
+                        </div>
+                        <div className="flex items-center justify-center mt-4">
+                            <a href="/" className="text-sm italic">
+                                Continue as guest
+                            </a>
                         </div>
                     </div>
                 </div>

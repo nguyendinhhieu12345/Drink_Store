@@ -49,7 +49,7 @@ const AccountHeader = () => {
                     <MenuHandler>
                         <div className="cursor-pointer">
                             <ImageWithError
-                                src={localStorage?.getItem("profile") ? JSON.parse(localStorage?.getItem("profile") as string)?.avatarUrl : assets.images.imgUser}
+                                src={JSON.parse(localStorage?.getItem("profile") as string)?.avatarUrl ? JSON.parse(localStorage?.getItem("profile") as string)?.avatarUrl : assets.images.imgUser}
                                 fallbackSrc={localStorage?.getItem("profile") ? JSON.parse(localStorage?.getItem("profile") as string)?.avatarUrl : assets.images.noAvatar}
                                 alt="avatar"
                                 className="rounded-full h-10 w-10 bg-btnDisable"

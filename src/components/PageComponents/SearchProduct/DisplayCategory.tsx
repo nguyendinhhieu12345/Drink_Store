@@ -60,7 +60,7 @@ function DisplayCategory(props: IDisplayCategory) {
                         <button
                             key={index}
                             onClick={() => handleGetProductByCategory(category?.id)}
-                            className="flex flex-col items-center justify-center w-full"
+                            className={`flex flex-col items-center justify-center w-full ${category?.id === localStorage?.getItem("categorySearch") && " border rounded-lg border-red-400 text-red-500"}`}
                         >
                             <div className="h-20 w-20 mt-2 rounded-full p-0.5">
                                 <img

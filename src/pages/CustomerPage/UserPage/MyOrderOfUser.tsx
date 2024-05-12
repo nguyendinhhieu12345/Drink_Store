@@ -5,6 +5,9 @@ import * as userApi from "@/api/PageApi/userApi"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { formatVND } from "@/utils/hepler";
+import { useNavigate } from "react-router-dom";
+import { configRouter } from "@/configs/router";
+import { toast } from "react-toastify";
 
 interface IOrdersResponse extends BaseResponseApi {
     data: {
@@ -20,6 +23,7 @@ interface IOrdersResponse extends BaseResponseApi {
 
 function MyOrderOfUser() {
     const [orders, setOrders] = useState<IOrdersResponse>()
+    const nav = useNavigate()
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
@@ -32,6 +36,10 @@ function MyOrderOfUser() {
     }
 
     useEffect(() => {
+        if (!useCurrentUser?.success && !useCurrentUser?.data?.userId || !useCurrentUser) {
+            nav(configRouter.login)
+            toast.warning("Please login to continue using website services!")
+        }
         handleGetOrder("WAITING")
     }, [])
 
@@ -46,6 +54,7 @@ function MyOrderOfUser() {
                     <option value="IN_PROCESS">Processing</option>
                     <option value="SUCCEED">Succeed</option>
                     <option value="CANCELED">Canceled</option>
+                    <option value="NOT_RECEIVED">Not Received</option>
                 </select>
             </div>
             <div className="w-full my-5 overflow-hidden border border-gray-200 rounded-lg mb-8 rounded-b-lg">

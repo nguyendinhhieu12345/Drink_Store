@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import * as authApi from "../../api/authApi/authApi";
@@ -15,11 +15,6 @@ function ResetPassword() {
     const nav = useNavigate();
     const emailForgetPass = JSON.parse(localStorage.getItem("emailForgetPass") as string)
     const { isLoading, startLoading, stopLoading } = useLoading()
-
-    useEffect(() => {
-        console.log(emailForgetPass)
-        document.title = "Shopfee | Reset Password";
-    }, []);
 
     const handleResetPass = async () => {
         if (password.trim() === "" || confirmPassword.trim() === "") {

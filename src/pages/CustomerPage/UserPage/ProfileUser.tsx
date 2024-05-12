@@ -1,7 +1,26 @@
 import InputImage from "@/components/PageComponents/UserPage/UpdateProfileUser/InputImage";
 import InputInformation from "@/components/PageComponents/UserPage/UpdateProfileUser/InputInformation";
+import { configRouter } from "@/configs/router";
+import { RootState } from "@/redux/store";
+import { User } from "@/type";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function ProfileUser() {
+    const nav = useNavigate()
+    const currentUser = useSelector<RootState, User>(
+        (state) => state.authSlice.currentUser as User
+    );
+
+    useEffect(() => {
+        if (!currentUser?.success && !currentUser?.data?.userId || !currentUser) {
+            nav(configRouter.login)
+            toast.warning("Please login to continue using website services!")
+        }
+    }, [])
+
     return (
         <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <div className="md:grid md:grid-cols-3 md:gap-6">

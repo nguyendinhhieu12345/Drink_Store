@@ -155,3 +155,32 @@ export const getAllOrderByUserId = async (
         return Promise.reject(error);
     }
 };
+
+export const getSpentStatistic = async (
+    userId: string,
+    start_date: string,
+    end_date: string
+) => {
+    try {
+        const res = await httpRequest.get(
+            `/user/${userId}/spent-statistics?start_date=${start_date}&end_date=${end_date}`
+        );
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const getOrderStatistic = async (
+    userId: string,
+    chart_type: string,
+) => {
+    try {
+        const res = await httpRequest.get(
+            `/user/${userId}/order-statistics?chart_type=${chart_type}`
+        );
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
