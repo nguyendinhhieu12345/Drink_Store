@@ -5,7 +5,7 @@ import * as productDetailApi from "@/api/PageApi/productDetailApi"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { AxiosError } from "axios"
-import { toast } from "react-toastify"
+// import { toast } from "react-toastify"
 import { BaseResponseApi } from "@/type"
 
 interface IReview extends BaseResponseApi {
@@ -55,7 +55,8 @@ function Reviews() {
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
                     // nav(configRouter.home);
-                    toast.error("Product not found with id: " + id);
+                    // toast.error("Product not found with id: " + id);
+                    console.log(e)
                 }
             }
         }
@@ -69,7 +70,7 @@ function Reviews() {
                 <div className="w-[40%]">
                     <p className="font-semibold text-2xl">Customer Reviews</p>
                     <div className="flex items-center gap-2 font-medium my-2">
-                        <Rating placeholder="" value={4} readonly ratedColor="amber" />
+                        {/* <Rating placeholder="" value={4} readonly ratedColor="amber" /> */}
                         <Typography placeholder="" color="blue-gray" className="font-medium ">
                             Based on {statistiProduct?.success && statistiProduct?.data?.reviewCountTotal} Reviews
                         </Typography>

@@ -120,19 +120,41 @@ function AddAddress(props: IPropsCheckout) {
             if (address?.success) {
                 try {
                     startLoading()
-                    const shipping = await checkoutApi.getShippingFee(address?.data?.latitude ?? 0, address?.data?.longitude ?? 0)
+                    const shipping = await checkoutApi.getShippingFee(cartCurrent.map(item => {
+                        const { productId, itemDetailList } = item;
+                        return {
+                            productId,
+                            itemDetailList: itemDetailList.map(detail => {
+                                const { quantity, toppingNameList, size, note } = detail;
+                                if (size) {
+                                    return {
+                                        quantity,
+                                        toppingNameList,
+                                        size,
+                                        note
+                                    };
+                                }
+                                else {
+                                    return {
+                                        quantity,
+                                        note
+                                    };
+                                }
+                            })
+                        }
+                    }) as Cart[], address?.data?.longitude ?? 0, address?.data?.latitude ?? 0)
                     if (shipping?.success) {
                         setError("")
                         stopLoading()
                         props?.setDataCheckout((prev: ICheckout | undefined) => (
                             {
                                 ...prev!,
-                                shippingFee: shipping?.data?.shippingFee,
+                                shippingFee: shipping?.data?.branchValid?.shippingFee,
                                 total: cartCurrent.reduce((total, item) => {
                                     return total + (item?.itemDetailList ?? []).reduce((subtotal, item) => {
                                         return subtotal + (item?.price ?? 0);
                                     }, 0);
-                                }, 0) + (shipping?.data?.shippingFee ?? 0)
+                                }, 0) + (shipping?.data?.branchValid?.shippingFee ?? 0)
                             }
                         ))
                     }
@@ -246,15 +268,15 @@ function AddAddress(props: IPropsCheckout) {
             const address = await addressApi?.getAddressDetail(props?.dataCheckout?.addressId as string)
             if (address?.success) {
                 try {
-                    const shipping = await checkoutApi.getShippingFee(address?.data?.latitude ?? 0, address?.data?.longitude ?? 0)
+                    const shipping = await checkoutApi.getShippingFee(props?.dataCheckout?.itemList as Cart[], address?.data?.longitude ?? 0, address?.data?.latitude ?? 0)
                     if (shipping?.success) {
                         setError("")
                         stopLoading()
                         props?.setDataCheckout((prev: ICheckout | undefined) => (
                             {
                                 ...prev!,
-                                shippingFee: shipping?.data?.shippingFee,
-                                total: ((prev?.total as number) - (prev?.shippingFee as number)) + shipping?.data?.shippingFee
+                                shippingFee: shipping?.data?.branchValid?.shippingFee,
+                                total: ((prev?.total as number) - (prev?.shippingFee as number)) + shipping?.data?.branchValid?.shippingFee
                             }
                         ))
                     }

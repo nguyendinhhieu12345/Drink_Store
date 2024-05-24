@@ -128,7 +128,7 @@ function Store() {
     };
 
     return (
-        <div className="h-auto mt-20 mx-10 bg-white flex flex-col items-center justify-center">
+        <div className="h-auto mt-20 mx-2 sm:mx-10 bg-white flex flex-col items-center justify-center">
             <div className="flex items-center justify-center my-5">
                 <Storefront
                     className="mr-3 p-2 rounded-full bg-yellow-300 text-white"
@@ -144,7 +144,7 @@ function Store() {
                     >
                         Search
                     </label>
-                    <div className="relative w-[400px]">
+                    <div className="relative w-full sm:w-[400px]">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3  cursor-pointer z-999999">
                             <Search />
                         </div>
@@ -174,7 +174,7 @@ function Store() {
                 <div className="text-left px-4 font-semibold text-xl">
                     Found {stores?.data?.branchList?.length} stores
                 </div>
-                <div className="flex flex-wrap w-full justify-start">
+                <div className="grid grid-cols-1 gap-1 lg:grid-cols-2 lg:gap-2 w-full justify-start">
                     {stores?.data?.branchList?.map((store, index) => (
                         <button
                             onClick={() => {
@@ -182,7 +182,7 @@ function Store() {
                                 setStoreId(store?.id)
                             }}
                             key={index}
-                            className="w-[48%] flex items-center my-3 mx-3 rounded-lg shadow-xl border border-gray-200 px-5 py-2"
+                            className="w-full flex items-center my-3 sm:mx-3 rounded-lg shadow-xl border border-gray-200 px-5 py-2"
                         >
                             <img
                                 src={store?.imageUrl}

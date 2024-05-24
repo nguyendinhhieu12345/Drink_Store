@@ -63,7 +63,7 @@ function SearchProduct() {
     }, [location])
 
     return (
-        <div className="h-auto mt-20 mx-48">
+        <div className="h-auto mt-20 mx-5 lg:mx-10 2xl:mx-48">
             <div className="py-5 text-md">
                 <Breadcrumbs placeholder="" className="bg-white p-0 m-0">
                     <a href="/" className="font-semibold">

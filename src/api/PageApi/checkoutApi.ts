@@ -12,9 +12,14 @@ export interface IValidateCouponRequest {
     totalItemPrice: number
 }
 
-export const getShippingFee = async (lat: number, lng: number) => {
+export const getShippingFee = async (orderItemList: Cart[], lng: number, lat: number) => {
     try {
-        const res = await httpRequest.get(`/order/shipping-fee?lat=${lat}&lng=${lng}`);
+        const res = await httpRequest.post(`/order/check-shipping-item`, {
+            orderItemList: orderItemList,
+            deliveryLocation: {
+                lng, lat
+            }
+        });
         return res;
     } catch (error) {
         return Promise.reject(error);

@@ -74,7 +74,7 @@ function ProductDetailContent() {
 
     const handleAddToCart = async () => {
         console.log(dataAddCart)
-        if (dataAddCart?.quantity && dataAddCart?.quantity >= 1 && dataAddCart?.size !== "") {
+        if (dataAddCart?.quantity && dataAddCart?.quantity >= 1 && dataAddCart?.size && dataAddCart?.size !== "") {
             if (cartCurrent?.filter(cart => cart?.productId === productDetail?.data?.id)?.length > 0) {
                 const data = await dispatch(
                     updateCart({
@@ -183,7 +183,7 @@ function ProductDetailContent() {
                     }
                     {productDetail?.data?.type !== "CAKE" &&
                         <div className="my-6">
-                            <p className="font-medium">Topping</p>
+                            {(productDetail?.success && productDetail?.data?.toppingList && productDetail?.data?.toppingList?.length > 0) && <p className="font-medium">Topping</p>}
                             <div className="flex my-4">
                                 {productDetail?.data?.toppingList?.map((topping, index) => (
                                     <button

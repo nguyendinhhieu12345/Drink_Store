@@ -61,11 +61,11 @@ function ListProductTop({ title }: IListProductTop) {
     }, [])
 
     return (
-        <div className="flex flex-col gap-2 px-2 w-full space-y-4 bg-white rounded-lg py-6 my-10">
+        <div className="flex flex-col gap-2 px-2 w-full space-y-4 bg-white rounded-lg py-2 lg:py-6 my-5 lg:my-10">
             <div className="w-full flex items-center justify-between px-1">
                 <h5 className="text-lg font-bold uppercase">Top {title}</h5>
             </div>
-            <div className="grid gap-5 grid-cols-5 w-full px-3">
+            <div className="flex overflow-auto items-center justify-between lg:grid lg:gap-5 lg:grid-cols-5 w-full px-1 lg:px-3">
                 {
                     title === "Rating" ?
                         products?.rating && products?.rating?.success && products?.rating?.data?.map((product) => (
@@ -91,17 +91,17 @@ const ProductItem = (product: IProductResponse) => {
     return (
         <button
             key={product?.id}
-            className="flex items-center justify-center"
+            className="flex items-center justify-center mx-2 min-w-[160px] border border-gray-200 shadow-xl rounded-md lg:rounded-none lg:border-none lg:shadow-none"
             onClick={() => handleRedirectProductDetail(product?.id)}
         >
             <div
-                className={`${product?.status === "TEMPORARY_SUSPENDED" && "opacity-60"} rounded-md flex flex-col gap-3 justify-between items-center min-h-[100px] min-w-[70%] max-w-[80%] border border-gray-200 shadow-xl relative`}
+                className={`${product?.status === "TEMPORARY_SUSPENDED" && "opacity-60"} lg:rounded-md flex flex-col gap-3 justify-between items-center min-h-[100px] min-w-[70%] max-w-[80%] lg:border lg:border-gray-200 lg:shadow-xl relative`}
             >
-                <div className="h-40 w-40 bg-gray-300 rounded-lg mt-3">
+                <div className="w-30 h-30 2xl:h-40 2xl:w-40 lg:mx-3 bg-gray-300 rounded-lg mt-3">
                     <img
                         src={product?.thumbnailUrl}
                         alt="image product"
-                        className="h-40 w-40 rounded-lg"
+                        className="2xl:h-40 2xl:w-40 rounded-lg"
                         loading="lazy"
                     />
                 </div>

@@ -11,26 +11,28 @@ interface IDisplayFollowList {
 function DisplayFollowList(props: IDisplayFollowList) {
     const nav = useNavigate()
 
-    const handleRedirectProductDetail = () => {
-        nav(configRouter.productDetail)
+    const handleRedirectProductDetail = (productId: string) => {
+        nav(configRouter.productDetail.slice(0, -3) + productId)
     }
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full">
             {props?.products?.success && props?.products?.data?.productList.length > 0 && props?.products?.data?.productList?.map((product, index) => (
                 <div key={index} className="flex my-5">
-                    <img src={product?.thumbnailUrl}
-                        alt="image product"
-                        className="w-auto h-auto max-w-64 max-h-64 object-contain rounded-lg shadow-lg"
-                    />
-                    <div className="flex flex-col space-y-2 justify-start p-2.5">
-                        <h5 className="text-base font-medium break-all cursor-pointer" onClick={handleRedirectProductDetail}>
-                            {product?.name}
-                        </h5>
-                        <p className="text-sm text-gray-600">{product?.description}</p>
-                        <p className="flex items-center text-base">{product?.ratingSummary?.quantity} reviews| <Rating value={product?.ratingSummary?.star} ratedColor="amber" placeholder="" readonly /></p>
+                    <div className="flex items-start w-[80%] md:w-[95%]">
+                        <img src={product?.thumbnailUrl}
+                            alt="image product"
+                            className="w-auto h-auto max-w-28 max-h-28 sm:max-w-52 sm:max-h-52 object-contain rounded-lg shadow-lg"
+                        />
+                        <div className="flex flex-col space-y-2 justify-start px-5 break-all">
+                            <h5 className="text-lg font-bold break-all cursor-pointer" onClick={() => handleRedirectProductDetail(product?.id)}>
+                                {product?.name}
+                            </h5>
+                            <p className="text-sm text-gray-600">{product?.description}</p>
+                            <p className="hidden sm:flex sm:items-center sm:text-base">{product?.ratingSummary?.quantity} reviews| <Rating value={product?.ratingSummary?.star} ratedColor="amber" placeholder="" readonly /></p>
+                        </div>
                     </div>
-                    <p className="text-sm text-gray-600">{formatVND(product?.price ? product?.price : 0)}</p>
+                    <p className="text-sm font-semibold text-gray-800 w-[20%] md:w-[5%]">{formatVND(product?.price ? product?.price : 0)}</p>
                 </div>
             ))}
         </div>
