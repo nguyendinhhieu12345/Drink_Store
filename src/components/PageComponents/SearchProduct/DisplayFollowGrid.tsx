@@ -15,7 +15,7 @@ function DisplayFollowGrid(props: IDisplayFollowGrid) {
     }
 
     return (
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4 lg:gap-4">
             {props?.products?.success && props?.products?.data?.productList?.length > 0 && props?.products?.data?.productList?.map((product, index) => (
                 <div key={index} className="m-1">
                     <img src={product?.thumbnailUrl}

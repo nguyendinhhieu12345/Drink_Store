@@ -39,16 +39,16 @@ const ListCategory = () => {
     }
 
     return (
-        <div className="flex flex-col items-start justify-center my-10 py-6 w-full h-auto bg-white rounded-lg">
-            <div className="mb-2 font-semibold text-start px-3 text-2xl">
+        <div className="flex flex-col items-start justify-center my-5 py-2 w-full h-auto bg-white rounded-lg lg:my-10 lg:py-6">
+            <div className="mb-2 font-semibold text-start px-3 text-lg lg:text-2xl">
                 Category
             </div>
-            <div className="flex overflow-auto items-center justify-betweenx px-3 w-full">
+            <div className="flex overflow-auto items-center px-3 w-full">
                 {categorys?.success && categorys?.data?.length > 0 && categorys?.data?.slice(0, 5)?.map((category, index) => (
                     <button
                         key={index}
                         onClick={() => handleSeeProductOfCategory(category?.id)}
-                        className="flex flex-col items-center justify-center max-h-40 w-1/6 my-2 mx-3 py-2 border hover:border-gray-300 cursor-pointer rounded-md"
+                        className="w-full lg:w-1/6 flex flex-col items-center justify-center max-h-40 my-2 mx-3 px-2 lg:px-0 py-2 border hover:border-gray-300 cursor-pointer rounded-md"
                     >
                         <div className="h-20 w-20 rounded-full p-0.5">
                             <img
@@ -58,14 +58,15 @@ const ListCategory = () => {
                                 alt="avatar"
                             />
                         </div>
-                        <p className="mt-4 break-words text-center text-base text-slate-600 line-clamp-1">
+                        <p className="mt-4 break-all text-center text-base text-slate-600 line-clamp-1">
                             {category?.name}
                         </p>
                     </button>
                 ))}
-                {categorys?.success && categorys?.data?.length > 5 && <button
+                {/* {categorys?.success && categorys?.data?.length > 5 &&  */}
+                <button
                     onClick={handleRedirectAllCategory}
-                    className="flex flex-col items-center justify-center max-h-40 w-1/6 my-2 mx-3 py-2 border hover:border-gray-300 cursor-pointer rounded-md"
+                    className="flex lg:w-1/6 flex-col items-center justify-center max-h-40 w-full my-2 mx-3 px-2 lg:px-0 py-2 border hover:border-gray-300 cursor-pointer rounded-md"
                 >
                     <div className="h-20 w-20 rounded-full p-0.5">
                         <img
@@ -79,7 +80,7 @@ const ListCategory = () => {
                         See All
                     </p>
                 </button>
-                }
+                {/* } */}
             </div>
         </div>
     );

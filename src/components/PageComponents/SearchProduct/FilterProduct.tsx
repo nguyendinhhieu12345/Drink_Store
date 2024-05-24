@@ -79,8 +79,8 @@ function FilterProduct(props: IFilterProduct) {
             </div>
             <div className="flex items-center">
                 <div className="flex items-center">
-                    <p className="text-sm">Sort by:</p>
-                    <select className="rounded-lg px-2 py-1 ml-2 text-sm" onChange={async (e) => {
+                    <p className="text-xs sm:text-sm">Sort by:</p>
+                    <select className="rounded-lg px-2 py-1 ml-2 text-xs sm:text-sm" onChange={async (e) => {
                         if (localStorage?.getItem("categorySearch")) {
                             const data = await searchApi.getProductByCategoryId(localStorage.getItem("categorySearch") as string, 1, 0, 0, 0, e.target.value)
                             if (data?.success) {
@@ -104,18 +104,18 @@ function FilterProduct(props: IFilterProduct) {
                         </option>
                     </select>
                 </div>
-                <div className="flex items-center text-sm ml-5">
+                <div className="flex items-center text-xs sm:text-sm ml-5">
                     <p>View</p>
                     <button className="mr-1" onClick={() => props?.setActiveDisplay(true)}>
-                        <SquaresFour size={25} weight={props?.activeDisplay ? "fill" : undefined} className={`${!props.activeDisplay && "opacity-50"}`} />
+                        <SquaresFour size={20} weight={props?.activeDisplay ? "fill" : undefined} className={`${!props.activeDisplay && "opacity-50"}`} />
                     </button>
                     <button className="mr-1" onClick={() => props?.setActiveDisplay(false)}>
-                        <ListDashes size={25} weight={!props?.activeDisplay ? "fill" : undefined} className={`${props.activeDisplay && "opacity-50"}`} />
+                        <ListDashes size={20} weight={!props?.activeDisplay ? "fill" : undefined} className={`${props.activeDisplay && "opacity-50"}`} />
                     </button>
                     <Popover placement="bottom-end">
                         <PopoverHandler>
                             <button>
-                                <Funnel size={25} />
+                                <Funnel size={20} />
                             </button>
                         </PopoverHandler>
                         <PopoverContent placeholder="" className="w-80">
@@ -193,7 +193,7 @@ function FilterProduct(props: IFilterProduct) {
                             </div>
                         </PopoverContent>
                     </Popover>
-                    <button onClick={handleResetFilter}><Broom size={25} /></button>
+                    <button onClick={handleResetFilter}><Broom size={20} /></button>
                 </div>
             </div>
         </div>

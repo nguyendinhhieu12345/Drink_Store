@@ -25,7 +25,7 @@ export const requestPermissions = (userId: string | null) => {
             })
                 .then(async (curentToken) => {
                     if (curentToken) {
-                        // console.log(curentToken)
+                        console.log(curentToken)
                         const data = await authApi.sendNotifyUser(userId ? userId : null, curentToken)
                         if (data?.success) {
                             localStorage.setItem("fcmTokenId", data?.data?.fcmTokenId)

@@ -14,12 +14,12 @@ function Home() {
     );
 
     const getProfileUser = async (userId: string) => {
-        if (!localStorage.getItem('profile')) {
-            const data = await userApi.getProfileUser(userId)
-            if (data?.success) {
-                localStorage.setItem("profile", JSON.stringify(data?.data))
-            }
+        // if (!localStorage.getItem('profile')) {
+        const data = await userApi.getProfileUser(userId)
+        if (data?.success) {
+            localStorage.setItem("profile", JSON.stringify(data?.data))
         }
+        // }
     }
 
     useEffect(() => {
@@ -32,12 +32,12 @@ function Home() {
     }, [])
 
     return (
-        <div className="h-auto mt-20 mx-20">
+        <div className="h-auto mt-20 mx-5 sm:mx-5 xl:mx-20">
             <BannerHome />
             <ListCategory />
             <ListProductTop title="Rating" />
             <ListProductTop title="Sales" />
-        </div>
+        </div >
     );
 }
 
