@@ -142,7 +142,7 @@ function AddAddress(props: IPropsCheckout) {
                                 }
                             })
                         }
-                    }) as Cart[], address?.data?.longitude ?? 0, address?.data?.latitude ?? 0)
+                    }) as Cart[], address?.data?.id)
                     if (shipping?.success) {
                         setError("")
                         stopLoading()
@@ -268,7 +268,7 @@ function AddAddress(props: IPropsCheckout) {
             const address = await addressApi?.getAddressDetail(props?.dataCheckout?.addressId as string)
             if (address?.success) {
                 try {
-                    const shipping = await checkoutApi.getShippingFee(props?.dataCheckout?.itemList as Cart[], address?.data?.longitude ?? 0, address?.data?.latitude ?? 0)
+                    const shipping = await checkoutApi.getShippingFee(props?.dataCheckout?.itemList as Cart[], address?.data?.id)
                     if (shipping?.success) {
                         setError("")
                         stopLoading()

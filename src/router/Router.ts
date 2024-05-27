@@ -124,6 +124,18 @@ const publicRoutes: IRouter[] = [
         role: null,
     },
     {
+        path: configRouter.blogDetail,
+        component: lazy(() => import("../pages/CustomerPage/BlogDetail")),
+        layout: DefaultLayout,
+        role: null,
+    },
+    {
+        path: configRouter.blogs,
+        component: lazy(() => import("../pages/CustomerPage/Blogs")),
+        layout: DefaultLayout,
+        role: null,
+    },
+    {
         path: configRouter.requireRefundOrder,
         component: lazy(() => import("../pages/CustomerPage/RequireRefundOrder")),
         layout: DefaultLayout,

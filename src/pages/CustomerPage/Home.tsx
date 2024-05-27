@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { User } from "@/type";
 import * as userApi from "@/api/PageApi/userApi"
+import ShowBlog from "@/components/PageComponents/Home/ShowBlog";
 
 function Home() {
     const currentUser = useSelector<RootState, User>(
@@ -37,7 +38,8 @@ function Home() {
             <ListCategory />
             <ListProductTop title="Rating" />
             <ListProductTop title="Sales" />
-        </div >
+            <ShowBlog title="Blogs Post" />
+        </div>
     );
 }
 

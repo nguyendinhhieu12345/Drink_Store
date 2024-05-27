@@ -21,7 +21,7 @@ function NavList() {
             <Typography
                 placeholder=""
                 as="a"
-                href="/"
+                href="/blogs"
                 variant="small"
                 color="blue-gray"
             >
@@ -29,7 +29,7 @@ function NavList() {
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
                 >
-                    Home
+                    Blogs
                 </ListItem>
             </Typography>
             <Typography

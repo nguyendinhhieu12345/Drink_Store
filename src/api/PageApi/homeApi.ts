@@ -35,3 +35,31 @@ export const getTopSellingProduct = async (quantity: number) => {
         return Promise.reject(error);
     }
 };
+
+
+export const getAllBlog = async (
+    pageCurrent?: number,
+    size?: number,
+) => {
+    try {
+        const res = await httpRequest.get(
+            `/blog/view-list?page=${pageCurrent}&size=${size}`
+        );
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+export const getAllBlogById = async (
+    blogId: string
+) => {
+    try {
+        const res = await httpRequest.get(
+            `/blog/${blogId}/view`
+        );
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
