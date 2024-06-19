@@ -7,6 +7,7 @@ import * as signupApi from "@/api/authApi/authApi"
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { signup } from "@/features/auth/authSlice";
+import { messageToast } from "@/utils/hepler";
 
 function OTPPage() {
 
@@ -44,38 +45,43 @@ function OTPPage() {
 
     const handleConfirmOTP = async () => {
         try {
-            const data = await signupApi.verifyCode(emailForgetPass?.email ? emailForgetPass?.email : DataSignUp?.email, inputs.join(""))
-            if (data?.success) {
-                if (emailForgetPass) {
-                    localStorage.setItem("emailForgetPass", JSON.stringify({
-                        email: emailForgetPass,
-                        code: inputs.join("")
-                    }))
-                    navigate(configRouter.resetPassword)
-                }
-                else {
-                    const result = await dispatch(signup({
-                        email: DataSignUp.email,
-                        code: inputs.join(""),
-                        password: DataSignUp.password,
-                        firstName: DataSignUp.firstName,
-                        lastName: DataSignUp.lastName,
-                        fcmTokenId: localStorage?.getItem("fcmTokenId") as string
-                    }))
-                    if (result.type === "auth/signup/fulfilled") {
-                        localStorage.removeItem("user")
-                        navigate(configRouter.home);
-                    } else {
-                        toast.error(
-                            (result as { error: { message: string } }).error?.message
-                        );
+            if (inputs.join("").trim().length === 6) {
+                const data = await signupApi.verifyCode(emailForgetPass?.email ? emailForgetPass?.email : DataSignUp?.email, inputs.join(""))
+                if (data?.success) {
+                    if (emailForgetPass) {
+                        localStorage.setItem("emailForgetPass", JSON.stringify({
+                            email: emailForgetPass,
+                            code: inputs.join("")
+                        }))
+                        navigate(configRouter.resetPassword)
+                    }
+                    else {
+                        const result = await dispatch(signup({
+                            email: DataSignUp.email,
+                            code: inputs.join(""),
+                            password: DataSignUp.password,
+                            firstName: DataSignUp.firstName,
+                            lastName: DataSignUp.lastName,
+                            fcmTokenId: localStorage?.getItem("fcmTokenId") as string
+                        }))
+                        if (result.type === "auth/signup/fulfilled") {
+                            localStorage.removeItem("user")
+                            navigate(configRouter.home);
+                        } else {
+                            toast.error(
+                                (result as { error: { message: string } }).error?.message
+                            );
+                        }
                     }
                 }
+            }
+            else {
+                toast.error(messageToast.fillInput)
             }
         }
         catch (e: unknown) {
             if (e instanceof AxiosError && e.response) {
-                toast.error(e.response.data?.message);
+                toast.error(e.response.data?.devResponse?.message);
             }
         }
     };
@@ -109,7 +115,7 @@ function OTPPage() {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toast.error(e.response.data?.message);
+                    toast.error(e.response.data?.devResponse?.message);
                 }
             }
         }
@@ -117,7 +123,7 @@ function OTPPage() {
 
     return (
         <div className="w-full h-full bg-gray-400">
-            <div className="w-auto h-[350px] flex flex-col justify-center text-black absolute top-1/4 left-[25%] shadow-md bg-white rounded-lg p-3">
+            <div className="w-1/2    min-w-1/2 h-[350px] flex flex-col justify-center text-black absolute top-1/4 left-1/4 shadow-md bg-white rounded-lg p-3">
                 <div className="flex flex-col items-center justify-center">
                     <div className="font-semibold text-2xl my-2">Test@gmail.com</div>
                     <div className="mt-2">
@@ -144,7 +150,7 @@ function OTPPage() {
                 </div>
                 <div className="text-center my-3 w-full">
                     <button
-                        className="bg-btnDisable text-white rounded-lg px-3 py-2 w-[45%]"
+                        className="bg-btnActive text-white rounded-lg px-3 py-2 w-[45%]"
                         onClick={handleConfirmOTP}
                     >
                         Confirm

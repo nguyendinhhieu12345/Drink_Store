@@ -156,6 +156,21 @@ export const getAllOrderByUserId = async (
     }
 };
 
+export const getHistoryCoinByUserId = async (
+    userId: string,
+    pageCurrent: number,
+    size: number
+) => {
+    try {
+        const res = await httpRequest.get(
+            `/user/${userId}/coin-history?page=${pageCurrent}&size=${size}`
+        );
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
 export const getSpentStatistic = async (
     userId: string,
     start_date: string,

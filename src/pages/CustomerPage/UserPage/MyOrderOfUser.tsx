@@ -8,21 +8,26 @@ import { formatVND } from "@/utils/hepler";
 import { useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import { toast } from "react-toastify";
+import TablePaging from "@/components/PageComponents/SearchProduct/Paging";
 
-interface IOrdersResponse extends BaseResponseApi {
+export interface IOrdersResponse extends BaseResponseApi {
     data: {
-        id: string,
-        total: number,
-        productQuantity: number,
-        orderType: string,
-        productName: string,
-        statusLastEvent: string,
-        timeLastEvent: number
-    }[]
+        totalPage: number
+        orderList: {
+            id: string,
+            total: number,
+            productQuantity: number,
+            orderType: string,
+            productName: string,
+            statusLastEvent: string,
+            timeLastEvent: number
+        }[]
+    }
 }
 
 function MyOrderOfUser() {
     const [orders, setOrders] = useState<IOrdersResponse>()
+    const [pageActive, setPageActive] = useState<number>(1);
     const nav = useNavigate()
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
@@ -41,7 +46,7 @@ function MyOrderOfUser() {
             toast.warning("Please login to continue using website services!")
         }
         handleGetOrder("WAITING")
-    }, [])
+    }, [pageActive])
 
     return (
         <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
@@ -72,7 +77,7 @@ function MyOrderOfUser() {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {orders?.data?.map((order, index) => (
+                            {orders?.data?.orderList?.map((order, index) => (
                                 <tr key={index}>
                                     <td className="px-5 py-3 leading-6 whitespace-nowrap"><span className="uppercase text-sm font-medium">{order?.id}</span></td>
                                     <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm">{new Date(order?.timeLastEvent as number).toLocaleString().split(", ")[0]}</span></td>
@@ -86,56 +91,13 @@ function MyOrderOfUser() {
                     </table>
                 </div>
                 {/* paging */}
-                {/* <div className="px-4 py-3 border-t border-gray-200  bg-white text-gray-500 ">
-                    <div className="flex flex-col justify-end text-xs sm:flex-row text-gray-600 ">
-                        <div className="flex mt-2 sm:mt-auto sm:justify-end">
-                            <nav aria-label="Product Page Navigation">
-                                <ul className="inline-flex items-center">
-                                    <li>
-                                        <button
-                                            className="inline-flex items-center justify-center leading-5 transition-colors duration-150 font-medium p-2 rounded-md text-gray-600 focus:outline-none border border-transparent hover:bg-gray-100"
-                                            type="button"
-                                            aria-label="Previous"
-                                        >
-                                            <CaretLeft size={12} />
-                                        </button>
-                                    </li>
-
-                                    {Array.from({ length: 5 }).map(
-                                        (_, i) => (
-                                            <li
-                                                key={i}
-                                                className={`${i + 1 === 1
-                                                    ? "bg-green-500 rounded-md"
-                                                    : "hover:bg-gray-100 rounded-md"
-                                                    }`}
-                                            >
-                                                <button
-                                                    className={`${i + 1 === 1
-                                                        ? "bg-green-500 hover:bg-green-500"
-                                                        : ""
-                                                        }inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium focus:outline-none px-3 py-1 rounded-md text-xs text-gray-600 border border-transparent `}
-                                                    type="button"
-                                                >
-                                                    {i + 1}
-                                                </button>
-                                            </li>
-                                        )
-                                    )}
-                                    <li>
-                                        <button
-                                            className="inline-flex items-center justify-center cursor-pointer leading-5 transition-colors duration-150 font-medium p-2 rounded-md text-gray-600 focus:outline-none border border-transparent hover:bg-gray-100"
-                                            type="button"
-                                            aria-label="Next"
-                                        >
-                                            <CaretRight size={12} />
-                                        </button>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div> */}
+                {orders?.success && orders?.data?.totalPage >= 2 && (
+                    <TablePaging
+                        data={orders}
+                        setPageActive={setPageActive}
+                        pageActive={pageActive}
+                    />
+                )}
             </div>
         </div>
     )

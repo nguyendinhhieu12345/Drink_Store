@@ -35,7 +35,7 @@ function ForgetPassword() {
             catch (e: unknown) {
                 setLoading(false);
                 if (e instanceof AxiosError && e.response) {
-                    toast.error(e.response.data?.message);
+                    toast.error(e.response?.data?.devResponse?.message);
                     if (inputRef.current) inputRef.current.focus();
                 }
             }

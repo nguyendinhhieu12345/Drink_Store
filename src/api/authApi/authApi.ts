@@ -1,5 +1,7 @@
+import { toast } from "react-toastify";
 import { Auth, signupState } from "../../type";
 import * as httpRequest from "../../utils/httpRequest";
+import { AxiosError } from "axios";
 
 export const loginPass = async (params: Auth) => {
     try {
@@ -9,8 +11,20 @@ export const loginPass = async (params: Auth) => {
             fcmTokenId: params.fcmTokenId
         });
         return res;
-    } catch (error) {
-        return Promise.reject(error);
+    } catch (error: unknown) {
+        if (error instanceof AxiosError && error.response) {
+            if (error?.response?.data?.error?.errorCode === 13) {
+                error?.response?.data?.devResponse?.details?.map((err: {
+                    field: string,
+                    valueReject: string,
+                    validate: string
+                }) => (
+                    toast.error(err?.field + " " + err?.validate)
+                ))
+            }
+            toast.error(`${error?.response?.data?.error?.errorMessage}${error?.response?.data?.error?.subErrorMessage ? ` - ${error?.response?.data?.error?.subErrorMessage}` : ""} `)
+            return Promise.reject(error);
+        }
     }
 };
 

@@ -28,11 +28,14 @@ export interface ICheckout {
 
 export interface IPropsCheckout {
     dataCheckout: ICheckout | undefined,
-    setDataCheckout: React.Dispatch<React.SetStateAction<ICheckout | undefined>>
+    setDataCheckout: React.Dispatch<React.SetStateAction<ICheckout | undefined>>,
+    isDisable?: boolean,
+    setIsDisable?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function CheckoutDetail() {
     const [dataCheckout, setDataCheckout] = useState<ICheckout>()
+    const [isDisable, setIsDisable] = useState<boolean>(false)
     const cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
     )
@@ -77,11 +80,11 @@ function CheckoutDetail() {
     return (
         <div className="flex items-start">
             <div className="flex flex-col w-1/2">
-                <AddAddress dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} />
-                <AddPayment dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} />
-                <AddCoupon dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} />
+                <AddAddress dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} isDisable={isDisable} setIsDisable={setIsDisable} />
+                <AddPayment dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} isDisable={isDisable} setIsDisable={setIsDisable} />
+                <AddCoupon dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} isDisable={isDisable} setIsDisable={setIsDisable} />
             </div>
-            <OrderSumary dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} />
+            <OrderSumary dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} isDisable={isDisable} setIsDisable={setIsDisable} />
         </div>
     )
 }

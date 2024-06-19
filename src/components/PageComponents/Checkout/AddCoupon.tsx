@@ -185,7 +185,8 @@ function AddCoupon(props: IPropsCheckout) {
                         return total + (item?.itemDetailList)?.reduce((subtotal, item) => {
                             return subtotal + (item?.price ?? 0);
                         }, 0);
-                    }, 0) as number) + (prev?.shippingFee as number)) - getTotalCouponValue(data?.data)
+                    }, 0) as number) + (prev?.shippingFee as number)) - getTotalCouponValue(data?.data),
+                    ...couponCodes
                 }
             ))
             localStorage.setItem("discountValue", getTotalCouponValue(data?.data).toString())

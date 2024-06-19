@@ -56,6 +56,12 @@ const publicRoutes: IRouter[] = [
         layout: DefaultLayout,
         role: null,
     },
+    {
+        path: configRouter.hello,
+        component: lazy(() => import("../pages/CustomerPage/Hello")),
+        layout: DefaultLayout,
+        role: null,
+    },
 
     {
         path: configRouter.store,
@@ -89,6 +95,12 @@ const publicRoutes: IRouter[] = [
     },
     {
         path: configRouter.changePassword,
+        component: lazy(() => import("../pages/CustomerPage/UserPage")),
+        layout: DefaultLayout,
+        role: null,
+    },
+    {
+        path: configRouter.historyCoin,
         component: lazy(() => import("../pages/CustomerPage/UserPage")),
         layout: DefaultLayout,
         role: null,

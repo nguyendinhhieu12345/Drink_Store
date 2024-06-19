@@ -6,6 +6,7 @@ import MyOrderOfUser from "./UserPage/MyOrderOfUser"
 import ProfileUser from "./UserPage/ProfileUser"
 import ChangePasswordUser from "./UserPage/ChangePasswordUser"
 import DefaultAddress from "./UserPage/DefaultAddress"
+import HistoryCoin from "./UserPage/HistoryCoin"
 
 function UserPage() {
     const location = useLocation()
@@ -25,6 +26,9 @@ function UserPage() {
         }
         if (location.pathname === configRouter.defaultAddress) {
             return <DefaultAddress />
+        }
+        if (location.pathname === configRouter.historyCoin) {
+            return <HistoryCoin />
         }
     }
 

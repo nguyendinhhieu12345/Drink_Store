@@ -30,6 +30,7 @@ const AccountHeader = () => {
             await dispatch(resetStoreCart())
             localStorage.removeItem("profile")
             localStorage.removeItem("orderId")
+            localStorage.removeItem("emailForgetPass")
         }
         else {
             toast.error(
@@ -58,8 +59,11 @@ const AccountHeader = () => {
                     </MenuHandler>
                     {currentUser?.data?.userId ?
                         <MenuList placeholder="">
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.dashboard)}>Default Address</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.dashboard)}>Statistics</MenuItem>
                             <MenuItem placeholder="" onClick={() => nav(configRouter.myOrder)}>History Order</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.profile)}>Profile</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>Default Address</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>History coin</MenuItem>
                             <hr className="my-3" />
                             <MenuItem placeholder="" onClick={handleLogout}>
                                 Logout

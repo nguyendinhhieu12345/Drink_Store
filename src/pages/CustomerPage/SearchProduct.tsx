@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@material-tailwind/react"
 import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import * as searchApi from "@/api/PageApi/searchApi"
+import TablePaging from "@/components/PageComponents/SearchProduct/Paging"
 
 export interface ISearchProduct extends BaseResponseApi {
     data: {
@@ -29,18 +30,19 @@ export interface ISearchProduct extends BaseResponseApi {
 function SearchProduct() {
     const [products, setProducts] = useState<ISearchProduct>()
     const [activeDisplay, setActiveDisplay] = useState<boolean>(true)
+    const [pageActive, setPageActive] = useState<number>(1);
     const location = useLocation()
 
     const handleGetProduct = async (categoryId: string, keySearch: string) => {
         if (categoryId === "") {
-            const data = await searchApi.getProductByKeyName(1, "", 0, 0, 0, "")
+            const data = await searchApi.getProductByKeyName(pageActive, "", 0, 0, 0, "")
             if (data?.success) {
                 setProducts(data)
                 localStorage.removeItem("categorySearch")
             }
         }
         else {
-            const data = await searchApi.getProductByKeyName(1, keySearch, 0, 0, 0, "")
+            const data = await searchApi.getProductByKeyName(pageActive, keySearch, 0, 0, 0, "")
             if (data?.success) {
                 setProducts(data)
             }
@@ -60,7 +62,7 @@ function SearchProduct() {
             window.removeEventListener('beforeunload', clearLocalStorage);
             clearLocalStorage();
         };
-    }, [location])
+    }, [location, pageActive])
 
     return (
         <div className="h-auto mt-20 mx-5 lg:mx-10 2xl:mx-48">
@@ -75,6 +77,13 @@ function SearchProduct() {
             {!location.search.split("?key=")[1] && <DisplayCategory setProducts={setProducts} />}
             <FilterProduct setProducts={setProducts} activeDisplay={activeDisplay} setActiveDisplay={setActiveDisplay} />
             {activeDisplay ? <DisplayFollowGrid products={products} /> : <DisplayFollowList products={products} />}
+            {products?.success && products?.data?.totalPage >= 2 && (
+                <TablePaging
+                    data={products}
+                    setPageActive={setPageActive}
+                    pageActive={pageActive}
+                />
+            )}
         </div>
     )
 }

@@ -30,6 +30,11 @@ export interface IProduct {
   thumbnailUrl: string;
   status: string;
   price: number;
+  description?: string;
+  ratingSummary?: {
+    star: number;
+    quantity: number
+  }
 }
 
 export interface IBranch {
