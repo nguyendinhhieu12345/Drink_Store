@@ -207,7 +207,7 @@ function AddMapInAddress(props: IAddMapInAddress) {
                             value={props?.newAddress?.detail}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
-                                detail: e.target.value
+                                detail: e.target.value.trim()
                             }))}
                         />
                     </div>

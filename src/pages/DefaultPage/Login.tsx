@@ -40,12 +40,9 @@ const Login = () => {
                 setLoading(false);
             } else {
                 setLoading(false);
-                console.log(
-                    (loginSuccess as { error: { message: string } }).error?.message
-                );
-                toast.error(
-                    (loginSuccess as { error: { message: string } }).error?.message
-                );
+                // toast.error(
+                //     (loginSuccess as { error: { message: string } }).error?.message
+                // );
             }
             setLoading(false);
         }
@@ -115,6 +112,7 @@ const Login = () => {
                             <div className="mb-5">
                                 <p className="font-semibold text-base">Email</p>
                                 <InputWrap
+                                    type="email"
                                     formField={{ name: "email" }}
                                     className="border-2 border-gray-500 rounded-md w-90 h-10 pl-3 hover:border-blue-500"
                                 />

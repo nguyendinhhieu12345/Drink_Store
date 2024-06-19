@@ -1,6 +1,6 @@
 import * as userApi from "@/api/PageApi/userApi"
 import useLoading from "@/hooks/useLoading";
-import { messageToast } from "@/utils/hepler";
+import { isPhone, messageToast } from "@/utils/hepler";
 import { Spinner } from "@material-tailwind/react";
 import { AxiosError } from "axios";
 import { ChangeEvent, useState } from "react";
@@ -28,7 +28,7 @@ function InputInformation() {
     const handleUpdateProfile = async () => {
         try {
             startLoading()
-            if (dataUpdate?.firstName.trim() !== "" && dataUpdate?.lastName.trim() !== "" && dataUpdate?.birthDate.trim() !== "" && dataUpdate?.gender.trim() !== "" && dataUpdate?.phoneNumber.trim() !== "") {
+            if (dataUpdate?.firstName.trim() !== "" && dataUpdate?.lastName.trim() !== "" && dataUpdate?.birthDate.trim() !== "" && dataUpdate?.gender.trim() !== "" && dataUpdate?.phoneNumber.trim() !== "" && isPhone(dataUpdate?.phoneNumber?.trim())) {
                 const resultSignup = await userApi?.updateProfileUser(profileBase?.id, dataUpdate?.firstName, dataUpdate?.lastName, dataUpdate?.birthDate, dataUpdate?.gender, dataUpdate?.phoneNumber)
                 if (resultSignup?.success) {
                     toast.success(resultSignup?.message)
@@ -64,11 +64,11 @@ function InputInformation() {
                 <div className="mt-5 md:mt-0 md:col-span-2">
                     <div className="lg:mt-6 mt-4 bg-white">
                         <div className="grid grid-cols-6 gap-6">
-                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={profileBase?.firstName} title="First Name" type="text" keyData="firstName" />
-                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={profileBase?.lastName} title="Last Name" type="text" keyData="lastName" />
-                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={profileBase?.phoneNumber} title="Phone/Number" type="text" keyData="phoneNumber" />
+                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={dataUpdate?.firstName} title="First Name" type="text" keyData="firstName" />
+                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={dataUpdate?.lastName} title="Last Name" type="text" keyData="lastName" />
+                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={dataUpdate?.phoneNumber} title="Phone/Number" type="text" keyData="phoneNumber" />
                             <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={profileBase?.email} title="Email" type="email" keyData="email" />
-                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={profileBase?.birthDate} title="Birthday" type="date" keyData="birthDate" />
+                            <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={dataUpdate?.birthDate} title="Birthday" type="date" keyData="birthDate" />
                             <div className="col-span-6 sm:col-span-3">
                                 <label className="block text-gray-500 font-medium text-sm leading-none mb-2">Gender</label>
                                 <div className="relative">
@@ -128,7 +128,7 @@ const InputWrap = (props: IInputWrap) => {
         props?.setDataUpdate((prev: IDataUpdateUser) => (
             {
                 ...prev,
-                [keyData]: value
+                [keyData]: value.trim()
             }
         ))
     };
@@ -137,7 +137,15 @@ const InputWrap = (props: IInputWrap) => {
         <div className="col-span-6 sm:col-span-3">
             <label className="block text-gray-500 font-medium text-sm leading-none mb-2">{props?.title}</label>
             <div className="relative">
-                <input value={props?.value} onChange={(e) => handleInputChange(e, props?.keyData)} disabled={props?.title === "Email" ? true : false} name={props?.title} type={props?.type} placeholder={props?.title} className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12" />
+                <input
+                    value={props?.value}
+                    onChange={(e) => handleInputChange(e, props?.keyData)}
+                    disabled={props?.title === "Email" ? true : false}
+                    name={props?.title}
+                    type={props?.type}
+                    placeholder={props?.title}
+                    className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
+                />
             </div>
         </div>
     )

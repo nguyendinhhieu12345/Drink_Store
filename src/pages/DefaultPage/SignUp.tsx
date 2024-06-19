@@ -41,7 +41,8 @@ const SignUp = () => {
                 catch (e: unknown) {
                     stopLoading()
                     if (e instanceof AxiosError && e.response) {
-                        toast.error(e.response.data?.message);
+                        console.log(e.response?.data)
+                        toast.error(e?.response?.data?.devResponse?.message);
                     }
                 }
             }

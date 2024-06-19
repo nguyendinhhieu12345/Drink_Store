@@ -23,6 +23,17 @@ export const getShippingFee = async (orderItemList: Cart[], addressId: string) =
     }
 };
 
+export const checkTakeAwayItem = async (orderItemList: Cart[], branchId: string) => {
+    try {
+        const res = await httpRequest.post(`/order/check-take-away-item?branch_id=${branchId}`, {
+            orderItemList
+        });
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
 export const getValidateListCoupon = async (data: IValidateCouponRequest) => {
     try {
         const res = await httpRequest.post(`/coupon/get-validate-list`, data);
@@ -107,9 +118,9 @@ export const updateTransaction = async (transactionId: string) => {
     }
 };
 
-export const getBranchNearest = async (lat: number, lng: number, time: string) => {
+export const getBranchNearest = async (lat: number, lng: number) => {
     try {
-        const res = await httpRequest.get(`/branch/nearest?lat=${lat}&lng=${lng}&time=${time}`);
+        const res = await httpRequest.get(`/branch/active?lat=${lat}&lng=${lng}&page=1&size=999`);
         return res;
     } catch (error) {
         return Promise.reject(error);

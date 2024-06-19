@@ -27,7 +27,7 @@ function ResetPassword() {
             } else {
                 try {
                     startLoading()
-                    const data = await authApi.resetPassword(emailForgetPass?.email?.email, emailForgetPass?.code, password);
+                    const data = await authApi.resetPassword(emailForgetPass?.email?.email, emailForgetPass?.code, password.trim());
                     if (data?.success) {
                         stopLoading()
                         toast.success(data?.message);

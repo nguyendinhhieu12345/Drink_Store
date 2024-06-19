@@ -34,7 +34,7 @@ function ChangePasswordUser() {
             confirmNewPassword: string
         }) => ({
             ...prev,
-            [key]: e.target.value
+            [key]: e.target.value.trim()
         }))
     }
 

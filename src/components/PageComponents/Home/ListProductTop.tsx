@@ -108,7 +108,7 @@ const ProductItem = (product: IProductResponse) => {
                 {product?.status === "TEMPORARY_SUSPENDED" && <div className="font-semibold text-red-500 text-sm italic bg-gray-300 px-1 py-1 rounded-tl-2xl rounded-br-2xl absolute left-0.5 top-5">
                     Suspended
                 </div>}
-                <div className="flex flex-col space-y-2 justify-start p-2.5">
+                <div className="flex flex-col space-y-2 justify-start">
                     <h5 className="text-base font-medium break-all">
                         {product?.name}
                     </h5>

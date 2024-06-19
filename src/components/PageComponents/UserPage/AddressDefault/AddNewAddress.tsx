@@ -19,7 +19,7 @@ function AddNewAddress(props: IAddMapInAddress) {
                             value={props?.newAddress?.recipientName}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
-                                recipientName: e.target.value
+                                recipientName: e.target.value.trim()
                             }))}
                         />
                     </div>
@@ -37,7 +37,7 @@ function AddNewAddress(props: IAddMapInAddress) {
                             value={props?.newAddress?.phoneNumber}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
-                                phoneNumber: e.target.value
+                                phoneNumber: e.target.value.trim()
                             }))}
                         />
                     </div>
@@ -55,7 +55,7 @@ function AddNewAddress(props: IAddMapInAddress) {
                             value={props?.newAddress?.note}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
-                                note: e.target.value
+                                note: e.target.value.trim()
                             }))}
                         />
                     </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Coin,
     Gear,
     ListBullets,
     MapPinLine,
@@ -23,6 +24,11 @@ const ITEM_ADMIN_SIDEBAR = [
         title: "History Orders",
         icon: <ListBullets size={25} />,
         to: configRouter.myOrder,
+    },
+    {
+        title: "History Coins",
+        icon: <Coin size={25} />,
+        to: configRouter.historyCoin,
     },
     {
         title: "Update Profile",
@@ -68,7 +74,7 @@ const ItemSidebar = (props: {
 const TabListUser = () => {
     return (
         <div
-            className={`bg-white h-auto max-h-65 w-1/4 mr-5 border border-gray-50 shadow-base rounded-md p-2`}
+            className={`bg-white h-auto max-h-[19rem] w-1/4 mr-5 border border-gray-50 shadow-base rounded-md p-2`}
         >
             {ITEM_ADMIN_SIDEBAR.map((item, index) => {
                 return (

@@ -77,10 +77,10 @@ export const dataInitResponseApi = {
 }
 
 export const messageToast = {
-    fillInput: "Please fill out all fields completely!"
+    fillInput: "Please fill in all the fields completely and in the correct format!"
 }
 
-export const isNumber = (str: string) => {
+export const isPhone = (str: string) => {
     if (str.length === 10)
         return /^[0-9]+$/.test(str);
     else

@@ -64,8 +64,15 @@ function OrderSumary(props: IPropsCheckout) {
             }
         }
         else {
+            // props?.setDataCheckout((prev: ICheckout | undefined) => (
+            //     {
+            //         ...prev!,
+            //         receiveTime: getCurrentIsoString(prev?.receiveTime as string)
+            //     }
+            // ))
             try {
                 if (props?.dataCheckout?.branchId && props?.dataCheckout?.receiveTime && props?.dataCheckout?.phoneNumber && props?.dataCheckout?.recipientName) {
+                    // console.log(props?.dataCheckout)
                     startLoading()
                     const data = await checkoutApi?.orderOnsite(Object.fromEntries(Object.entries(props?.dataCheckout).filter(([key]) => (key !== 'type' && key !== 'addressId' && key !== 'shippingFee'))) as ICheckout)
                     if (data?.success) {
@@ -93,6 +100,16 @@ function OrderSumary(props: IPropsCheckout) {
             }
         }
     }
+
+    // const getCurrentIsoString = (timeString: string) => {
+    //     const today = new Date();
+    //     const dateString = today.toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+    //     const date = new Date(`${dateString}T${timeString}:00.715Z`);
+
+    //     return date.toISOString();
+    // };
+
 
     const calculateTotalPrice = (cart: Cart[]): number => {
         let totalPrice = 0;
@@ -172,7 +189,7 @@ function OrderSumary(props: IPropsCheckout) {
                     <p className="font-semibold">{formatVND(props?.dataCheckout?.total ?? 0)}</p>
                 </div>
             </div>
-            <button onClick={handleRedirectThanksPage} className="w-full py-4 px-2 text-center bg-btnActive rounded-lg text-white">
+            <button disabled={props?.isDisable} onClick={handleRedirectThanksPage} className={`w-full py-4 px-2 text-center ${props?.isDisable ? "bg-btnDisable" : "bg-btnActive"} rounded-lg text-white`}>
                 {isLoading ? (
                     <p className="flex items-center justify-center">
                         <span className="mr-2">Order</span>{" "}

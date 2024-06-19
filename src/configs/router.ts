@@ -19,5 +19,7 @@ export const configRouter = {
     orderDetail: "/order/:id",
     blogDetail: "/blog/:id",
     requireRefundOrder: "/require-refund-order/:id",
-    blogs: "/blogs"
+    blogs: "/blogs",
+    historyCoin: "/history-coin",
+    hello: "/hello",
 };
