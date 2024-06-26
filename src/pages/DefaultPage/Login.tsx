@@ -40,9 +40,6 @@ const Login = () => {
                 setLoading(false);
             } else {
                 setLoading(false);
-                // toast.error(
-                //     (loginSuccess as { error: { message: string } }).error?.message
-                // );
             }
             setLoading(false);
         }
@@ -131,7 +128,7 @@ const Login = () => {
                                     className="italic text-blue-500 cursor-pointer text-sm"
                                     onClick={handleRedirectForgetPassword}
                                 >
-                                    Forgot your password?
+                                    Forgot password?
                                 </p>
                             </div>
                             <div className="flex space-x-5 mt-5">
@@ -184,11 +181,6 @@ const Login = () => {
                                     Sign Up
                                 </span>
                             </p>
-                        </div>
-                        <div className="flex items-center justify-center mt-4">
-                            <a href="/" className="text-sm italic">
-                                Continue as guest
-                            </a>
                         </div>
                     </div>
                 </div>

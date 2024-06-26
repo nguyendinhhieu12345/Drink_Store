@@ -1,4 +1,5 @@
 import CouponOrder from "@/components/PageComponents/Coupon/CouponComponent";
+import TotalCoin from "@/components/PageComponents/Coupon/TotalCoin";
 import BannerHome from "@/components/PageComponents/Home/BannerHome";
 import SealPercentSVG from "@/components/SVG/SealPercentSVG"
 
@@ -10,9 +11,8 @@ function Coupon() {
                 <h1 className="font-medium">Shopfee Coupon</h1>
             </div>
             <BannerHome />
-            <CouponOrder title="Product" />
-            <CouponOrder title="Order" />
-            <CouponOrder title="Shipping" />
+            <TotalCoin />
+            <CouponOrder />
         </div>
     )
 }

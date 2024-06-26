@@ -36,6 +36,14 @@ export const getTopSellingProduct = async (quantity: number) => {
     }
 };
 
+export const getTrackingProduct = async (quantity: number) => {
+    try {
+        const res = await httpRequest.get(`/product/user-tracking?size=${quantity}`);
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
 
 export const getAllBlog = async (
     pageCurrent?: number,

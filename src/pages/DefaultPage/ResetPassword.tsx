@@ -87,7 +87,7 @@ function ResetPassword() {
                         className="bg-blue-500 text-white rounded px-4 py-2"
                         onClick={handleResetPass}
                     >
-                        {isLoading ? <p className="flex items-center"><Spinner /> Confirm</p> : "Confirm"}
+                        {isLoading ? <p className="flex items-center"><Spinner /> Change Password</p> : "Change Password"}
                     </button>
                 </div>
             </div>

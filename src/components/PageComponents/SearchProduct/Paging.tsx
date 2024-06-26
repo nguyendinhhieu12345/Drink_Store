@@ -2,9 +2,10 @@ import { ISearchProduct } from "@/pages/CustomerPage/SearchProduct";
 import { IOrdersResponse } from "@/pages/CustomerPage/UserPage/MyOrderOfUser";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { Dispatch, SetStateAction } from "react";
+import { IReview } from "../ProductDetail/Reviews";
 
 interface ITablePaging {
-    data: ISearchProduct | IOrdersResponse;
+    data: ISearchProduct | IOrdersResponse | IReview;
     pageActive: number;
     setPageActive: Dispatch<SetStateAction<number>>;
 }

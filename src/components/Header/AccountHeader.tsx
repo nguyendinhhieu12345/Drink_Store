@@ -31,6 +31,7 @@ const AccountHeader = () => {
             localStorage.removeItem("profile")
             localStorage.removeItem("orderId")
             localStorage.removeItem("emailForgetPass")
+            localStorage.removeItem("fcmTokenId")
         }
         else {
             toast.error(
@@ -61,7 +62,7 @@ const AccountHeader = () => {
                         <MenuList placeholder="">
                             <MenuItem placeholder="" onClick={() => nav(configRouter.dashboard)}>Statistics</MenuItem>
                             <MenuItem placeholder="" onClick={() => nav(configRouter.myOrder)}>History Order</MenuItem>
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.profile)}>Profile</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.profile)}>Personal Information</MenuItem>
                             <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>Default Address</MenuItem>
                             <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>History coin</MenuItem>
                             <hr className="my-3" />

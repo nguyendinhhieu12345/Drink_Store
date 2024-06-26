@@ -131,32 +131,44 @@ function OrderDetail() {
     };
 
     const handleAddreview = async () => {
-        if (!(orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId) && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)?.length > 0)) {
-            try {
-                if (productReview?.content !== "" && productReview?.star !== 0) {
-                    startLoading()
-                    const data = await checkoutApi?.reviewProductOrder(productReview?.itemId, productReview?.star, productReview?.content)
-                    if (data?.success) {
-                        stopLoading()
-                        setProductReview({
-                            itemId: "",
-                            star: 0,
-                            content: ""
-                        })
-                        setError("")
-                        setOpen(prev => !prev)
-                        toast.success("Review product success")
+        console.log(orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId))
+        if ((orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId) && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)?.length > 0)) {
+            if (!orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)[0]?.review) {
+                try {
+                    if (productReview?.content !== "" && productReview?.star !== 0) {
+                        startLoading()
+                        const data = await checkoutApi?.reviewProductOrder(productReview?.itemId, productReview?.star, productReview?.content)
+                        if (data?.success) {
+                            stopLoading()
+                            setProductReview({
+                                itemId: "",
+                                star: 0,
+                                content: ""
+                            })
+                            setError("")
+                            setOpen(prev => !prev)
+                            toast.success("Review product success")
+                        }
+                    }
+                    else {
+                        setError(messageToast?.fillInput)
                     }
                 }
-                else {
-                    setError(messageToast?.fillInput)
+                catch (e: unknown) {
+                    if (e instanceof AxiosError && e.response) {
+                        stopLoading()
+                        setError(e?.response?.data?.error?.errorMessage)
+                    }
                 }
             }
-            catch (e: unknown) {
-                if (e instanceof AxiosError && e.response) {
-                    stopLoading()
-                    setError(e?.response?.data?.error?.errorMessage)
-                }
+            else {
+                setError("")
+                setOpen(prev => !prev)
+                setProductReview({
+                    itemId: "",
+                    star: 0,
+                    content: ""
+                })
             }
         }
         else {

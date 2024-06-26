@@ -95,6 +95,7 @@ function OrderSumary(props: IPropsCheckout) {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
+                    toast.error(e.response?.data?.devResponse?.message)
                     stopLoading()
                 }
             }
