@@ -125,7 +125,7 @@ function OTPPage() {
         <div className="w-full h-full bg-gray-400">
             <div className="w-1/2    min-w-1/2 h-[350px] flex flex-col justify-center text-black absolute top-1/4 left-1/4 shadow-md bg-white rounded-lg p-3">
                 <div className="flex flex-col items-center justify-center">
-                    <div className="font-semibold text-2xl my-2">Test@gmail.com</div>
+                    <div className="font-semibold text-2xl my-2">Email</div>
                     <div className="mt-2">
                         Enter the 6-digit OTP code that has been sent from email to complete
                         your account registration

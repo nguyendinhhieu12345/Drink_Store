@@ -23,7 +23,7 @@ interface IProductResponse {
     }
 }
 
-interface IListProduct extends BaseResponseApi {
+export interface IListProduct extends BaseResponseApi {
     data: IProductResponse[]
 }
 

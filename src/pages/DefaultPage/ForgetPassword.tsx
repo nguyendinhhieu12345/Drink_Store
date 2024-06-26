@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import * as authApi from "../../api/authApi/authApi";
 import { toast } from "react-toastify";
@@ -80,16 +80,8 @@ function ForgetPassword() {
                     {error && <p className="italic text-[14px] text-red-600">{error}</p>}
                 </div>
                 <div className="m-[10px_15px] flex flex-row justify-end">
-                    <Link
-                        to={configRouter.login}
-                        className="italic text-sm text-blue-400"
-                    >
-                        Already have an account?
-                    </Link>
-                </div>
-                <div className="m-[10px_15px] flex flex-row justify-end">
                     <Button placeholder="" onClick={handleForgetPass}>
-                        {loading ? <Spinner /> : "Search"}
+                        {loading ? <Spinner /> : "Continue"}
                     </Button>
                 </div>
             </div>

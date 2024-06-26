@@ -160,7 +160,7 @@ function ProductDetailContent() {
         <div>
             <div className="flex items-start mb-10">
                 <div className="w-1/2">
-                    <img src={productDetail?.data?.imageUrl} alt="image product" className="w-142 h-142 object-contain bg-yellow-400" />
+                    <img src={productDetail?.data?.imageUrl} alt="image product" className="w-142 h-142 object-contain bg-[#fff0f0f0]" />
                 </div>
                 <div className="w-1/2">
                     <p className="font-semibold text-3xl">{productDetail?.data?.name}</p>

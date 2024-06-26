@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import * as searchApi from "@/api/PageApi/searchApi"
 import { BaseResponseApi } from "@/type";
 import { ISearchProduct } from "@/pages/CustomerPage/SearchProduct";
+import { SwiperSlide, Swiper } from "swiper/react";
+import "swiper/css"
 
 interface IListCategory extends BaseResponseApi {
     data: {
@@ -46,25 +48,29 @@ function DisplayCategory(props: IDisplayCategory) {
                 Category
             </div>
             <div className="flex overflow-auto items-center w-full">
-                {categorys?.success && categorys?.data?.length > 0 && categorys?.data?.slice(0, 5)?.map((category, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleGetProductByCategory(category?.id)}
-                        className={`${index === 0 && "ml-0"} w-full lg:w-1/6 flex flex-col items-center justify-center max-h-40 my-2 mx-3 px-5 lg:px-0 py-2 border sm:hover:border-red-600 cursor-pointer rounded-md ${category?.id === localStorage?.getItem("categorySearch") && " border rounded-lg border-red-400 text-red-500"}`}
-                    >
-                        <div className="w-15 h-15 sm:h-20 sm:w-20 rounded-full p-0.5">
-                            <img
-                                className="shadow-base h-full w-full rounded-full border-2 border-white object-cover hover:ease-in-out hover:duration-300 hover:delay-100 hover:scale-[1.2]"
-                                src={category?.imageUrl}
-                                loading="lazy"
-                                alt="avatar"
-                            />
-                        </div>
-                        <p className="mt-4 break-all text-center text-base text-slate-600 line-clamp-1">
-                            {category?.name}
-                        </p>
-                    </button>
-                ))}
+                <Swiper
+                    spaceBetween={30}
+                    navigation
+                    scrollbar={{ draggable: true }}
+                    slidesPerView={6}
+                >
+                    {categorys?.success && categorys?.data?.length > 0 && categorys?.data?.map((cate, index) => (
+                        <SwiperSlide className="cursor-pointer" key={index} onClick={() => handleGetProductByCategory(cate?.id)}>
+                            <div className={`flex flex-col items-center justify-center w-full ${cate?.id === localStorage?.getItem("categorySearch") && "font-semibold border rounded-lg border-brown-400 text-brown-500"}`}>
+                                <div className="h-32 w-25 p-0.5">
+                                    <img
+                                        className="h-full w-full border-2 border-white object-contain"
+                                        src={cate?.imageUrl}
+                                        alt="avatar"
+                                    />
+                                </div>
+                                <p className="my-2 text-center text-sm text-slate-600 line-clamp-1">
+                                    {cate?.name}
+                                </p>
+                            </div>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
             </div>
         </div>
     )

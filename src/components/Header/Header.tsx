@@ -55,7 +55,7 @@ function NavList() {
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
                 >
-                    Coupon
+                    Preferential
                 </ListItem>
             </Typography>
             <Typography

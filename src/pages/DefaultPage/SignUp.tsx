@@ -9,16 +9,10 @@ import * as signupApi from "@/api/authApi/authApi"
 import { toast } from "react-toastify";
 import { messageToast } from "@/utils/hepler";
 import { AxiosError } from "axios";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { signupWithFirebase } from "@/features/auth/authSlice";
 
 const SignUp = () => {
     const navigate = useNavigate();
     const { isLoading, startLoading, stopLoading } = useLoading()
-    const dispatch = useDispatch<AppDispatch>()
-
     const handleLogin = async (
         email: string,
         password: string,
@@ -29,20 +23,28 @@ const SignUp = () => {
             if (password.length >= 6) {
                 try {
                     startLoading()
-                    const data = await signupApi.sendCodeRegister(email)
-                    if (data?.success) {
+                    const checkExisAccount = await signupApi.checkExistAccount(email)
+                    if (checkExisAccount?.success && checkExisAccount?.data) {
                         stopLoading()
-                        localStorage.setItem("user", JSON.stringify({
-                            email, password, firstName, lastName
-                        }))
-                        navigate(configRouter.optConfirm);
+                        toast.error("Email is already registered!")
                     }
                 }
-                catch (e: unknown) {
-                    stopLoading()
-                    if (e instanceof AxiosError && e.response) {
-                        console.log(e.response?.data)
-                        toast.error(e?.response?.data?.devResponse?.message);
+                catch {
+                    try {
+                        const data = await signupApi.sendCodeRegister(email)
+                        if (data?.success) {
+                            stopLoading()
+                            localStorage.setItem("user", JSON.stringify({
+                                email, password, firstName, lastName
+                            }))
+                            navigate(configRouter.optConfirm);
+                        }
+                    }
+                    catch (e: unknown) {
+                        stopLoading()
+                        if (e instanceof AxiosError && e.response) {
+                            toast.error(e?.response?.data?.devResponse?.message);
+                        }
                     }
                 }
             }
@@ -53,38 +55,6 @@ const SignUp = () => {
         else {
             toast.error(messageToast.fillInput)
         }
-    };
-
-    const handleSignupWithFirebase = async () => {
-        const auth = getAuth();
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(auth, provider)
-            .then(async (result) => {
-                try {
-                    const resultSignup = await dispatch(signupWithFirebase({
-                        fcmTokenId: localStorage?.getItem("fcmTokenId") as string,
-                        idToken: await result?.user?.getIdToken()
-                    }))
-                    if (resultSignup.type === "auth/signupWithFirebase/fulfilled") {
-                        navigate(configRouter.home);
-                    } else {
-                        toast.error(
-                            (resultSignup as { error: { message: string } }).error?.message
-                        );
-                    }
-                }
-                catch (e: unknown) {
-                    if (e instanceof AxiosError && e.response) {
-                        toast.error(e.response.data?.message);
-                    }
-                }
-            }).catch((error) => {
-                toast.error(error?.message)
-            });
-    }
-
-    const handleRedirectSignInPage = () => {
-        navigate(configRouter.login);
     };
 
     return (
@@ -221,17 +191,10 @@ const SignUp = () => {
                             <p>OR</p>
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
                         </div>
-                        <div className="flex items-center justify-center space-x-2 mt-3">
-                            <button onClick={handleSignupWithFirebase} className="w-[50%] h-10 border border-gray-200 rounded-lg shadow-2xl flex items-center justify-center font-normal">
-                                <img src={assets.images.googleLogo} className="mr-3" />
-                                <p>Google</p>
-                            </button>
-                        </div>
                         <div className="flex items-center justify-center mt-4">
-                            <p className="text-sm italic" onClick={handleRedirectSignInPage}>
-                                Don't have on account?{" "}
-                                <span className="text-blue-500 cursor-pointer">Sign In</span>
-                            </p>
+                            <a href="/" className="text-sm italic">
+                                Continue as guest
+                            </a>
                         </div>
                     </div>
                 </div>

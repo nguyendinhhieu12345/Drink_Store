@@ -94,12 +94,12 @@ function FilterProduct(props: IFilterProduct) {
                             }
                         }
                     }}
-                        defaultValue="PRICE_DESC"
+                        defaultValue="PRICE_ASC"
                     >
-                        <option value="PRICE_DESC">
+                        <option value="PRICE_ASC">
                             Price low to hight
                         </option>
-                        <option value="PRICE_ASC">
+                        <option value="PRICE_DESC">
                             Price hight to low
                         </option>
                     </select>

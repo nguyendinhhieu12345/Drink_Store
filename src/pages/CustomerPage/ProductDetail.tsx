@@ -1,9 +1,8 @@
-import ListProductRecommend from "@/components/PageComponents/Home/ListProductRecommend"
 import ProductDetailContent from "@/components/PageComponents/ProductDetail/ProductDetailContent"
 import Reviews from "@/components/PageComponents/ProductDetail/Reviews"
 import { Breadcrumbs } from "@material-tailwind/react"
+import ProductRecommend from "@/components/PageComponents/ProductDetail/ProductRecommend"
 import { useParams } from "react-router-dom"
-
 
 function ProductDetail() {
     const { id } = useParams()
@@ -25,14 +24,7 @@ function ProductDetail() {
             <div className="border-b border-gray-200 py-8">
                 <Reviews />
             </div>
-            <div className="py-8">
-                <p className="font-semibold mb-3 text-md">Recommended products</p>
-                <div className="grid gap-5 grid-cols-5 w-full mt-5">
-                    {Array.from({ length: 5 }, (_, index) => (
-                        <ListProductRecommend key={index} />
-                    ))}
-                </div>
-            </div>
+            <ProductRecommend />
         </div >
     )
 }

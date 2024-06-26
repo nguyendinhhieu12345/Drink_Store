@@ -22,6 +22,7 @@ const CartHeader = () => {
 
     return (
         <div
+            onClick={handleRedirectCart}
             className="relative z-10"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}

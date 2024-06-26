@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as homeApi from "@/api/PageApi/homeApi"
 
-interface IListCategory extends BaseResponseApi {
+export interface IListCategory extends BaseResponseApi {
     data: {
         id: string;
         name: string;

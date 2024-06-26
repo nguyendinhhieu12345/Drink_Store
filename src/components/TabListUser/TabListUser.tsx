@@ -31,7 +31,7 @@ const ITEM_ADMIN_SIDEBAR = [
         to: configRouter.historyCoin,
     },
     {
-        title: "Update Profile",
+        title: "Update",
         icon: <Gear size={25} />,
         to: configRouter.profile,
     },
@@ -41,7 +41,7 @@ const ITEM_ADMIN_SIDEBAR = [
         to: configRouter.changePassword,
     },
     {
-        title: "Default Address",
+        title: "Saved Address",
         icon: <MapPinLine size={25} />,
         to: configRouter.defaultAddress,
     },

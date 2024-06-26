@@ -39,6 +39,15 @@ export const sendCodeRegister = async (email: string) => {
     }
 };
 
+export const checkExistAccount = async (email: string) => {
+    try {
+        const res = await httpRequest.get(`/user/registered?email=${email}`);
+        return res;
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
 export const verifyCode = async (email: string, code: string) => {
     try {
         const res = await httpRequest.post("/auth/user/verify", {

@@ -1,14 +1,18 @@
 import assets from "@/assets"
 import { Progress, Rating, Typography } from "@material-tailwind/react"
-import { Star } from "@phosphor-icons/react"
+import { Star, ThumbsDown, ThumbsUp } from "@phosphor-icons/react"
 import * as productDetailApi from "@/api/PageApi/productDetailApi"
 import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { AxiosError } from "axios"
 // import { toast } from "react-toastify"
-import { BaseResponseApi } from "@/type"
+import { BaseResponseApi, User } from "@/type"
+import { useSelector } from "react-redux"
+import { RootState } from "@/redux/store"
+import TablePaging from "../SearchProduct/Paging"
+import { formatTimeStamp } from "@/utils/hepler"
 
-interface IReview extends BaseResponseApi {
+export interface IReview extends BaseResponseApi {
     data: {
         totalPage: number;
         productReviewList: {
@@ -37,31 +41,46 @@ interface IStatisticProduct extends BaseResponseApi {
 
 function Reviews() {
     const [reviews, setReviews] = useState<IReview>()
+    const [pageActive, setPageActive] = useState<number>(1);
     const [statistiProduct, setStatisticProduct] = useState<IStatisticProduct>()
 
+    const useCurrentUser = useSelector<RootState, User>(
+        (state) => state.authSlice.currentUser as User
+    );
+
     const { id } = useParams()
-    useEffect(() => {
-        const getProductDetail = async () => {
-            try {
-                const data = await productDetailApi.getReviewProduct(id as string, 1)
-                const result = await productDetailApi.getStatisticProduct(id as string)
-                if (data?.success) {
-                    setReviews(data)
-                }
-                if (result?.success) {
-                    setStatisticProduct(result)
-                }
+
+    const getProductDetail = async () => {
+        try {
+            const data = await productDetailApi.getReviewProduct(id as string, pageActive)
+            const result = await productDetailApi.getStatisticProduct(id as string)
+            if (data?.success) {
+                setReviews(data)
             }
-            catch (e: unknown) {
-                if (e instanceof AxiosError && e.response) {
-                    // nav(configRouter.home);
-                    // toast.error("Product not found with id: " + id);
-                    console.log(e)
-                }
+            if (result?.success) {
+                setStatisticProduct(result)
             }
         }
+        catch (e: unknown) {
+            if (e instanceof AxiosError && e.response) {
+                // nav(configRouter.home);
+                // toast.error("Product not found with id: " + id);
+                console.log(e)
+            }
+        }
+    }
+
+    useEffect(() => {
         id && getProductDetail()
-    }, [id])
+    }, [id, pageActive])
+
+    const handleLikeReview = async (interaction: string, reviewId: string) => {
+        const data = await productDetailApi?.likeProduct(reviewId, interaction, useCurrentUser?.data?.userId)
+        console.log(data)
+        if (data?.success) {
+            getProductDetail()
+        }
+    }
 
     return (
         <>
@@ -100,18 +119,30 @@ function Reviews() {
                     <div className="flex flex-col items-center justify-center">
                         {reviews?.data?.productReviewList?.length === 0 && <p className="w-full mb-5 pb-5 italic">No reviews</p>}
                         {reviews?.success && reviews?.data?.productReviewList.map((review) => (
-                            <div key={review.id} className="w-full mb-5 pb-5">
+                            <div key={review.id} className="w-full mb-2 pb-5">
                                 <div className="flex items-center">
                                     <img src={review?.avatarUrl ? review?.avatarUrl : assets?.images?.noAvatar} alt="avatar user" loading="lazy" className="w-11 h-11 object-contain rounded-full border" />
                                     <div className="ml-5">
                                         <p className="font-medium text-sm my-1">{review?.reviewerName}</p>
-                                        <Rating placeholder="" value={review?.star} readonly ratedColor="amber" className="w-2 h-2 my-1" />
+                                        <Rating placeholder="" value={review?.star} readonly ratedColor="amber" className="w-1 h-1 my-1" />
+                                        <p className="text-xs my-1 italic">{formatTimeStamp(review?.createdAt)}</p>
                                     </div>
                                 </div>
-                                <p className="text-base italic my-2">{review?.content}</p>
+                                <p className="text-base italic my-1">{review?.content}</p>
+                                <div className="flex items-center">
+                                    <button onClick={() => handleLikeReview("LIKE", review?.id)}><ThumbsUp size={20} color={review?.interaction === "LIKE" ? "blue" : "black"} weight={review?.interaction === "LIKE" ? "fill" : "regular"} /></button>
+                                    <button onClick={() => handleLikeReview("DISLIKE", review?.id)} className="ml-3"><ThumbsDown size={20} color={review?.interaction === "DISLIKE" ? "blue" : "black"} weight={review?.interaction === "DISLIKE" ? "fill" : "regular"} /></button>
+                                </div>
                             </div>
                         ))}
                     </div>
+                    {reviews?.success && reviews?.data?.totalPage >= 2 && (
+                        <TablePaging
+                            data={reviews}
+                            setPageActive={setPageActive}
+                            pageActive={pageActive}
+                        />
+                    )}
                 </div>
             </div>
         </>

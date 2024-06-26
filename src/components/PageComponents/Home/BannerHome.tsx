@@ -23,7 +23,7 @@ function BannerHome() {
     }, [])
 
     return (
-        <div className="w-full pt-5 h-auto ">
+        <div className="w-full pt-5 h-auto mb-10">
             <Carousel
                 placeholder=""
                 className="rounded-xl max-h-[650px] w-full"
