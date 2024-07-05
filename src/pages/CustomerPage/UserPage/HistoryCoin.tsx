@@ -7,8 +7,9 @@ import { formatVND } from "@/utils/hepler";
 import { useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import { toast } from "react-toastify";
+import TablePaging from "@/components/PageComponents/SearchProduct/Paging";
 
-interface IHistoryCoinResponse extends BaseResponseApi {
+export interface IHistoryCoinResponse extends BaseResponseApi {
     data: {
         totalPage: number;
         coinHistoryList: {
@@ -22,13 +23,14 @@ interface IHistoryCoinResponse extends BaseResponseApi {
 function HistoryCoin() {
     const [historyCoin, setHistoryCoin] = useState<IHistoryCoinResponse>()
     const nav = useNavigate()
+    const [pageActive, setPageActive] = useState<number>(1);
 
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
 
     const handleGetOrder = async () => {
-        const data = await userApi?.getHistoryCoinByUserId(useCurrentUser?.data?.userId, 1, 10)
+        const data = await userApi?.getHistoryCoinByUserId(useCurrentUser?.data?.userId, pageActive, 10)
         if (data?.success) {
             setHistoryCoin(data)
         }
@@ -40,7 +42,7 @@ function HistoryCoin() {
             toast.warning("Please login to continue using website services!")
         }
         handleGetOrder()
-    }, [])
+    }, [pageActive])
 
     return (
         <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
@@ -66,6 +68,13 @@ function HistoryCoin() {
                         </tbody>
                     </table>
                 </div>
+                {historyCoin?.success && historyCoin?.data?.totalPage >= 2 && (
+                    <TablePaging
+                        data={historyCoin}
+                        setPageActive={setPageActive}
+                        pageActive={pageActive}
+                    />
+                )}
             </div>
         </div>
     )

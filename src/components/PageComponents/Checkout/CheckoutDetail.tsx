@@ -6,6 +6,9 @@ import { useEffect, useState } from "react"
 import AddCoupon from "./AddCoupon"
 import { useSelector } from "react-redux"
 import { RootState } from "@/redux/store"
+import { toast } from "react-toastify"
+import { configRouter } from "@/configs/router"
+import { useNavigate } from "react-router-dom"
 
 export interface ICheckout {
     userId: string,
@@ -39,42 +42,55 @@ function CheckoutDetail() {
     const cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
     )
+    const nav = useNavigate()
 
     useEffect(() => {
-        setDataCheckout((prev: ICheckout | undefined) => (
-            {
-                ...prev!,
-                type: "Home Delivery",
-                itemList: cartCurrent.map(item => {
-                    const { productId, itemDetailList } = item;
-                    return {
-                        productId,
-                        itemDetailList: itemDetailList.map(detail => {
-                            const { quantity, toppingNameList, size, note } = detail;
-                            if (size) {
-                                return {
-                                    quantity,
-                                    toppingNameList,
-                                    size,
-                                    note
-                                };
-                            }
-                            else {
-                                return {
-                                    quantity,
-                                    note
-                                };
-                            }
-                        })
-                    }
-                }) as Cart[],
-                total: cartCurrent.reduce((total, item) => {
-                    return total + (item?.itemDetailList ?? []).reduce((subtotal, item) => {
-                        return subtotal + (item?.price ?? 0);
-                    }, 0);
-                }, 0) + (prev?.shippingFee as number ?? 0),
-            }
-        ))
+        if (cartCurrent?.length > 0) {
+            setDataCheckout((prev: ICheckout | undefined) => (
+                {
+                    ...prev!,
+                    type: "Home Delivery",
+                    itemList: cartCurrent.map(item => {
+                        const { productId, itemDetailList } = item;
+                        return {
+                            productId,
+                            itemDetailList: itemDetailList.map(detail => {
+                                const { quantity, toppingNameList, size, note } = detail;
+                                if (size) {
+                                    return {
+                                        quantity,
+                                        toppingNameList,
+                                        size,
+                                        note
+                                    };
+                                }
+                                else {
+                                    return {
+                                        quantity,
+                                        note
+                                    };
+                                }
+                            })
+                        }
+                    }) as Cart[],
+                    total: cartCurrent.reduce((total, item) => {
+                        return total + (item?.itemDetailList ?? []).reduce((subtotal, item) => {
+                            return subtotal + (item?.price ?? 0);
+                        }, 0);
+                    }, 0) + (prev?.shippingFee as number ?? 0),
+                }
+            ))
+        }
+        else {
+            nav(configRouter.home)
+            toast.warning("Please add the product before checkout!")
+            setDataCheckout((prev: ICheckout | undefined) => (
+                {
+                    ...prev!,
+                    type: "Home Delivery",
+                }
+            ))
+        }
     }, [])
 
     return (

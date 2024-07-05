@@ -46,7 +46,7 @@ function DetailStatusLine(props: IOrderStatusLine) {
                     </p>
                 </div>
             </div>
-            <DialogRequestCancelOrder type={statusOrderLine?.data[0]?.orderStatus as string} setOpen={setOpen} getOrderDetails={getOrderDetails} getOrderItemReview={getOrderItemReview} getOrderStatusLine={getOrderStatusLine} orderId={orderDetail?.data?.id as string} open={open} handleOpen={handleOpen} />
+            <DialogRequestCancelOrder branchId={orderDetail?.data?.branch?.id as string} type={statusOrderLine?.data[0]?.orderStatus as string} setOpen={setOpen} getOrderDetails={getOrderDetails} getOrderItemReview={getOrderItemReview} getOrderStatusLine={getOrderStatusLine} orderId={orderDetail?.data?.id as string} open={open} handleOpen={handleOpen} />
             <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
                 <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
                     <span className="font-bold font-serif text-sm uppercase text-gray-600 block">

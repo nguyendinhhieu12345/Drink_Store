@@ -5,14 +5,16 @@ import * as searchProduct from "@/api/PageApi/searchApi"
 import { useNavigate } from "react-router-dom";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import SearchHeaderResult from "./SearchHeaderResult";
-import { IProduct } from "@/types/type";
+import { BaseResponseApi } from "@/type";
 
 interface Inputs {
     dataInput: string;
 }
-interface iSearchHeader {
-    products: IProduct[];
-    keyword: string[];
+interface iSearchHeader extends BaseResponseApi {
+    data: {
+        autocompleteTextList: [],
+        highlightTextList: string[]
+    }
 }
 const SearchHeader = (): React.ReactElement => {
     const [dataSearch, setDataSearch] = React.useState<iSearchHeader>();
@@ -34,24 +36,15 @@ const SearchHeader = (): React.ReactElement => {
         if (debouncedValue !== undefined) {
             const callApi = async () => {
                 try {
-                    const data = await searchProduct.getProductByKeyName(1, debouncedValue.trim(), 0, 0, 0, "");
+                    const data = await searchProduct.getProductByAutoComplete(debouncedValue.trim());
                     if (data?.success) {
-                        setDataSearch((prev) => ({
-                            ...prev,
-                            keyword: [],
-                            products: data?.data?.productList,
-                        }));
+                        setDataSearch(data);
                     }
                 } catch (error) {
                     Promise.reject(error);
                 }
             };
             callApi();
-        } else {
-            setDataSearch({
-                keyword: [],
-                products: [],
-            });
         }
     }, [debouncedValue]);
     const onSubmit: SubmitHandler<Inputs> = (data) => {
@@ -100,10 +93,7 @@ const SearchHeader = (): React.ReactElement => {
                 </div>
             </form>
             <SearchHeaderResult
-                dataSearch={{
-                    keyword: dataSearch?.keyword ? dataSearch?.keyword : [],
-                    products: dataSearch?.products ? dataSearch?.products : [],
-                }}
+                dataSearch={dataSearch?.data?.highlightTextList as string[]}
                 setIsFocus={setIsFocus}
                 isOpen={isFocus}
             />

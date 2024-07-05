@@ -4,7 +4,7 @@ import { ArrowLeft } from "@phosphor-icons/react";
 import { messageToast } from "@/utils/hepler";
 import { useEffect, useState } from "react";
 import * as checkoutApi from "@/api/PageApi/checkoutApi"
-import { BaseResponseApi } from "@/type";
+import { BaseResponseApi, User } from "@/type";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import useLoading from "@/hooks/useLoading";
@@ -13,6 +13,9 @@ import DetailStatusLine from "@/components/PageComponents/OrderDetail/DetailStat
 import OrderProductDetail from "@/components/PageComponents/OrderDetail/OrderProductDetail";
 import OrderPayment from "@/components/PageComponents/OrderDetail/OrderPayment";
 import DialogReviewProduct from "@/components/PageComponents/OrderDetail/DialogReviewProduct";
+import socket from "@/socket/socket";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 interface ItemDetail {
     quantity: number;
@@ -120,6 +123,10 @@ function OrderDetail() {
     const { isLoading, startLoading, stopLoading } = useLoading()
     const [error, setError] = useState<string>("")
     const [activeStep, setActiveStep] = useState<number>(0);
+
+    const useCurrentUser = useSelector<RootState, User>(
+        (state) => state.authSlice.currentUser as User
+    );
 
     const handleOpen = () => setOpen((cur) => !cur);
 
@@ -243,6 +250,16 @@ function OrderDetail() {
     }
 
     useEffect(() => {
+        socket.on('connect', () => {
+            console.log('Connected to socket server');
+            socket.emit('joinUser', useCurrentUser?.data?.userId); // Join the user-specific room
+        });
+
+        socket.on('employee_update_order', (data) => {
+            console.log('Order update received:', data);
+            // Handle the order update here
+        });
+        
         id && getOrderDetails()
         id && getOrderStatusLine()
         id && getOrderItemReview()
