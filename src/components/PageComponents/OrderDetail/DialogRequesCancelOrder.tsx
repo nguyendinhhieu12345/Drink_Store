@@ -1,5 +1,6 @@
 import { cancellationRequestOrder, requestCancelOrder } from "@/api/PageApi/checkoutApi";
 import useLoading from "@/hooks/useLoading";
+import socket from "@/socket/socket";
 import {
     Button,
     Dialog,
@@ -21,11 +22,12 @@ interface IDialogRequestCancelOrder {
     getOrderDetails: () => Promise<void>,
     getOrderStatusLine: () => Promise<void>,
     getOrderItemReview: () => Promise<void>,
-    type: string
+    type: string,
+    branchId: string
 }
 
 function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
-    const { type, orderId, open, handleOpen, setOpen, getOrderDetails, getOrderStatusLine, getOrderItemReview } = props;
+    const { type, orderId, branchId, open, handleOpen, setOpen, getOrderDetails, getOrderStatusLine, getOrderItemReview } = props;
     const [reason, setReason] = useState<string>("I want to update address")
     const { isLoading, startLoading, stopLoading } = useLoading()
 
@@ -124,6 +126,10 @@ function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
                     getOrderItemReview()
                     setOpen(prev => !prev)
                     stopLoading()
+                    socket.emit("user_update_order", {
+                        branchId: branchId,
+                        orderId: orderId
+                    })
                 }
             }
             else {
@@ -134,6 +140,10 @@ function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
                     getOrderItemReview()
                     setOpen(prev => !prev)
                     stopLoading()
+                    socket.emit("user_update_order", {
+                        branchId: branchId,
+                        orderId: orderId
+                    })
                 }
             }
         }

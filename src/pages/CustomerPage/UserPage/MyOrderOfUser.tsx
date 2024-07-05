@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import { toast } from "react-toastify";
 import TablePaging from "@/components/PageComponents/SearchProduct/Paging";
+import socket from "@/socket/socket";
 
 export interface IOrdersResponse extends BaseResponseApi {
     data: {
@@ -28,13 +29,15 @@ export interface IOrdersResponse extends BaseResponseApi {
 function MyOrderOfUser() {
     const [orders, setOrders] = useState<IOrdersResponse>()
     const [pageActive, setPageActive] = useState<number>(1);
+    const [statusOrder, setStatusOrder] = useState<string>("WAITING")
     const nav = useNavigate()
+
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
 
-    const handleGetOrder = async (statusOrder: string) => {
-        const data = await userApi?.getAllOrderByUserId(useCurrentUser?.data?.userId, 1, statusOrder)
+    const handleGetOrder = async () => {
+        const data = await userApi?.getAllOrderByUserId(useCurrentUser?.data?.userId, pageActive, statusOrder)
         if (data?.success) {
             setOrders(data)
         }
@@ -45,15 +48,27 @@ function MyOrderOfUser() {
             nav(configRouter.login)
             toast.warning("Please login to continue using website services!")
         }
-        handleGetOrder("WAITING")
-    }, [pageActive])
+        socket.on('connect', () => {
+            console.log('Connected to socket server');
+            socket.emit('joinUser', useCurrentUser?.data?.userId); // Join the user-specific room
+        });
+
+        socket.on('employee_update_order', (data) => {
+            console.log('Order update received:', data);
+            // Handle the order update here
+        });
+        handleGetOrder()
+    }, [pageActive, statusOrder])
 
     return (
         <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold mb-5">My Orders</h2>
                 <select className="rounded-lg"
-                    onChange={(e) => handleGetOrder(e.target.value)}
+                    onChange={(e) => {
+                        setStatusOrder(e.target.value)
+
+                    }}
                 >
                     <option value="WAITING">Waiting</option>
                     <option value="IN_PROCESS">Processing</option>

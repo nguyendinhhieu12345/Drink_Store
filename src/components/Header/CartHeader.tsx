@@ -17,7 +17,8 @@ const CartHeader = () => {
     )
 
     const handleRedirectCart = () => {
-        navigate(configRouter.checkout);
+        if (cartCurrent?.length > 0)
+            navigate(configRouter.checkout);
     };
 
     return (

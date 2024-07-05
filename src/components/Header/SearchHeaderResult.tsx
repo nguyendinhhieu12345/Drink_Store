@@ -1,14 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import ImageWithError from "../ImageError/ImageWithError";
-import { IProduct } from "@/types/type";
-import { formatVND } from "@/utils/hepler";
 interface IProps {
     isOpen: boolean;
-    dataSearch: {
-        keyword: string[];
-        products: IProduct[];
-    };
+    dataSearch: string[];
     setIsFocus: React.Dispatch<React.SetStateAction<boolean>>;
 }
 const SearchHeaderResult = (props: IProps): React.ReactElement => {
@@ -21,37 +15,23 @@ const SearchHeaderResult = (props: IProps): React.ReactElement => {
                             <div>
                                 <h5 className="text-base font-bold">Suggested Products</h5>
                             </div>
-                            {props.dataSearch.products?.length === 0 && (
+                            {props.dataSearch?.length === 0 && (
                                 <div className="w-full h-[50px] rounded-sm flex items-center justify-center px-4 py-2 text-gray-500 space-x-3">
                                     <p className="text-sm font-norma overflow-hidden text-ellipsis">
                                         No result
                                     </p>
                                 </div>
                             )}
-                            {props.dataSearch.products?.map((data) => {
+                            {props.dataSearch?.map((data, index) => {
                                 return (
                                     <Link
-                                        key={data.id}
-                                        to={`/product/${data?.id}`}
+                                        key={index}
+                                        to={`/search?key=${encodeURIComponent(data.trim().replace(/<\/?em>/g, ''))}`}
                                         onClick={() => props.setIsFocus(false)}
                                     >
-                                        <div className="rounded-md bg-white hover:bg-gray-200 min-h-[50px] flex items-center justify-start px-2 py-2 space-x-3">
-                                            <div className=" h-[40px] w-[60px] rounded-md overflow-hidden">
-                                                <ImageWithError
-                                                    src={data?.thumbnailUrl ? data?.thumbnailUrl : ""}
-                                                    alt=""
-                                                    className=" w-full h-full"
-                                                />
-                                            </div>
-                                            <div className=" flex flex-col justify-start items-start w-ful ">
-                                                <h5 className="text-sm font-bold overflow-hidden text-ellipsis">
-                                                    {data?.name}
-                                                </h5>
-                                                <p className="text-sm  font-normal text-gray-500 overflow-hidden text-ellipsis">
-                                                    {formatVND(data?.price ? data?.price : 0)}
-                                                </p>
-                                            </div>
-                                        </div>
+                                        <h5 className="text-base font-bold overflow-hidden text-ellipsis w-full hover:bg-gray-200 py-2 px-2 rounded-lg" >
+                                            <p dangerouslySetInnerHTML={{ __html: data.replace(/<em>/g, "<em class='text-brown-600'>") }} className="w-full"></p>
+                                        </h5>
                                     </Link>
                                 );
                             })}

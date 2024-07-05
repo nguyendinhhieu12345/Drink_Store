@@ -12,6 +12,7 @@ import useLoading from "@/hooks/useLoading"
 import { Spinner } from "@material-tailwind/react"
 import { AxiosError } from "axios"
 import { toast } from "react-toastify"
+import socket from "@/socket/socket"
 
 function OrderSumary(props: IPropsCheckout) {
     const nav = useNavigate()
@@ -50,8 +51,16 @@ function OrderSumary(props: IPropsCheckout) {
                                 }
                             ))
                         }
+                        socket.emit("user_create_order", {
+                            branchId: data?.data?.branchId,
+                            orderId: data?.data?.orderId
+                        })
                     }
                     else {
+                        socket.emit("user_create_order", {
+                            branchId: data?.data?.branchId,
+                            orderId: data?.data?.orderId
+                        })
                         dispatch(resetStoreCart())
                         nav(configRouter?.orderDetail.slice(0, -3) + data?.data?.orderId)
                     }
@@ -64,15 +73,8 @@ function OrderSumary(props: IPropsCheckout) {
             }
         }
         else {
-            // props?.setDataCheckout((prev: ICheckout | undefined) => (
-            //     {
-            //         ...prev!,
-            //         receiveTime: getCurrentIsoString(prev?.receiveTime as string)
-            //     }
-            // ))
             try {
                 if (props?.dataCheckout?.branchId && props?.dataCheckout?.receiveTime && props?.dataCheckout?.phoneNumber && props?.dataCheckout?.recipientName) {
-                    // console.log(props?.dataCheckout)
                     startLoading()
                     const data = await checkoutApi?.orderOnsite(Object.fromEntries(Object.entries(props?.dataCheckout).filter(([key]) => (key !== 'type' && key !== 'addressId' && key !== 'shippingFee'))) as ICheckout)
                     if (data?.success) {
@@ -102,29 +104,20 @@ function OrderSumary(props: IPropsCheckout) {
         }
     }
 
-    // const getCurrentIsoString = (timeString: string) => {
-    //     const today = new Date();
-    //     const dateString = today.toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-
-    //     const date = new Date(`${dateString}T${timeString}:00.715Z`);
-
-    //     return date.toISOString();
-    // };
-
-
     const calculateTotalPrice = (cart: Cart[]): number => {
         let totalPrice = 0;
+        if (cart?.length > 0) {
+            // Iterate through each item in the cart
+            cart.forEach(item => {
+                // Calculate subtotal for each item
+                const subtotal = item.itemDetailList.reduce((acc, detail) => {
+                    return acc + (detail.price || 0);
+                }, 0);
 
-        // Iterate through each item in the cart
-        cart.forEach(item => {
-            // Calculate subtotal for each item
-            const subtotal = item.itemDetailList.reduce((acc, detail) => {
-                return acc + (detail.price || 0);
-            }, 0);
-
-            // Add subtotal to totalPrice
-            totalPrice += subtotal;
-        });
+                // Add subtotal to totalPrice
+                totalPrice += subtotal;
+            });
+        }
 
         return totalPrice;
     };
@@ -187,7 +180,7 @@ function OrderSumary(props: IPropsCheckout) {
                 </div>
                 <div className="flex items-center justify-between mb-2 text-default">
                     <p className="text-black font-semibold">Total</p>
-                    <p className="font-semibold">{formatVND(props?.dataCheckout?.total ?? 0)}</p>
+                    <p className="font-semibold">{formatVND(props?.dataCheckout?.total ? props?.dataCheckout?.total : 0)}</p>
                 </div>
             </div>
             <button disabled={props?.isDisable} onClick={handleRedirectThanksPage} className={`w-full py-4 px-2 text-center ${props?.isDisable ? "bg-btnDisable" : "bg-btnActive"} rounded-lg text-white`}>

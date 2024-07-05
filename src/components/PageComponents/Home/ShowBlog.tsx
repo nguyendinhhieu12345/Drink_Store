@@ -27,7 +27,7 @@ function ShowBlog(props: IShowBlog) {
 
     useEffect(() => {
         const getAllBlog = async () => {
-            const data = await homeApi.getAllBlog(1, 8)
+            const data = await homeApi.getAllBlog(1, 4)
             if (data?.success) {
                 setBlogs(data)
             }

@@ -3,9 +3,10 @@ import { IOrdersResponse } from "@/pages/CustomerPage/UserPage/MyOrderOfUser";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { Dispatch, SetStateAction } from "react";
 import { IReview } from "../ProductDetail/Reviews";
+import { IHistoryCoinResponse } from "@/pages/CustomerPage/UserPage/HistoryCoin";
 
 interface ITablePaging {
-    data: ISearchProduct | IOrdersResponse | IReview;
+    data: ISearchProduct | IOrdersResponse | IReview | IHistoryCoinResponse;
     pageActive: number;
     setPageActive: Dispatch<SetStateAction<number>>;
 }

@@ -68,20 +68,25 @@ function DefaultAddress() {
     const nav = useNavigate()
 
     const handleOpen = () => {
-        setAddressEdit("")
-        setOpen(prev => !prev)
-        setNewAddress({
-            province: "",
-            district: "",
-            ward: "",
-            detail: "",
-            longitude: 0,
-            latitude: 0,
-            note: "",
-            recipientName: JSON.parse(localStorage?.getItem("profile") as string)?.firstName + " " + JSON.parse(localStorage?.getItem("profile") as string)?.lastName
-            ,
-            phoneNumber: JSON.parse(localStorage?.getItem("profile") as string) ? JSON.parse(localStorage?.getItem("profile") as string)?.phoneNumber : ""
-        })
+        if (addresss?.data?.length === 5) {
+            toast.warning("Only enter a minimum of 5 addresses")
+        }
+        else {
+            setAddressEdit("")
+            setOpen(prev => !prev)
+            setNewAddress({
+                province: "",
+                district: "",
+                ward: "",
+                detail: "",
+                longitude: 0,
+                latitude: 0,
+                note: "",
+                recipientName: JSON.parse(localStorage?.getItem("profile") as string)?.firstName + " " + JSON.parse(localStorage?.getItem("profile") as string)?.lastName
+                ,
+                phoneNumber: JSON.parse(localStorage?.getItem("profile") as string) ? JSON.parse(localStorage?.getItem("profile") as string)?.phoneNumber : ""
+            })
+        }
     }
 
     useEffect(() => {
