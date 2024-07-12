@@ -6,7 +6,8 @@ import * as homeApi from "@/api/PageApi/homeApi"
 import { formatTimeStamp } from "@/utils/hepler"
 
 interface IShowBlog {
-    title: string
+    title: string,
+    size: number
 }
 
 interface IListBlog extends BaseResponseApi {
@@ -27,7 +28,7 @@ function ShowBlog(props: IShowBlog) {
 
     useEffect(() => {
         const getAllBlog = async () => {
-            const data = await homeApi.getAllBlog(1, 4)
+            const data = await homeApi.getAllBlog(1, props?.size)
             if (data?.success) {
                 setBlogs(data)
             }
@@ -36,15 +37,15 @@ function ShowBlog(props: IShowBlog) {
     }, [])
 
     return (
-        <div className=" w-full">
+        <div className="w-full">
             <div className="flex items-center justify-center my-5">
                 <div className="mr-2 p-1 text-center rounded-full bg-yellow-300 text-white"><Cup className="w-5 h-5" /></div>
                 <h1 className="font-medium text-2xl">{props?.title}</h1>
             </div>
-            <div className="w-full flex items-center justify-between flex-wrap">
+            <div className="w-full flex items-center flex-wrap">
                 {
                     blogs?.data?.blogList?.map((blog, index) => (
-                        <article key={index} className="w-[22%] flex flex-col shadow-base rounded-xl m-4 bg-white">
+                        <article key={index} className="w-[40%] sm:w-[22%] flex flex-col shadow-base rounded-xl m-4 bg-white">
                             <a rel="noopener noreferrer" href={configRouter?.blogDetail.slice(0, -3) + blog?.id} aria-label="Te nulla oportere reprimique his dolorum">
                                 <img alt="" className="object-cover w-full h-40 rounded-t-xl" src={blog?.thumbnailUrl} />
                             </a>

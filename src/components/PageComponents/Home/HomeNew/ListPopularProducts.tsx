@@ -43,15 +43,15 @@ function ListPopularProducts() {
     return (
         <div>
             <div className='flex items-center justify-between'>
-                <h2 className="text-3xl font-bold mb-4 border-l-4 border-red-500 pl-5 my-5">Popular Products</h2>
+                <h2 className="text-xl sm:text-3xl font-bold mb-4 border-l-4 border-red-500 pl-5 my-5">Popular Products</h2>
                 <div className='flex items-center'>
-                    <button onClick={() => setActiveBtn(0)} className={`px-3 py-2 mx-3 ${activeBtn === 0 && 'text-red-500 border-b-4 border-red-500 font-semibold'} hover:text-red-500  transition ease-in-out delay-75`}>
+                    <button onClick={() => setActiveBtn(0)} className={`px-1.5 sm:px-3 py-2 mx-3 ${activeBtn === 0 && 'text-red-500 border-b-4 border-red-500 font-semibold'} hover:text-red-500  transition ease-in-out delay-75`}>
                         Top Rated
                     </button>
-                    <button onClick={() => setActiveBtn(1)} className={`px-3 py-2 mx-3 ${activeBtn === 1 && 'text-red-500 border-b-4 border-red-500 font-semibold'} hover:text-red-500 transition ease-in-out delay-75`}>
+                    <button onClick={() => setActiveBtn(1)} className={`px-1.5 sm:px-3 py-2 mx-3 ${activeBtn === 1 && 'text-red-500 border-b-4 border-red-500 font-semibold'} hover:text-red-500 transition ease-in-out delay-75`}>
                         Best Selling
                     </button>
-                    <button onClick={() => setActiveBtn(2)} className={`px-3 py-2 mx-3 ${activeBtn === 2 && 'text-red-500 border-b-4 border-red-500 font-semibold'} hover:text-red-500 transition ease-in-out delay-75`}>
+                    <button onClick={() => setActiveBtn(2)} className={`px-1.5 sm:px-3 py-2 mx-3 ${activeBtn === 2 && 'text-red-500 border-b-4 border-red-500 font-semibold'} hover:text-red-500 transition ease-in-out delay-75`}>
                         Viewed Products
                     </button>
                 </div>

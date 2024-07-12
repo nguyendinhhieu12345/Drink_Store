@@ -18,13 +18,6 @@ interface IOrderChart {
     }
 }
 
-const data = [
-    { name: 'Group A', value: 400 },
-    { name: 'Group B', value: 300 },
-    { name: 'Group C', value: 300 },
-    { name: 'Group D', value: 200 },
-];
-
 const OrderChart = () => {
     const [dataGet, setDataGet] = useState<string>("PAYMENT_TYPE")
     const useCurrentUser = useSelector<RootState, User>(
@@ -42,7 +35,7 @@ const OrderChart = () => {
 
     useEffect(() => {
         getOverviewRevenue()
-    }, [])
+    }, [dataGet])
 
     return (
         <div className="w-full h-auto flex flex-col lg:flex-row justify-center items-center">
@@ -51,17 +44,16 @@ const OrderChart = () => {
                     <p className="font-semibold text-[14px] text-[#685F78] uppercase">
                     </p>
                     <div className="flex items-center justify-center">
-                        <p className="font-medium text-base">
-                            Select type
+                        <p className="font-medium text-base mr-2">
+                            Select type:
                         </p>
-                        <select className="bg-gray-50 w-25 border border-gray-300 text-gray-900 text-sm rounded-lg p-2"
+                        <select className="bg-gray-50 w-auto border border-gray-300 text-gray-900 text-sm rounded-lg p-2"
                             onChange={(e) => {
                                 setDataGet(e.target.value)
                             }}>
                             <option value="PAYMENT_TYPE">PAYMENT_TYPE</option>
                             <option value="ORDER_STATUS">ORDER_STATUS</option>
                         </select>
-                        <button onClick={getOverviewRevenue} className="p-2 text-base mx-2 bg-blue-500 text-white rounded-lg">Appy</button>
                     </div>
                 </div>
                 <div className="flex items-center justify-center w-full h-[350px]">
@@ -103,7 +95,7 @@ const OrderChart = () => {
                                         );
                                     }}
                                 >
-                                    {data.map((_, index) => (
+                                    {chartRevenue?.data?.statistics?.map((_, index) => (
                                         <Cell key={`cell-${index}`} fill={`#${index * 123456}`} />
                                     ))}
                                 </Pie>

@@ -17,45 +17,55 @@ const SignUp = () => {
         email: string,
         password: string,
         firstName: string,
-        lastName: string
+        lastName: string,
+        confirmPassword: string
     ) => {
-        if (email.trim() !== "" && password.trim() !== "" && firstName.trim() !== "" && lastName.trim() !== "") {
-            if (password.length >= 6) {
-                try {
-                    startLoading()
-                    const checkExisAccount = await signupApi.checkExistAccount(email)
-                    if (checkExisAccount?.success && checkExisAccount?.data) {
-                        stopLoading()
-                        toast.error("Email is already registered!")
+        if (email.trim() !== "" && password.trim() !== "" && firstName.trim() !== "" && lastName.trim() !== "" && confirmPassword?.trim() !== "") {
+            if (confirmPassword.trim() === password.trim()) {
+                if (password.length >= 6) {
+                    try {
+                        startLoading()
+                        const checkExisAccount = await signupApi.checkExistAccount(email)
+                        if (checkExisAccount?.success && checkExisAccount?.data) {
+                            stopLoading()
+                            toast.error("Email is already registered!")
+                        }
+                    }
+                    catch {
+                        try {
+                            const data = await signupApi.sendCodeRegister(email)
+                            if (data?.success) {
+                                stopLoading()
+                                localStorage.setItem("user", JSON.stringify({
+                                    email, password, firstName, lastName
+                                }))
+                                navigate(configRouter.optConfirm);
+                            }
+                        }
+                        catch (e: unknown) {
+                            stopLoading()
+                            if (e instanceof AxiosError && e.response) {
+                                toast.error(e?.response?.data?.devResponse?.message);
+                            }
+                        }
                     }
                 }
-                catch {
-                    try {
-                        const data = await signupApi.sendCodeRegister(email)
-                        if (data?.success) {
-                            stopLoading()
-                            localStorage.setItem("user", JSON.stringify({
-                                email, password, firstName, lastName
-                            }))
-                            navigate(configRouter.optConfirm);
-                        }
-                    }
-                    catch (e: unknown) {
-                        stopLoading()
-                        if (e instanceof AxiosError && e.response) {
-                            toast.error(e?.response?.data?.devResponse?.message);
-                        }
-                    }
+                else {
+                    toast.error("Please enter password length less than 6 characters");
                 }
             }
             else {
-                toast.error("Please enter password length less than 6 characters");
+                toast.error("Please enter the same password!");
             }
         }
         else {
             toast.error(messageToast.fillInput)
         }
     };
+
+    const handleRedirectLoginPage = () => {
+        navigate(configRouter.login)
+    }
 
     return (
         <div className="flex justify-center items-center h-screen bg-primary bg-[url('https://th.bing.com/th/id/R.2053e0d910bb9f2594ce2482e96070ec?rik=PLO4HYTyDm52hw&pid=ImgRaw&r=0')] bg-contain bg-repeat-round">
@@ -84,6 +94,7 @@ const SignUp = () => {
                                 password: "",
                                 firstName: "",
                                 lastName: "",
+                                confirmPassword: ""
                             }}
                             onSubmit={(values) =>
                                 handleLogin(
@@ -93,6 +104,7 @@ const SignUp = () => {
                                             email: string;
                                             firstName: string;
                                             lastName: string;
+                                            confirmPassword: string
                                         }
                                     ).email,
                                     (
@@ -101,6 +113,7 @@ const SignUp = () => {
                                             email: string;
                                             firstName: string;
                                             lastName: string;
+                                            confirmPassword: string
                                         }
                                     ).password,
                                     (
@@ -109,6 +122,7 @@ const SignUp = () => {
                                             email: string;
                                             firstName: string;
                                             lastName: string;
+                                            confirmPassword: string
                                         }
                                     ).firstName,
                                     (
@@ -117,8 +131,18 @@ const SignUp = () => {
                                             email: string;
                                             firstName: string;
                                             lastName: string;
+                                            confirmPassword: string
                                         }
-                                    ).lastName
+                                    ).lastName,
+                                    (
+                                        values as {
+                                            password: string;
+                                            email: string;
+                                            firstName: string;
+                                            lastName: string;
+                                            confirmPassword: string
+                                        }
+                                    ).confirmPassword
                                 )
                             }
                             className="flex flex-col justify-center items-center"
@@ -158,6 +182,15 @@ const SignUp = () => {
                                 />
                             </div>
 
+                            <div className="w-full mt-5">
+                                <p className="font-semibold text-base">Confirm Password</p>
+                                <InputWrap
+                                    formField={{ name: "confirmPassword" }}
+                                    type="password"
+                                    className="border-2 border-gray-500 w-full rounded-md h-10 pl-3 pr-3 hover:border-blue-500"
+                                />
+                            </div>
+
                             <div className="flex space-x-5 mt-5">
                                 <button
                                     type="submit"
@@ -186,6 +219,17 @@ const SignUp = () => {
                                 </button>
                             </div>
                         </FromWrap>
+                        <div className="flex items-center justify-center mt-4">
+                            <p className="text-sm italic">
+                                Have an account?{" "}
+                                <span
+                                    className="text-blue-500 cursor-pointer"
+                                    onClick={handleRedirectLoginPage}
+                                >
+                                    Login
+                                </span>
+                            </p>
+                        </div>
                         <div className="flex items-center space-x-3 mt-4">
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
                             <p>OR</p>

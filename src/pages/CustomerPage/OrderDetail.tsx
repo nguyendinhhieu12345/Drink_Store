@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { messageToast } from "@/utils/hepler";
@@ -123,6 +123,7 @@ function OrderDetail() {
     const { isLoading, startLoading, stopLoading } = useLoading()
     const [error, setError] = useState<string>("")
     const [activeStep, setActiveStep] = useState<number>(0);
+    const location = useLocation()
 
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
@@ -257,9 +258,11 @@ function OrderDetail() {
 
         socket.on('employee_update_order', (data) => {
             console.log('Order update received:', data);
-            // Handle the order update here
+            if (location.pathname === (configRouter.orderDetail.slice(0, -3) + id)) {
+                id && getOrderStatusLine()
+            }
         });
-        
+
         id && getOrderDetails()
         id && getOrderStatusLine()
         id && getOrderItemReview()

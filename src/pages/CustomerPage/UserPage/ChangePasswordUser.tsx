@@ -78,7 +78,7 @@ function ChangePasswordUser() {
     }, [])
 
     return (
-        <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
+        <div className="bg-white h-auto w-full mt-5 sm:mt-0 sm:w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <h2 className="text-xl font-semibold mb-5">Change password</h2>
             <div className="md:grid-cols-6 md:gap-6">
                 <div className="md:mt-0 md:col-span-2">

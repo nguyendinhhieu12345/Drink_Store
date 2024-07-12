@@ -4,11 +4,15 @@ import {
     Typography,
     List,
     ListItem,
+    Drawer,
+    IconButton,
 } from "@material-tailwind/react";
 import assets from "@/assets";
 import AccountHeader from "./AccountHeader";
 import CartHeader from "./CartHeader";
 import SearchHeader from "./SearchHeader";
+import { Download, Newspaper, Storefront, TextOutdent } from "@phosphor-icons/react";
+import SealPercentSVG from "../SVG/SealPercentSVG";
 
 function NavList() {
     return (
@@ -22,7 +26,9 @@ function NavList() {
                 href="/blogs"
                 variant="small"
                 color="blue-gray"
+                className="flex items-center"
             >
+                <Newspaper size={25} className="sm:hidden" />
                 <ListItem
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
@@ -36,7 +42,9 @@ function NavList() {
                 href="/store"
                 variant="small"
                 color="blue-gray"
+                className="flex items-center"
             >
+                <Storefront size={25} className="sm:hidden" />
                 <ListItem
                     placeholder=""
                     className=" text-md font-semibold flex items-center gap-2 py-2 pr-4"
@@ -50,7 +58,11 @@ function NavList() {
                 href="/coupon"
                 variant="small"
                 color="blue-gray"
+                className="flex items-center"
             >
+                <div className="sm:hidden">
+                    <SealPercentSVG />
+                </div>
                 <ListItem
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
@@ -64,7 +76,9 @@ function NavList() {
                 href="/hello"
                 variant="small"
                 color="blue-gray"
+                className="flex items-center"
             >
+                <Download size={25} className="sm:hidden" />
                 <ListItem
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
@@ -78,6 +92,7 @@ function NavList() {
 
 const Header = (): React.ReactElement => {
     const [openNav, setOpenNav] = React.useState<boolean>(false);
+    const [open, setOpen] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         window.addEventListener(
@@ -86,15 +101,19 @@ const Header = (): React.ReactElement => {
         );
     }, []);
 
+    const openDrawer = () => setOpen(true);
+    const closeDrawer = () => setOpen(false);
+
     return (
-        <header className="w-full px-20 py-10 h-16 bg-white fixed z-50 shadow-lg border border-gray-300">
+        <header className="w-full sm:px-20 py-10 h-16 bg-white fixed z-50 shadow-lg border border-gray-300">
             <div className="flex items-center justify-between text-blue-gray-900 h-full">
+                <TextOutdent onClick={openDrawer} size={35} className="sm:hidden" />
                 <Typography
                     placeholder=""
                     as="a"
                     href="/"
                     variant="h6"
-                    className="mr-4 cursor-pointer py-1.5 lg:ml-2"
+                    className="mr-4 cursor-pointer py-1.5 lg:ml-2 hidden sm:block "
                 >
                     <img src={assets.images.shopfeeIconNoBg} className="w-full h-16" />
                 </Typography>
@@ -110,6 +129,32 @@ const Header = (): React.ReactElement => {
             <Collapse open={openNav}>
                 <NavList />
             </Collapse>
+            <Drawer placeholder="" open={open} onClose={closeDrawer} className="p-4">
+                <div className="flex items-center justify-between">
+                    <Typography placeholder="" variant="h5" color="blue-gray">
+                        Menu
+                    </Typography>
+                    <IconButton placeholder="" variant="text" color="blue-gray" onClick={closeDrawer}>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2}
+                            stroke="currentColor"
+                            className="h-5 w-5"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6 18L18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </IconButton>
+                </div>
+                <Collapse open={!openNav}>
+                    <NavList />
+                </Collapse>
+            </Drawer>
         </header>
     );
 };

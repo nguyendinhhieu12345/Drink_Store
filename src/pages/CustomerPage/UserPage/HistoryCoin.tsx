@@ -45,7 +45,7 @@ function HistoryCoin() {
     }, [pageActive])
 
     return (
-        <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
+        <div className="bg-white h-auto w-full mt-5 sm:mt-0 sm:w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <h2 className="text-xl font-semibold mb-5">History Coins</h2>
             <div className="w-full my-5 overflow-hidden border border-gray-200 rounded-lg mb-8 rounded-b-lg">
                 <div className="w-full overflow-x-auto">

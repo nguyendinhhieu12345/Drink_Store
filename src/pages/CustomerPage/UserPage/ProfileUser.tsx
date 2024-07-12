@@ -22,7 +22,7 @@ function ProfileUser() {
     }, [])
 
     return (
-        <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
+        <div className="bg-white h-auto w-full mt-5 sm:mt-0 sm:w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <div className="md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-1">
                     <div className="px-4 sm:px-0">

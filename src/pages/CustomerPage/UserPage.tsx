@@ -33,8 +33,8 @@ function UserPage() {
     }
 
     return (
-        <div className="h-auto mt-25 mx-20">
-            <div className="flex w-full">
+        <div className="h-auto mt-25 px-5 sm:px-5 xl:px-20">
+            <div className="flex flex-col sm:flex-row w-full">
                 <TabListUser />
                 {renderComponentFollowLocation()}
             </div>

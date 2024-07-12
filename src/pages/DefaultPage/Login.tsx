@@ -173,12 +173,12 @@ const Login = () => {
                         </div>
                         <div className="flex items-center justify-center mt-4">
                             <p className="text-sm italic">
-                                Don't have on account?{" "}
+                                New User?{" "}
                                 <span
                                     className="text-blue-500 cursor-pointer"
                                     onClick={handleRedirectSignupPage}
                                 >
-                                    Sign Up
+                                    Register
                                 </span>
                             </p>
                         </div>

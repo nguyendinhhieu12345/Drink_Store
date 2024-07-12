@@ -3,7 +3,7 @@ import Tricount from "@/components/PageComponents/Hello/Tricount"
 
 function Hello() {
     return (
-        <div className="h-auto mt-25 mx-20">
+        <div className="h-auto mt-25 px-5 sm:px-5 xl:px-20">
             <Tricount />
             <KeyFeatures />
         </div>

@@ -49,7 +49,12 @@ const RevenueChart = () => {
     }
 
     const formatCurrency = (value: number) => {
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        return value.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    };
+
+    const formatDate = (dateString: string) => {
+        const [year, month, day] = dateString.split('-');
+        return `${day}-${month}-${year}`;
     };
 
     useEffect(() => {
@@ -104,17 +109,16 @@ const RevenueChart = () => {
                             <AreaChart
                                 data={chartRevenue?.data?.statistics}
                                 margin={{
-                                    top: 10,
+                                    top: 5,
                                     right: 30,
-                                    left: 0,
-                                    bottom: 0,
+                                    left: 30,
+                                    bottom: 5,
                                 }}
                             >
                                 <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="time" />
-                                <YAxis label={{ value: 'VND', angle: -90, position: 'insideLeft' }}
-                                    tickFormatter={formatCurrency} />
-                                <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                                <XAxis dataKey="time" tickFormatter={formatDate} />
+                                <YAxis tickFormatter={formatCurrency} />
+                                <Tooltip formatter={(value: number) => formatCurrency(value)} labelFormatter={(label: string) => formatDate(label)} />
                                 <Area
                                     type="monotone"
                                     dataKey="amount"

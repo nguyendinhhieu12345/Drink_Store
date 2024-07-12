@@ -67,6 +67,7 @@ function FilterProduct(props: IFilterProduct) {
                     min_star: 0,
                     sort_type: "PRICE_DESC"
                 })
+                localStorage.removeItem("categorySearch")
                 props?.setProducts(data)
             }
         }
@@ -75,7 +76,7 @@ function FilterProduct(props: IFilterProduct) {
     return (
         <div className="flex items-center border-t py-3 justify-between">
             <div className="text-sm">
-                <p>{location.search.split("?key=")[1] && `Search "${location.search.split("?key=")[1].replace(/%/g, " ")}"`}</p>
+                <p className="hidden sm:block">{location.search.split("?key=")[1] && `Search "${location.search.split("?key=")[1].replace(/%20/g, " ")}"`}</p>
             </div>
             <div className="flex items-center">
                 <div className="flex items-center">

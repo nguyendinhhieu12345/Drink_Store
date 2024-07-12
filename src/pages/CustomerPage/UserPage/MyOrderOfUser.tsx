@@ -5,7 +5,7 @@ import * as userApi from "@/api/PageApi/userApi"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { formatVND } from "@/utils/hepler";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import { toast } from "react-toastify";
 import TablePaging from "@/components/PageComponents/SearchProduct/Paging";
@@ -31,6 +31,7 @@ function MyOrderOfUser() {
     const [pageActive, setPageActive] = useState<number>(1);
     const [statusOrder, setStatusOrder] = useState<string>("WAITING")
     const nav = useNavigate()
+    const location = useLocation()
 
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
@@ -48,20 +49,25 @@ function MyOrderOfUser() {
             nav(configRouter.login)
             toast.warning("Please login to continue using website services!")
         }
-        socket.on('connect', () => {
-            console.log('Connected to socket server');
-            socket.emit('joinUser', useCurrentUser?.data?.userId); // Join the user-specific room
-        });
+        else {
+            socket.on('connect', () => {
+                console.log('Connected to socket server');
+                socket.emit('joinUser', useCurrentUser?.data?.userId); // Join the user-specific room
+            });
 
-        socket.on('employee_update_order', (data) => {
-            console.log('Order update received:', data);
-            // Handle the order update here
-        });
-        handleGetOrder()
-    }, [pageActive, statusOrder])
+            socket.on('employee_update_order', (data) => {
+                console.log('Order update received:', data);
+                if (location.pathname === configRouter.myOrder) {
+                    handleGetOrder()
+                }
+                // Handle the order update here
+            });
+            handleGetOrder()
+        }
+    }, [pageActive, statusOrder, useCurrentUser?.data?.userId])
 
     return (
-        <div className="bg-white h-auto w-3/4 border border-gray-50 shadow-base rounded-md p-3">
+        <div className="bg-white h-auto w-full mt-5 sm:mt-0 sm:w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold mb-5">My Orders</h2>
                 <select className="rounded-lg"
