@@ -85,8 +85,8 @@ function Reviews() {
     return (
         <>
             <p className="font-semibold mb-3 text-md">Reviews</p>
-            <div className="flex item-start">
-                <div className="w-[40%]">
+            <div className="flex flex-col sm:flex-row item-start">
+                <div className="w-full sm:w-[40%]">
                     <p className="font-semibold text-2xl">Customer Reviews</p>
                     <div className="flex items-center gap-2 font-medium my-2">
                         {/* <Rating placeholder="" value={4} readonly ratedColor="amber" /> */}
@@ -115,7 +115,7 @@ function Reviews() {
                         }
                     </div>
                 </div>
-                <div className="w-[60%] ml-20">
+                <div className="w-full mt-4 sm:mt-0 sm:w-[60%] sm:ml-20">
                     <div className="flex flex-col items-center justify-center">
                         {reviews?.data?.productReviewList?.length === 0 && <p className="w-full mb-5 pb-5 italic">No reviews</p>}
                         {reviews?.success && reviews?.data?.productReviewList.map((review) => (

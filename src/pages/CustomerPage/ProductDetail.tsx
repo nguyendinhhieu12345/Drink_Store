@@ -8,7 +8,7 @@ function ProductDetail() {
     const { id } = useParams()
 
     return (
-        <div className="h-auto mt-20 mx-25">
+        <div className="h-auto mt-20 px-5 sm:px-5 xl:px-20">
             <div className="py-6 text-md">
                 <Breadcrumbs placeholder="" className="bg-white p-0 m-0">
                     <a href="/" className="font-semibold">

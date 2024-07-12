@@ -74,7 +74,7 @@ const ItemSidebar = (props: {
 const TabListUser = () => {
     return (
         <div
-            className={`bg-white h-auto max-h-[19rem] w-1/4 mr-5 border border-gray-50 shadow-base rounded-md p-2`}
+            className={`bg-white h-auto max-h-[19rem] w-full sm:w-1/4 mr-5 border border-gray-50 shadow-base rounded-md p-2`}
         >
             {ITEM_ADMIN_SIDEBAR.map((item, index) => {
                 return (

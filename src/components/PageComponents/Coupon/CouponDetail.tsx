@@ -22,7 +22,7 @@ function CouponDetail(props: ICouponDetail) {
 
     return (
         <>
-            <button onClick={handleOpen} className="h-auto max-h-44 block md:flex lg:flex w-[31%] border items-center bg-white rounded-md shadow-base m-3">
+            <button onClick={handleOpen} className="h-auto max-h-44 block md:flex lg:flex w-full sm:w-[31%] border items-center bg-white rounded-md shadow-base m-3">
                 <div className="p-6 flex items-center justify-items-start">
                     <figure>
                         <img alt="image discount" loading="lazy" width="120" height="120" decoding="async" data-nimg="1" className="border rounded-lg" src="https://th.bing.com/th/id/R.486fee971e545a6a0aa2e439b03880d1?rik=NwG3OyQ4BOxWzQ&riu=http%3a%2f%2f3.bp.blogspot.com%2f-hvIuzd_3wGY%2fVDqszc7Or1I%2fAAAAAAAABXA%2fL0SdhBe19HE%2fs1600%2fDiscount.png&ehk=vzDpC54Lh5RZKIZV%2bkK5Meac3ACshBu%2bE8VFE8h0nWI%3d&risl=&pid=ImgRaw&r=0" />
@@ -35,7 +35,7 @@ function CouponDetail(props: ICouponDetail) {
                         <div className="w-full flex flex-col items-start justify-start">
                             <p className="font-semibold leading-5 text-lg break-words">{props?.coupon?.description}</p >
                             <p className="text-base leading-5 text-gray-500 mt-2">Start: {formatBirthDay(props?.coupon?.startDate)}</p>
-                            <p className="text-base leading-5 text-gray-500 mt-2">Expire: {formatBirthDay(props?.coupon?.expirationDate)}</p>
+                            <p className="text-base leading-5 text-gray-500 mt-2">Expire: {props?.coupon?.expirationDate ? formatBirthDay(props?.coupon?.expirationDate) : "Not expired"}</p>
                         </div>
                     </div>
                 </div>

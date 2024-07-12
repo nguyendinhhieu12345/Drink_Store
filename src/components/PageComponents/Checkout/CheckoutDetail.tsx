@@ -17,9 +17,9 @@ export interface ICheckout {
     paymentType: string,
     addressId: string,
     shippingFee: number,
-    productCouponCode: string,
-    orderCouponCode: string,
-    shippingCouponCode: string,
+    productCouponCode?: string,
+    orderCouponCode?: string,
+    shippingCouponCode?: string,
     total: number,
     coin: number,
     type?: string,
@@ -94,8 +94,8 @@ function CheckoutDetail() {
     }, [])
 
     return (
-        <div className="flex items-start">
-            <div className="flex flex-col w-1/2">
+        <div className="flex flex-col sm:flex-row items-start">
+            <div className="flex flex-col w-full sm:w-1/2">
                 <AddAddress dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} isDisable={isDisable} setIsDisable={setIsDisable} />
                 <AddPayment dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} isDisable={isDisable} setIsDisable={setIsDisable} />
                 <AddCoupon dataCheckout={dataCheckout} setDataCheckout={setDataCheckout} isDisable={isDisable} setIsDisable={setIsDisable} />

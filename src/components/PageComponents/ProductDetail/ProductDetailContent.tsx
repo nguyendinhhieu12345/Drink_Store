@@ -158,20 +158,20 @@ function ProductDetailContent() {
 
     return (
         <div>
-            <div className="flex items-start mb-10">
-                <div className="w-1/2">
+            <div className="flex flex-col sm:flex-row items-start mb-10">
+                <div className="w-full sm:w-1/2">
                     <img src={productDetail?.data?.imageUrl} alt="image product" className="w-142 h-142 object-contain bg-[#fff0f0f0]" />
                 </div>
-                <div className="w-1/2">
-                    <p className="font-semibold text-3xl">{productDetail?.data?.name}</p>
+                <div className="w-full sm:w-1/2">
+                    <p className="font-semibold text-3xl mt-5 sm:mt-0">{productDetail?.data?.name}</p>
                     <p className="my-2 font-medium text-2xl text-yellow-500">{productDetail?.data?.type === "CAKE" ? formatVND(productDetail?.data?.price ? productDetail?.data?.price : 0) : formatVND((productDetail?.data?.sizeList && productDetail?.data?.sizeList[0]?.price) ? (productDetail?.data?.sizeList && productDetail?.data?.sizeList[0]?.price) : 0)}</p>
                     {productDetail?.data?.type !== "CAKE" &&
                         <div className="my-6">
                             <p className="font-medium">Select size (required)</p>
-                            <div className="flex my-4">
+                            <div className="flex flex-wrap my-4">
                                 {productDetail?.data?.sizeList?.map((size, index) => (
                                     <button id={size?.size} onClick={() => handleAddSize(size?.size, size?.price)} key={index}
-                                        className={`flex items-center border border-gray-300 px-4 py-2 rounded-md mr-4 opacity-80 text-gray-700 active:text-white active:bg-select focus:text-white focus:bg-select ${selectedSize === size.size ? 'bg-select text-white' : ''
+                                        className={`my-2 flex items-center border border-gray-300 px-4 py-2 rounded-md mr-4 opacity-80 text-gray-700 active:text-white active:bg-select focus:text-white focus:bg-select ${selectedSize === size.size ? 'bg-select text-white' : ''
                                             }`}
                                     >
                                         <Cup className={`w-${index + 4} h-${index + 4} mr-1`} />
@@ -184,12 +184,12 @@ function ProductDetailContent() {
                     {productDetail?.data?.type !== "CAKE" &&
                         <div className="my-6">
                             {(productDetail?.success && productDetail?.data?.toppingList && productDetail?.data?.toppingList?.length > 0) && <p className="font-medium">Topping</p>}
-                            <div className="flex my-4">
+                            <div className="flex flex-wrap my-4">
                                 {productDetail?.data?.toppingList?.map((topping, index) => (
                                     <button
                                         id={topping?.name}
                                         onClick={() => handleAddTopping(topping?.name, topping?.price)} key={index}
-                                        className={`flex items-center border border-gray-300 px-4 py-2 rounded-md mr-4 opacity-80 text-gray-700 active:text-white active:bg-select 
+                                        className={`my-2 flex items-center border border-gray-300 px-4 py-2 rounded-md mr-4 opacity-80 text-gray-700 active:text-white active:bg-select 
                                         ${selectedToppings.includes(topping.name) ? 'bg-select text-white' : 'bg-white text-gray-700'
                                             }`}
                                     >

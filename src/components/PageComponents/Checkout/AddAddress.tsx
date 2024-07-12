@@ -349,6 +349,7 @@ function AddAddress(props: IPropsCheckout) {
     }
 
     const handleAddTakeAway = async () => {
+        props?.setIsDisable && props?.setIsDisable(false)
         setError("")
         props?.setDataCheckout((prev: ICheckout | undefined) => (
             {
@@ -563,6 +564,7 @@ function AddAddress(props: IPropsCheckout) {
                                     type: "Home Delivery"
                                 }
                             ))
+                            props?.setIsDisable && props?.setIsDisable(false)
                             getAllAddresUser()
                         }}>Home Delivery</MenuItem>
                         <MenuItem placeholder="" onClick={() => handleAddTakeAway()}>Take Away</MenuItem>
@@ -660,8 +662,7 @@ function AddAddress(props: IPropsCheckout) {
                                             props?.setIsDisable && props?.setIsDisable(true)
                                         }
                                     }
-                                }
-                                }
+                                }}
                             />
                         </div>
                         {orderItemInvalidList?.length > 0 && orderItemInvalidList?.map((item) => (

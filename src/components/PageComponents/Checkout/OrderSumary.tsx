@@ -68,6 +68,7 @@ function OrderSumary(props: IPropsCheckout) {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
+                    toast.error(e.response.data.devResponse?.message)
                     stopLoading()
                 }
             }
@@ -84,8 +85,16 @@ function OrderSumary(props: IPropsCheckout) {
                             localStorage.setItem("transactionId", data?.data?.transactionId)
                             dispatch(resetStoreCart())
                             window.location.href = (data?.data?.paymentUrl as string)
+                            socket.emit("user_create_order", {
+                                branchId: data?.data?.branchId,
+                                orderId: data?.data?.orderId
+                            })
                         }
                         else {
+                            socket.emit("user_create_order", {
+                                branchId: data?.data?.branchId,
+                                orderId: data?.data?.orderId
+                            })
                             dispatch(resetStoreCart())
                             nav(configRouter?.orderDetail.slice(0, -3) + data?.data?.orderId)
                         }
@@ -97,7 +106,7 @@ function OrderSumary(props: IPropsCheckout) {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toast.error(e.response?.data?.devResponse?.message)
+                    toast.error(e.response.data.devResponse?.message)
                     stopLoading()
                 }
             }
@@ -123,7 +132,7 @@ function OrderSumary(props: IPropsCheckout) {
     };
 
     return (
-        <div className="w-1/2 ml-10 border shadow-base rounded-lg p-3">
+        <div className="w-full mt-5 sm:mt-0 sm:w-1/2 sm:ml-10 border shadow-base rounded-lg p-3">
             <p className="font-semibold text-lg mb-2">Order Sumary</p>
             <div>
                 {cartCurrent?.map((cart, index) => (

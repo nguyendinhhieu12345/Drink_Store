@@ -64,7 +64,7 @@ const AccountHeader = () => {
                             <MenuItem placeholder="" onClick={() => nav(configRouter.myOrder)}>History Order</MenuItem>
                             <MenuItem placeholder="" onClick={() => nav(configRouter.profile)}>Personal Information</MenuItem>
                             <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>Default Address</MenuItem>
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>History coin</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.historyCoin)}>History coin</MenuItem>
                             <hr className="my-3" />
                             <MenuItem placeholder="" onClick={handleLogout}>
                                 Logout

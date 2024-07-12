@@ -62,7 +62,7 @@ const SearchHeader = (): React.ReactElement => {
                 >
                     Search
                 </label>
-                <div className="relative w-96">
+                <div className="relative w-56 sm:w-96">
                     <div
                         className="absolute inset-y-0 left-0 flex items-center pl-3  cursor-pointer z-999999"
                         onClick={handleSubmit(onSubmit)}

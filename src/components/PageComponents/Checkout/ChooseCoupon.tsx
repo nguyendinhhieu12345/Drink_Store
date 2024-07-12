@@ -2,9 +2,9 @@ import { useEffect, useState } from "react"
 import { ICheckout, IPropsCheckout } from "./CheckoutDetail"
 import { BaseResponseApi } from "@/type";
 import * as checkoutApi from "@/api/PageApi/checkoutApi"
-import { Radio } from "@material-tailwind/react";
+import { Checkbox } from "@material-tailwind/react";
 import { Cart } from "@/features/cart/cartSlice";
-import { formatVND } from "@/utils/hepler";
+import { formatBirthDay, formatVND } from "@/utils/hepler";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
@@ -100,28 +100,120 @@ function ChooseCoupon(props: IPropsCheckout) {
 
     useEffect(() => {
         getCouponValid()
-    }, [])
+    }, [props?.dataCheckout])
 
-    const handleGetCoupon = (type: string, couponCode: string) => {
+    const handleGetCoupon = (type: string, couponCode: string, e?: React.ChangeEvent<HTMLInputElement>) => {
         if (type === "product") {
-            props?.setDataCheckout((prev: ICheckout | undefined) => ({
-                ...prev!,
-                productCouponCode: couponCode,
-            }))
+            if (e?.target.checked) {
+                props?.setDataCheckout((prev: ICheckout | undefined) => ({
+                    ...prev!,
+                    productCouponCode: couponCode,
+                }))
+            }
+            else {
+                props?.setDataCheckout((prev: ICheckout | undefined) => {
+                    const { productCouponCode, ...rest } = prev!;
+                    console.log(productCouponCode)
+                    return {
+                        ...rest
+                    };
+                })
+            }
+            // getCouponValid()
         }
         else if (type === "shipping") {
-            props?.setDataCheckout((prev: ICheckout | undefined) => ({
-                ...prev!,
-                shippingCouponCode: couponCode
-            }))
+            if (e?.target.checked) {
+                props?.setDataCheckout((prev: ICheckout | undefined) => ({
+                    ...prev!,
+                    shippingCouponCode: couponCode
+                }))
+            }
+            else {
+                props?.setDataCheckout((prev: ICheckout | undefined) => {
+                    const { shippingCouponCode, ...rest } = prev!;
+                    console.log(shippingCouponCode)
+                    return {
+                        ...rest
+                    };
+                })
+            }
+            // getCouponValid()
         }
         else {
-            props?.setDataCheckout((prev: ICheckout | undefined) => ({
-                ...prev!,
-                orderCouponCode: couponCode
-            }))
+            if (e?.target.checked) {
+                props?.setDataCheckout((prev: ICheckout | undefined) => ({
+                    ...prev!,
+                    orderCouponCode: couponCode
+                }))
+            }
+            else {
+                props?.setDataCheckout((prev: ICheckout | undefined) => {
+                    const { orderCouponCode, ...rest } = prev!;
+                    console.log(orderCouponCode)
+                    return {
+                        ...rest
+                    };
+                })
+            }
+            // getCouponValid()
         }
-        getCouponValid()
+    }
+
+    const checkDisableCheckBox = (isValid: boolean, couponCode: string, type: string) => {
+        if (isValid) {
+            if (type === "product") {
+                if (props?.dataCheckout?.productCouponCode !== undefined) {
+                    if (props?.dataCheckout?.productCouponCode !== couponCode) {
+                        console.log(true)
+                        return true
+                    }
+                    else {
+                        console.log(false)
+                        return false
+                    }
+                }
+                else {
+                    console.log(false)
+                    return false
+                }
+            }
+            if (type === "shipping") {
+                if (props?.dataCheckout?.shippingCouponCode !== undefined) {
+                    if (props?.dataCheckout?.shippingCouponCode !== couponCode) {
+                        console.log(true)
+                        return true
+                    }
+                    else {
+                        console.log(false)
+                        return false
+                    }
+                }
+                else {
+                    console.log(false)
+                    return false
+                }
+            }
+            if (type === "order") {
+                if (props?.dataCheckout?.orderCouponCode !== undefined) {
+                    if (props?.dataCheckout?.orderCouponCode !== couponCode) {
+                        console.log(true)
+                        return true
+                    }
+                    else {
+                        console.log(false)
+                        return false
+                    }
+                }
+                else {
+                    console.log(false)
+                    return false
+                }
+            }
+        }
+        else {
+            console.log(true)
+            return true
+        }
     }
 
     return (
@@ -150,12 +242,12 @@ function ChooseCoupon(props: IPropsCheckout) {
                                     after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                                         <div className="w-full flex flex-col items-start justify-start">
                                             <p className="font-semibold leading-5 text-base break-words">{coupon?.description}</p >
-                                            <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {new Date(coupon?.expirationDate).toLocaleString().split(", ")[0]}</p>
+                                            <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : "Not expired"}</p>
                                         </div>
                                     </div>
                                 </div>
                             </button>
-                            <Radio disabled={!coupon.valid} defaultChecked={props?.dataCheckout?.productCouponCode === coupon?.code ? true : false} name="product" crossOrigin="true" onChange={() => coupon.valid && handleGetCoupon("product", coupon?.code)} />
+                            <Checkbox disabled={checkDisableCheckBox(coupon.valid, coupon.code, "product")} defaultChecked={props?.dataCheckout?.productCouponCode === coupon?.code ? true : false} name="product" crossOrigin="true" onChange={(e) => coupon.valid && handleGetCoupon("product", coupon?.code, e)} />
                         </div>
                         <div className="flex flex-col mx-16">
                             {coupon?.minPurchaseCondition && <p>Min purchase require: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
@@ -164,6 +256,9 @@ function ChooseCoupon(props: IPropsCheckout) {
                                     <span>{sub?.value} x {sub?.productName} {index + 1 !== coupon?.subjectConditionList?.length && ", "}</span>
                                 ))}
                             </div>}
+                            <div>
+                                {(!coupon?.valid && couponValid?.data?.productNoCombineBy?.length > 0) && <p>Coupon not combine with: {couponValid?.data?.productNoCombineBy}</p>}
+                            </div>
                         </div>
                     </>
                 ))}
@@ -191,15 +286,19 @@ function ChooseCoupon(props: IPropsCheckout) {
                                 after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                                                 <div className="w-full flex flex-col items-start justify-start">
                                                     <p className="font-semibold leading-5 text-base break-words">{coupon?.description}</p >
-                                                    <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {new Date(coupon?.expirationDate).toLocaleString().split(", ")[0]}</p>
+                                                    <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : "Not expired"}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </button>
-                                    <Radio disabled={!coupon.valid} name="shipping" defaultChecked={props?.dataCheckout?.shippingCouponCode === coupon?.code ? true : false} crossOrigin="true" onChange={() => handleGetCoupon("shipping", coupon?.code)} />
+
+                                    <Checkbox disabled={checkDisableCheckBox(coupon.valid, coupon.code, "shipping")} name="shipping" defaultChecked={props?.dataCheckout?.shippingCouponCode === coupon?.code ? true : false} crossOrigin="true" onChange={(e) => handleGetCoupon("shipping", coupon?.code, e)} />
                                 </div>
                                 <div className="flex flex-col mx-16">
                                     {coupon?.minPurchaseCondition && <p>Min purchase require: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
+                                    <div>
+                                        {(!coupon?.valid && couponValid?.data?.shippingNoCombineBy?.length > 0) && <p>Coupon not combine with: {couponValid?.data?.shippingNoCombineBy}</p>}
+                                    </div>
                                 </div>
                             </>
                         ))}
@@ -227,15 +326,18 @@ function ChooseCoupon(props: IPropsCheckout) {
                                     after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                                         <div className="w-full flex flex-col items-start justify-start">
                                             <p className="font-semibold leading-5 text-base break-words">{coupon?.description}</p >
-                                            <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {new Date(coupon?.expirationDate).toLocaleString().split(", ")[0]}</p>
+                                            <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : "Not expired"}</p>
                                         </div>
                                     </div>
                                 </div>
                             </button>
-                            <Radio disabled={!coupon.valid} name="order" crossOrigin="true" defaultChecked={props?.dataCheckout?.orderCouponCode === coupon?.code ? true : false} onChange={() => handleGetCoupon("order", coupon?.code)} />
+                            <Checkbox disabled={checkDisableCheckBox(coupon.valid, coupon.code, "order")} name="order" crossOrigin="true" defaultChecked={props?.dataCheckout?.orderCouponCode === coupon?.code ? true : false} onChange={(e) => handleGetCoupon("order", coupon?.code, e)} />
                         </div>
                         <div className="flex flex-col mx-16">
                             {coupon?.minPurchaseCondition && <p>Min purchase require: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
+                            <div>
+                                {(!coupon?.valid && couponValid?.data?.orderNoCombineBy?.length > 0) && <p>Coupon not combine with: {couponValid?.data?.orderNoCombineBy}</p>}
+                            </div>
                         </div>
                     </>
                 ))}

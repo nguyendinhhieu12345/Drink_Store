@@ -39,11 +39,11 @@ const Tricount: React.FC = () => {
                         BECOME A MEMBER OF SHOPFEE
                     </h2>
                 </div>
-                <div className="mt-8 flex items-center justify-center">
-                    <div className='w-1/2'>
+                <div className="mt-8 sm:flex sm:items-center sm:justify-center">
+                    <div className='w-full sm:w-1/2'>
                         <img src={assets?.images?.download_app} alt="Coffee House App" className="h-auto w-auto" />
                     </div>
-                    <div className="-mt-6 w-1/2">
+                    <div className="w-full mt-4 text-center sm:w-1/2 sm:-mt-6">
                         <p className="mt-5 text-lg text-gray-600">
                             <span className='text-brown-500 font-semibold'>Download the Shopfee App</span > and Become a <span className='text-brown-500 font-semibold'>Shopfee Member</span> to comfortably explore details of promotional programs exclusively for Shopfee members with attractive gifts.
                         </p>

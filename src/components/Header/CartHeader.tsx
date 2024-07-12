@@ -36,7 +36,7 @@ const CartHeader = () => {
             />
             {isHovered && (
                 cartCurrent?.length > 0 ?
-                    (<div className="absolute w-[415px] h-[350px] right-0 z-1 bg-white p-3 border border-[#ccc] rounded-md shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-y-auto">
+                    (<div className="absolute w-[350px] sm:w-[415px] h-[350px] right-0 z-1 bg-white p-3 border border-[#ccc] rounded-md shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-y-auto">
                         <div className="pb-2 font-semibold opacity-70 text-[14px]">
                             New products added
                         </div>

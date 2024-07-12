@@ -4,6 +4,7 @@ import { BaseResponseApi } from "@/type";
 import { ISearchProduct } from "@/pages/CustomerPage/SearchProduct";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "swiper/css"
+import assets from "@/assets";
 
 interface IListCategory extends BaseResponseApi {
     data: {
@@ -52,7 +53,17 @@ function DisplayCategory(props: IDisplayCategory) {
                     spaceBetween={30}
                     navigation
                     scrollbar={{ draggable: true }}
-                    slidesPerView={6}
+                    // slidesPerView={6}
+                    breakpoints={{
+                        320: {
+                            slidesPerView: 4,
+                            spaceBetween: 10
+                        },
+                        640: {
+                            slidesPerView: 6,
+                            spaceBetween: 20
+                        }
+                    }}
                 >
                     {categorys?.success && categorys?.data?.length > 0 && categorys?.data?.map((cate, index) => (
                         <SwiperSlide className="cursor-pointer" key={index} onClick={() => handleGetProductByCategory(cate?.id)}>
@@ -70,6 +81,27 @@ function DisplayCategory(props: IDisplayCategory) {
                             </div>
                         </SwiperSlide>
                     ))}
+                    <SwiperSlide className="cursor-pointer">
+                        <div className={`flex flex-col items-center justify-center w-full`} onClick={async () => {
+                            const data = await searchApi.getProductByKeyName(1, "", 0, 0, 0, "")
+                            if (data?.success) {
+                                props?.setProducts(data)
+                            }
+                            localStorage.removeItem("categorySearch")
+                        }
+                        }>
+                            <div className="h-32 w-25 p-0.5">
+                                <img
+                                    className="h-full w-full border-2 border-white object-contain"
+                                    src={assets.images.shopfeeIcon}
+                                    alt="avatar"
+                                />
+                            </div>
+                            <p className="my-2 text-center text-sm text-slate-600 line-clamp-1">
+                                All
+                            </p>
+                        </div>
+                    </SwiperSlide>
                 </Swiper>
             </div>
         </div>

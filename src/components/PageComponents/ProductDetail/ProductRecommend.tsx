@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import * as productDetailApi from "@/api/PageApi/productDetailApi"
+import * as homeApi from "@/api/PageApi/homeApi"
 import { configRouter } from "@/configs/router";
 import { formatVND } from "@/utils/hepler";
 import { Eye } from "@phosphor-icons/react";
@@ -20,9 +21,17 @@ function ProductRecommend() {
 
     useEffect(() => {
         const getProductsRecommend = async () => {
-            const data = await productDetailApi?.getProductsRecommend(useCurrentUser?.data?.userId, 4)
-            if (data?.success) {
-                setProducts(data?.data)
+            if (useCurrentUser?.data?.userId) {
+                const data = await productDetailApi?.getProductsRecommend(useCurrentUser?.data?.userId, 4)
+                if (data?.success) {
+                    setProducts(data?.data)
+                }
+            }
+            else{
+                const data = await homeApi?.getTopSellingProduct(4)
+                if (data?.success) {
+                    setProducts(data?.data)
+                }
             }
         }
         getProductsRecommend()

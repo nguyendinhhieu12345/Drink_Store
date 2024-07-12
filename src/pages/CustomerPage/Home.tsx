@@ -43,7 +43,7 @@ function Home() {
             <ShowBlog title="Blogs Post" /> */}
             <BannerHome />
             <PopularProducts />
-            <ShowBlog title="Blogs Post" />
+            <ShowBlog title="Blogs Post" size={4}/>
         </div>
     );
 }

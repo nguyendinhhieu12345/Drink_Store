@@ -35,10 +35,10 @@ interface ICouponValidInCart {
             productSize: string;
             quantity: number
         }[],
-        subjectInformation?: {
+        subjectInformationList?: {
             id: string;
             name: string
-        }
+        }[]
     },
     valid: boolean
 }
@@ -95,9 +95,14 @@ function AddCoupon(props: IPropsCheckout) {
         let result: number = 0;
         if (productCouponCode !== null && !productCouponResult?.reward?.productRewardList) {
             if (productCouponResult?.reward?.moneyReward?.unit === RewardUnit.MONEY) {
-                result += getTotalProductById(productCouponResult!.reward!.subjectInformation!.id!) * (productCouponResult!.reward!.moneyReward!.value ?? 0);
+                productCouponResult!.reward!.subjectInformationList?.map((product) => {
+                    result += getTotalProductById(product!.id!) * (productCouponResult!.reward!.moneyReward!.value ?? 0);
+                })
+
             } else if (productCouponResult?.reward?.moneyReward?.unit === RewardUnit.PERCENTAGE) {
-                result += getTotalProductPriceById(productCouponResult!.reward!.subjectInformation!.id!) * ((productCouponResult!.reward!.moneyReward!.value ?? 0) / 100);
+                productCouponResult!.reward!.subjectInformationList?.map((product) => {
+                    result += getTotalProductPriceById(product!.id!) * ((productCouponResult!.reward!.moneyReward!.value ?? 0) / 100);
+                })
             }
         }
         return result;

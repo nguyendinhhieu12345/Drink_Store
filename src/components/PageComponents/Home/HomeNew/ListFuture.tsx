@@ -25,7 +25,7 @@ const features = [
 
 function ListFuture() {
     return (
-        <div className='flex items-center justify-between py-5'>
+        <div className='hidden sm:flex items-center justify-between py-5'>
             {features?.map((feature, index) => (
                 <div className="flex items-center" key={index}>
                     <div className="flex items-center justify-center w-16 h-16 rounded-full border border-gray-300">

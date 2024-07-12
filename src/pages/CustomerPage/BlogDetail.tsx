@@ -61,7 +61,7 @@ function BlogDetail() {
                     </div>
                 </main>
             </div>
-            <ShowBlog title="New Blogs" />
+            <ShowBlog title="New Blogs" size={4}/>
         </div>
     )
 }

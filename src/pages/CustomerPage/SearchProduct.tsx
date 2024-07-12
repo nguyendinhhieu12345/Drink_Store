@@ -71,7 +71,7 @@ function SearchProduct() {
                     <a href="/" className="font-semibold">
                         Home
                     </a>
-                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">Search {location.search.split("?key=")[1] && `"${location.search.split("?key=")[1].replace(/%/g, " ")}"`}</p>
+                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">Search {location.search.split("?key=")[1] && `"${location.search.split("?key=")[1].replace(/%20/g, " ")}"`}</p>
                 </Breadcrumbs>
             </div >
             {!location.search.split("?key=")[1] && <DisplayCategory setProducts={setProducts} />}

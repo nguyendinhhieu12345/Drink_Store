@@ -18,7 +18,7 @@ function ListDiscountOfDay() {
     }, [])
 
     return (
-        <div className="mb-5 w-full">
+        <div className="hidden sm:block sm:mb-5 w-full">
             <h2 className="text-3xl font-bold mb-4 border-l-4 border-red-500 pl-5 my-5">Deal of The Day</h2>
             <div className="flex flex-wrap w-full items-center my-8">
                 {coupons?.data?.map((coupon) => (
