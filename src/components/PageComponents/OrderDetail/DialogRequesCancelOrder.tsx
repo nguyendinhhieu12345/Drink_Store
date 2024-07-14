@@ -1,6 +1,7 @@
 import { cancellationRequestOrder, requestCancelOrder } from "@/api/PageApi/checkoutApi";
 import useLoading from "@/hooks/useLoading";
 import socket from "@/socket/socket";
+import { toastError } from "@/utils/hepler";
 import {
     Button,
     Dialog,
@@ -12,7 +13,6 @@ import {
 import { Radio, Typography } from "@material-tailwind/react";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import { toast } from "react-toastify";
 
 interface IDialogRequestCancelOrder {
     orderId: string,
@@ -150,7 +150,7 @@ function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
         catch (e: unknown) {
             stopLoading()
             if (e instanceof AxiosError && e.response) {
-                toast.error(e.response.data?.message);
+                toastError(e,"top-right")
             }
         }
     }

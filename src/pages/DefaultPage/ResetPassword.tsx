@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { configRouter } from "@/configs/router";
 import * as authApi from "../../api/authApi/authApi";
 import { toast } from "react-toastify";
-import { messageToast } from "@/utils/hepler";
+import { messageToast, toastError } from "@/utils/hepler";
 import { AxiosError } from "axios";
 import useLoading from "@/hooks/useLoading";
 import { Spinner } from "@material-tailwind/react";
@@ -37,7 +37,7 @@ function ResetPassword() {
                 } catch (e: unknown) {
                     stopLoading()
                     if (e instanceof AxiosError && e.response) {
-                        toast.error(e.response.data?.message);
+                        toastError(e,"top-right")
                     }
                 }
             }

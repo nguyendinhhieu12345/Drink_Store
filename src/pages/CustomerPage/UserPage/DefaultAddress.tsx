@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { BaseResponseApi, User } from "@/type";
-import { messageToast } from "@/utils/hepler";
+import { messageToast, toastError } from "@/utils/hepler";
 import { configRouter } from "@/configs/router";
 import { useNavigate } from "react-router-dom";
 
@@ -244,7 +244,7 @@ function DefaultAddress() {
         catch (e: unknown) {
             if (e instanceof AxiosError && e.response) {
                 stopLoading()
-                toast.error(e?.response?.data?.message);
+                toastError(e,"top-right")
             }
         }
     }

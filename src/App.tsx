@@ -44,7 +44,7 @@ function App() {
                 updateTransactionInf()
                 navigate(`/order/${orderId}`);
             } else {
-                // updateTransactionInf()
+                updateTransactionInf()
                 navigate(`/order/${orderId}`);
             }
         }

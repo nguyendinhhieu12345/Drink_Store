@@ -5,7 +5,7 @@ import * as authApi from "../../api/authApi/authApi";
 import { toast } from "react-toastify";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { AxiosError } from "axios";
-import { isEmail } from "@/utils/hepler";
+import { isEmail, toastError } from "@/utils/hepler";
 
 function ForgetPassword() {
     const [email, setEmail] = useState<string>("");
@@ -35,7 +35,7 @@ function ForgetPassword() {
             catch (e: unknown) {
                 setLoading(false);
                 if (e instanceof AxiosError && e.response) {
-                    toast.error(e.response?.data?.devResponse?.message);
+                    toastError(e,"top-right")
                     if (inputRef.current) inputRef.current.focus();
                 }
             }

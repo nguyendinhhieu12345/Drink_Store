@@ -73,7 +73,6 @@ function ProductDetailContent() {
     }, [id])
 
     const handleAddToCart = async () => {
-        console.log(dataAddCart)
         if (dataAddCart?.quantity && dataAddCart?.quantity >= 1 && dataAddCart?.size && dataAddCart?.size !== "") {
             if (cartCurrent?.filter(cart => cart?.productId === productDetail?.data?.id)?.length > 0) {
                 const data = await dispatch(
@@ -85,7 +84,7 @@ function ProductDetailContent() {
                             toppingNameList: dataAddCart?.toppingNameList,
                             size: dataAddCart?.size,
                             note: dataAddCart?.note ?? "",
-                            price: dataAddCart?.price
+                            price: (dataAddCart?.price as number) * dataAddCart?.quantity
                         }
                     })
                 );
@@ -106,7 +105,7 @@ function ProductDetailContent() {
                                 toppingNameList: dataAddCart?.toppingNameList,
                                 size: dataAddCart?.size,
                                 note: dataAddCart?.note ?? "",
-                                price: dataAddCart?.price
+                                price: (dataAddCart?.price as number) * dataAddCart?.quantity
                             }
                         ]
                     })
@@ -220,7 +219,7 @@ function ProductDetailContent() {
                                 onChange={(e) => setDataAddCart((prev: IItemDetailList | undefined) => ({
                                     ...prev!,
                                     quantity: parseInt(e.target.value),
-                                    price: (prev?.price ?? 1) * parseInt(e.target.value)
+                                    // price: (prev?.price as number) * parseInt(e.target.value)
                                 }))}
                                 className="rounded-lg bg-gray-50 border text-gray-900 focus:ring-0 focus:border-gray-300 min-w-0 w-20 text-sm border-gray-300 p-2.5"
                                 value={dataAddCart?.quantity ?? 1}
