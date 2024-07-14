@@ -20,7 +20,7 @@ export default withMT({
                 primary: "#F4EFEB",
                 btnDisable: "#A1887F",
                 btnActive: "#5D4037",
-                select: "#E57905"
+                select: "#6e4c42"
             },
             width: {
                 90: "360px",
