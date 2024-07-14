@@ -3,7 +3,7 @@ import { configRouter } from "@/configs/router"
 import useLoading from "@/hooks/useLoading"
 import { RootState } from "@/redux/store"
 import { User } from "@/type"
-import { messageToast } from "@/utils/hepler"
+import { messageToast, toastError } from "@/utils/hepler"
 import { Spinner } from "@material-tailwind/react"
 import { AxiosError } from "axios"
 import { ChangeEvent, useEffect, useState } from "react"
@@ -64,7 +64,7 @@ function ChangePasswordUser() {
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
                     stopLoading()
-                    toast.error(e?.response?.data?.message);
+                    toastError(e,"top-right")
                 }
             }
         }

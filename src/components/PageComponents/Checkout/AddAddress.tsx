@@ -20,7 +20,7 @@ import {
 import AddNewAddress from "../UserPage/AddressDefault/AddNewAddress"
 import useLoading from "@/hooks/useLoading"
 import { toast } from "react-toastify"
-import { getCurrentDateTime, messageToast } from "@/utils/hepler"
+import { getCurrentDateTime, messageToast, toastError } from "@/utils/hepler"
 import { Cart, removeToCart } from "@/features/cart/cartSlice"
 
 interface IBranchNearest extends BaseResponseApi {
@@ -294,7 +294,7 @@ function AddAddress(props: IPropsCheckout) {
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
                     stopLoading()
-                    toast.error(e?.response?.data?.message);
+                    toastError(e,"top-right")
                 }
             }
         }

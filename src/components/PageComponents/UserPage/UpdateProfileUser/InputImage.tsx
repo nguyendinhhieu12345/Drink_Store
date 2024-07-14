@@ -1,4 +1,4 @@
-import { checkTypeImage, imageUrlToFile } from "@/utils/hepler";
+import { checkTypeImage, imageUrlToFile, toastError } from "@/utils/hepler";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import * as userApi from "@/api/PageApi/userApi"
@@ -27,7 +27,7 @@ function InputImage() {
                 }
                 catch (e: unknown) {
                     if (e instanceof AxiosError && e.response) {
-                        toast.error(e.response.data?.message);
+                        toastError(e,"top-right")
                     }
                 }
             } else {

@@ -9,11 +9,12 @@ import FromWrap from "@/components/FormWrap/FromWrap";
 import InputWrap from "@/components/FormWrap/InputWrap";
 import { Auth } from "@/type";
 import { useDispatch } from "react-redux";
-import { login, loginWithFirebase } from "@/features/auth/authSlice";
+import { login, loginWithFirebase, signupWithFirebase } from "@/features/auth/authSlice";
 import { AppDispatch } from "@/redux/store";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { AxiosError } from "axios";
-import { messageToast } from "@/utils/hepler";
+import { messageToast, toastError } from "@/utils/hepler";
+import * as signupApi from "@/api/authApi/authApi"
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
@@ -54,21 +55,32 @@ const Login = () => {
         signInWithPopup(auth, provider)
             .then(async (result) => {
                 try {
-                    const resultSignup = await dispatch(loginWithFirebase({
-                        fcmTokenId: localStorage?.getItem("fcmTokenId") as string,
-                        idToken: await result?.user?.getIdToken()
-                    }))
-                    if (resultSignup.type === "auth/loginWithFirebase/fulfilled") {
-                        navigate(configRouter.home);
-                    } else {
-                        toast.error(
-                            (resultSignup as { error: { message: string } }).error?.message
-                        );
+                    console.log(result)
+                    try {
+                        const checkExisAccount = await signupApi.checkExistAccount(result?.user?.email as string)
+                        if (checkExisAccount?.success && checkExisAccount?.data) {
+                            const resultSignup = await dispatch(loginWithFirebase({
+                                fcmTokenId: localStorage?.getItem("fcmTokenId") as string,
+                                idToken: await result?.user?.getIdToken()
+                            }))
+                            if (resultSignup.type === "auth/loginWithFirebase/fulfilled") {
+                                navigate(configRouter.home);
+                            }
+                        }
+                    }
+                    catch {
+                        const resultSignup = await dispatch(signupWithFirebase({
+                            fcmTokenId: localStorage?.getItem("fcmTokenId") as string,
+                            idToken: await result?.user?.getIdToken()
+                        }))
+                        if (resultSignup.type === "auth/signupWithFirebase/fulfilled") {
+                            navigate(configRouter.home);
+                        }
                     }
                 }
                 catch (e: unknown) {
                     if (e instanceof AxiosError && e.response) {
-                        toast.error(e.response.data?.message);
+                        toastError(e, "top-right")
                     }
                 }
             }).catch((error) => {

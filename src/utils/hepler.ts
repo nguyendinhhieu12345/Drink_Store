@@ -1,3 +1,6 @@
+import { AxiosError } from "axios";
+import { toast, ToastPosition } from "react-toastify";
+
 export const formatVND = (value: number): string => {
     return value.toLocaleString("vi-VN", {
         style: "currency",
@@ -164,4 +167,19 @@ export function getCurrentDateTime() {
     const minutes = `${now.getMinutes() < 10 ? '0' : ''}${now.getMinutes()}`;
 
     return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+export const toastError = (error: unknown, position: ToastPosition) => {
+    if (error instanceof AxiosError && error.response) {
+        if (error?.response?.data?.error?.subErrorMessage) {
+            toast.error(error?.response?.data?.error?.subErrorMessage, {
+                position: position
+            })
+        }
+        else {
+            toast.error("Server Error. Please try again!", {
+                position: position
+            })
+        }
+    }
 }

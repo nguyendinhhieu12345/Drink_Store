@@ -5,6 +5,7 @@ import { useEffect } from "react"
 import { AxiosError } from "axios"
 import { toast } from "react-toastify"
 import { IShowAddressResponse } from "@/pages/CustomerPage/UserPage/DefaultAddress"
+import { toastError } from "@/utils/hepler"
 
 
 
@@ -32,7 +33,7 @@ function ShowAddress(props: IShowAddress) {
         }
         catch (e: unknown) {
             if (e instanceof AxiosError && e.response) {
-                toast.error(e?.response?.data?.message);
+                toastError(e,"top-right")
             }
         }
     }

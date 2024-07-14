@@ -7,7 +7,7 @@ import * as signupApi from "@/api/authApi/authApi"
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { signup } from "@/features/auth/authSlice";
-import { messageToast } from "@/utils/hepler";
+import { messageToast, toastError } from "@/utils/hepler";
 
 function OTPPage() {
 
@@ -81,7 +81,7 @@ function OTPPage() {
         }
         catch (e: unknown) {
             if (e instanceof AxiosError && e.response) {
-                toast.error(e.response.data?.devResponse?.message);
+                toastError(e,"top-right")
             }
         }
     };
@@ -115,7 +115,7 @@ function OTPPage() {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toast.error(e.response.data?.devResponse?.message);
+                    toastError(e,"top-right")
                 }
             }
         }

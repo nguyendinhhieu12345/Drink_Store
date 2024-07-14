@@ -1,7 +1,7 @@
-import { toast } from "react-toastify";
 import { Auth, signupState } from "../../type";
 import * as httpRequest from "../../utils/httpRequest";
 import { AxiosError } from "axios";
+import { toastError } from "@/utils/hepler";
 
 export const loginPass = async (params: Auth) => {
     try {
@@ -13,16 +13,7 @@ export const loginPass = async (params: Auth) => {
         return res;
     } catch (error: unknown) {
         if (error instanceof AxiosError && error.response) {
-            if (error?.response?.data?.error?.errorCode === 13) {
-                error?.response?.data?.devResponse?.details?.map((err: {
-                    field: string,
-                    valueReject: string,
-                    validate: string
-                }) => (
-                    toast.error(err?.field + " " + err?.validate)
-                ))
-            }
-            toast.error(`${error?.response?.data?.error?.errorMessage}${error?.response?.data?.error?.subErrorMessage ? ` - ${error?.response?.data?.error?.subErrorMessage}` : ""} `)
+            toastError(error, "top-right")
             return Promise.reject(error);
         }
     }
@@ -99,6 +90,7 @@ export const signupWithFirebase = async (fcmTokenId: string, idToken: string) =>
 
         return res;
     } catch (error) {
+        toastError(error, "top-right")
         return Promise.reject(error);
     }
 };
@@ -113,6 +105,7 @@ export const loginWithFirebase = async (fcmTokenId: string, idToken: string) => 
 
         return res;
     } catch (error) {
+        toastError(error, "top-right")
         return Promise.reject(error);
     }
 };

@@ -219,7 +219,7 @@ function AddMapInAddress(props: IAddMapInAddress) {
                 </button>
                 {open && <Map latitude={props?.newAddress?.latitude} longitude={props?.newAddress?.longitude} setNewAddress={props?.setNewAddress} />}
                 {error && (
-                    <div className="my-4 text-center italic text-red-500 text-sm">{error}</div>
+                    <div className="my-4 text-center italic text-red-500 text-sm"></div>
                 )}
             </div>
         </div>

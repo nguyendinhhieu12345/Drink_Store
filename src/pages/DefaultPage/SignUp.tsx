@@ -7,7 +7,7 @@ import { HandWaving } from "@phosphor-icons/react";
 import { useNavigate } from "react-router-dom";
 import * as signupApi from "@/api/authApi/authApi"
 import { toast } from "react-toastify";
-import { messageToast } from "@/utils/hepler";
+import { messageToast, toastError } from "@/utils/hepler";
 import { AxiosError } from "axios";
 
 const SignUp = () => {
@@ -45,7 +45,7 @@ const SignUp = () => {
                         catch (e: unknown) {
                             stopLoading()
                             if (e instanceof AxiosError && e.response) {
-                                toast.error(e?.response?.data?.devResponse?.message);
+                                toastError(e,"top-right")
                             }
                         }
                     }

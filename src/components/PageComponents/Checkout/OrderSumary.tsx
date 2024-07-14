@@ -1,6 +1,6 @@
 import { Edit } from "@/components/SVG/Edit.svg"
 import { configRouter } from "@/configs/router"
-import { formatVND, messageToast } from "@/utils/hepler"
+import { formatVND, messageToast, toastError } from "@/utils/hepler"
 import { CaretLeft, Timer } from "@phosphor-icons/react"
 import { useNavigate } from "react-router-dom"
 import { ICheckout, IPropsCheckout } from "./CheckoutDetail"
@@ -68,7 +68,7 @@ function OrderSumary(props: IPropsCheckout) {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toast.error(e.response.data.devResponse?.message)
+                    toastError(e,"top-right")
                     stopLoading()
                 }
             }
@@ -106,7 +106,7 @@ function OrderSumary(props: IPropsCheckout) {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toast.error(e.response.data.devResponse?.message)
+                    toastError(e,"top-right")
                     stopLoading()
                 }
             }
