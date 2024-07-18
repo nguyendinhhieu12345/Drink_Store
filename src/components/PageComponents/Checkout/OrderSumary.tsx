@@ -13,6 +13,7 @@ import { Spinner } from "@material-tailwind/react"
 import { AxiosError } from "axios"
 import { toast } from "react-toastify"
 import socket from "@/socket/socket"
+import { useTranslation } from "react-i18next"
 
 function OrderSumary(props: IPropsCheckout) {
     const nav = useNavigate()
@@ -22,6 +23,7 @@ function OrderSumary(props: IPropsCheckout) {
     )
     const { isLoading, startLoading, stopLoading } = useLoading()
     const dispatch = useDispatch<AppDispatch>()
+    const { t } = useTranslation()
 
     const handleAddProduct = () => {
         nav(configRouter.searchProduct)
@@ -68,7 +70,7 @@ function OrderSumary(props: IPropsCheckout) {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toastError(e,"top-right")
+                    toastError(e, "top-right")
                     stopLoading()
                 }
             }
@@ -106,7 +108,7 @@ function OrderSumary(props: IPropsCheckout) {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toastError(e,"top-right")
+                    toastError(e, "top-right")
                     stopLoading()
                 }
             }
@@ -133,7 +135,7 @@ function OrderSumary(props: IPropsCheckout) {
 
     return (
         <div className="w-full mt-5 sm:mt-0 sm:w-1/2 sm:ml-10 border shadow-base rounded-lg p-3">
-            <p className="font-semibold text-lg mb-2">Order Sumary</p>
+            <p className="font-semibold text-lg mb-2">{t("Order Sumary")}</p>
             <div>
                 {cartCurrent?.map((cart, index) => (
                     <div key={index} className="flex items-center justify-between my-2">
@@ -158,11 +160,11 @@ function OrderSumary(props: IPropsCheckout) {
                 ))}
             </div>
             <button onClick={handleAddProduct} className="text-default flex text-sm pb-2 border-b w-full">
-                <CaretLeft size={18} /> <span>Add more product</span>
+                <CaretLeft size={18} /> <span>{t("Add more product")}</span>
             </button>
             <div className="my-2 border-b pb-2">
-                <p className="font-semibold text-base mb-2">Time Order</p>
-                <p className="flex items-center text-default">As soon as posible: <Timer weight="fill" size={20} /> <span>Now - 10 Minutes</span></p>
+                <p className="font-semibold text-base mb-2">{t("Time Order")}</p>
+                <p className="flex items-center text-default">{t("As soon as posible")}: <Timer weight="fill" size={20} /> <span>{t("Now")} - 10 {t("Minutes")}</span></p>
                 <input onChange={(e) => props?.setDataCheckout((prev: ICheckout | undefined) => ({
                     ...prev!,
                     note: e.target.value
@@ -170,36 +172,36 @@ function OrderSumary(props: IPropsCheckout) {
                 }))} placeholder="Additional note for shop..." className="w-2/3 px-4 py-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500 active:ring-blue-500 active:border-blue-500" />
             </div>
             <div className="my-2">
-                <p className="font-semibold text-base mb-2">Payment sumary</p>
+                <p className="font-semibold text-base mb-2">{t("Payment sumary")}</p>
                 <div className="flex items-center justify-between mb-2 text-default">
-                    <p className="text-black">Item price</p>
+                    <p className="text-black">{t("Item price")}</p>
                     <p>{formatVND(calculateTotalPrice(cartCurrent) ?? 0)}</p>
                 </div>
                 {props?.dataCheckout?.type === "Home Delivery" && <div className="flex items-center justify-between mb-2 text-default">
-                    <p className="text-black">Shipping Fee</p>
+                    <p className="text-black">{t("Shipping Fee")}</p>
                     <p>{formatVND(props?.dataCheckout?.shippingFee ?? 0)}</p>
                 </div>}
                 <div className="flex items-center justify-between mb-2">
-                    <p className="text-black">Applied Coin</p>
+                    <p className="text-black">{t("Applied Coin")}</p>
                     <p className="text-yellow-300">-{formatVND(props?.dataCheckout?.coin ?? 0)}</p>
                 </div>
                 <div className="flex items-center justify-between mb-2">
-                    <p className="text-black">Discount</p>
+                    <p className="text-black">{t("Discount")}</p>
                     <p className="text-yellow-300">-{formatVND(parseInt(localStorage.getItem("discountValue") ?? "0"))}</p>
                 </div>
                 <div className="flex items-center justify-between mb-2 text-default">
-                    <p className="text-black font-semibold">Total</p>
+                    <p className="text-black font-semibold">{t("Total")}</p>
                     <p className="font-semibold">{formatVND(props?.dataCheckout?.total ? props?.dataCheckout?.total : 0)}</p>
                 </div>
             </div>
             <button disabled={props?.isDisable} onClick={handleRedirectThanksPage} className={`w-full py-4 px-2 text-center ${props?.isDisable ? "bg-btnDisable" : "bg-btnActive"} rounded-lg text-white`}>
                 {isLoading ? (
                     <p className="flex items-center justify-center">
-                        <span className="mr-2">Order</span>{" "}
+                        <span className="mr-2">{t("Order")}</span>{" "}
                         <Spinner className="h-4 w-4" />
                     </p>
                 ) : (
-                    <span>Order</span>
+                    <span>{t("Order")}</span>
                 )}
             </button>
         </div>

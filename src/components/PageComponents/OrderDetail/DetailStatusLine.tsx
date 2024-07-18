@@ -2,6 +2,7 @@ import { Edit } from "@/components/SVG/Edit.svg"
 import { IOrderDetail, OrderStatusData } from "@/pages/CustomerPage/OrderDetail"
 import { useState } from "react"
 import DialogRequestCancelOrder from "./DialogRequesCancelOrder"
+import { useTranslation } from "react-i18next"
 
 interface IOrderStatusLine {
     orderDetail: IOrderDetail | undefined,
@@ -14,6 +15,7 @@ interface IOrderStatusLine {
 function DetailStatusLine(props: IOrderStatusLine) {
     const { orderDetail, statusOrderLine, getOrderDetails, getOrderItemReview, getOrderStatusLine } = props
     const [open, setOpen] = useState<boolean>(false)
+    const { t } = useTranslation()
 
     const handleOpen = () => {
         setOpen(prev => !prev)
@@ -23,14 +25,14 @@ function DetailStatusLine(props: IOrderStatusLine) {
         <>
             <div className="flex lg:flex-row md:flex-row flex-col lg:items-center justify-between pb-4 border-b border-gray-50 ">
                 <h1 className="font-bold text-xl uppercase">
-                    Invoice
+                    {t("Invoice")}
                     <p className="text-xs mt-1 text-gray-500">
-                        Status
+                        {t("STATUS")}
                         <span className="pl-2 font-medium text-xs capitalize">
                             {" "}
                             <span className="font-serif">
                                 <span className="inline-flex text-center px-2 text-sm font-medium leading-5 rounded-full text-yellow-600 bg-yellow-100 ">
-                                    {statusOrderLine?.data[0]?.orderStatus} {!statusOrderLine?.data[0]?.orderStatus && <button className="ml-2"><Edit /></button>}
+                                    {t(`${statusOrderLine?.data[0]?.orderStatus}`)} {!statusOrderLine?.data[0]?.orderStatus && <button className="ml-2"><Edit /></button>}
                                 </span>
                             </span>
                         </span>
@@ -50,7 +52,7 @@ function DetailStatusLine(props: IOrderStatusLine) {
             <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
                 <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
                     <span className="font-bold font-serif text-sm uppercase text-gray-600 block">
-                        DATE
+                        {t("DATE")}
                     </span>
                     <span className="text-sm text-gray-500  block">
                         {new Date(orderDetail?.data?.createdAt as number).toLocaleString().split(", ")[0]}
@@ -58,7 +60,7 @@ function DetailStatusLine(props: IOrderStatusLine) {
                 </div>
                 <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
                     <span className="font-bold font-serif text-sm uppercase text-gray-600  block">
-                        INVOICE NO
+                        {t("INVOICE NO")}
                     </span>
                     <span className="text-sm text-gray-500  block">
                         {orderDetail?.data?.id}
@@ -66,7 +68,7 @@ function DetailStatusLine(props: IOrderStatusLine) {
                 </div>
                 <div className="flex flex-col lg:text-right text-left">
                     <span className="font-bold font-serif text-sm uppercase text-gray-600  block">
-                        INVOICE TO
+                        {t("INVOICE TO")}
                     </span>
                     <p className="text-sm text-gray-500  mt-2">
                         {orderDetail?.data?.receiverInformation?.detail} <br></br>

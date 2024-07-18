@@ -9,6 +9,7 @@ import { BrowserRouter } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import "@/firebase/firebaseConfig"
+import '@/ChangeLanguage/ChangeLanguage';
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>

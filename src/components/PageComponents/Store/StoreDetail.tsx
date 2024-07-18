@@ -3,6 +3,7 @@ import { NavigationArrow, Phone, Share } from "@phosphor-icons/react"
 import { useEffect, useState } from "react";
 import ShareStore from "./ShareStore";
 import * as storeApi from "@/api/PageApi/StoreApi"
+import { useTranslation } from "react-i18next";
 
 interface IStoreDetail {
     storeDetail: string
@@ -23,6 +24,7 @@ export interface IBranchDetail {
 function StoreDetail(props: IStoreDetail) {
     const [openShare, setOpenShare] = useState<boolean>(false)
     const [storeDetail, setStoreDetail] = useState<IBranchDetail>()
+    const { t } = useTranslation();
 
     const handleRedirectAddress = (address: string) => {
         const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(address)}`;
@@ -48,7 +50,7 @@ function StoreDetail(props: IStoreDetail) {
             <div className="border-b">
                 <img src={storeDetail?.imageUrl} alt="store image" className="rounded-lg w-full max-h-56 object-cover" />
                 <Typography className="text-center my-3" placeholder="" variant="h4" color="blue-gray">
-                    Store {storeDetail?.name}
+                    {t("Store")} {storeDetail?.name}
                 </Typography>
                 <Typography
                     placeholder=""
@@ -56,7 +58,7 @@ function StoreDetail(props: IStoreDetail) {
                     variant="paragraph"
                     color="gray"
                 >
-                    Open: {storeDetail?.openTime} - {storeDetail?.closeTime}
+                    {t("Open")}: {storeDetail?.openTime} - {storeDetail?.closeTime}
                 </Typography>
             </div>
             <div>
@@ -70,7 +72,7 @@ function StoreDetail(props: IStoreDetail) {
                 </div>
                 <div className="flex items-center w-full">
                     <Share size={25} className="bg-gray-300 rounded-lg font-semibold w-7 h-7 p-1" />
-                    <p onClick={() => setOpenShare(prev => !prev)} className="cursor-pointer border-b w-full ml-2 py-4 text-base">Share with your friend</p>
+                    <p onClick={() => setOpenShare(prev => !prev)} className="cursor-pointer border-b w-full ml-2 py-4 text-base">{t("Share with your friend")}</p>
                 </div>
                 {openShare &&
                     <ShareStore url={storeDetail?.fullAddress as string} />}

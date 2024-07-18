@@ -9,12 +9,14 @@ import {
     DialogFooter,
 } from "@material-tailwind/react";
 import CouponModel from "./CouponModel";
+import { useTranslation } from "react-i18next";
 
 interface ICouponDetail {
     coupon: ICoupon
 }
 
 function CouponDetail(props: ICouponDetail) {
+    const { t } = useTranslation()
 
     const [open, setOpen] = useState<boolean>(false);
 
@@ -34,20 +36,20 @@ function CouponDetail(props: ICouponDetail) {
                                 after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                         <div className="w-full flex flex-col items-start justify-start">
                             <p className="font-semibold leading-5 text-lg break-words">{props?.coupon?.description}</p >
-                            <p className="text-base leading-5 text-gray-500 mt-2">Start: {formatBirthDay(props?.coupon?.startDate)}</p>
-                            <p className="text-base leading-5 text-gray-500 mt-2">Expire: {props?.coupon?.expirationDate ? formatBirthDay(props?.coupon?.expirationDate) : "Not expired"}</p>
+                            <p className="text-base leading-5 text-gray-500 mt-2">{t("Start")}: {formatBirthDay(props?.coupon?.startDate)}</p>
+                            <p className="text-base leading-5 text-gray-500 mt-2">{t("Expire")}: {props?.coupon?.expirationDate ? formatBirthDay(props?.coupon?.expirationDate) : "Not expired"}</p>
                         </div>
                     </div>
                 </div>
             </button>
             <Dialog size="xs" placeholder="" open={open} handler={handleOpen}>
-                <DialogHeader placeholder="" className="text-center">Counpon Detail</DialogHeader>
+                <DialogHeader placeholder="" className="text-center">{t("Counpon Detail")}</DialogHeader>
                 <DialogBody placeholder="" className="min-h-10 overflow-scroll">
                     <CouponModel counponId={props?.coupon?.id} />
                 </DialogBody>
                 <DialogFooter placeholder="" className="space-x-2">
                     <Button placeholder="" variant="text" color="blue-gray" onClick={handleOpen}>
-                        Close
+                        {t("CLOSE")}
                     </Button>
                 </DialogFooter>
             </Dialog></>

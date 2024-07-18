@@ -1,21 +1,24 @@
 import { IAddNewAddress } from "@/pages/CustomerPage/UserPage/DefaultAddress"
 import AddMapInAddress, { IAddMapInAddress } from "./AddMapInAddress"
 import { Switch } from "@material-tailwind/react"
+import { useTranslation } from "react-i18next"
 
 function AddNewAddress(props: IAddMapInAddress) {
+    const { t } = useTranslation()
+
     return (
         <div className="overflow-y-auto w-full max-h-[32rem]">
             <div className="px-6 flex-grow overflow-y-hidden w-full max-h-full pb-5">
                 {/* Address Name */}
                 <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800 col-span-2 sm:col-span-2 font-medium text-sm">
-                        Consignee Name
+                        {t("Consignee Name")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <input
                             className="block w-full h-12 border px-3 py-1 text-sm focus:outline-none leading-5 rounded-md bg-gray-100 focus:bg-white focus:border-gray-200 border-gray-200 p-2"
                             type="text"
-                            placeholder="Enter name..."
+                            placeholder={t("Consignee Name")}
                             value={props?.newAddress?.recipientName}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
@@ -27,13 +30,13 @@ function AddNewAddress(props: IAddMapInAddress) {
                 {/* Address Phone */}
                 <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800 col-span-2 sm:col-span-2 font-medium text-sm">
-                        Phone Number
+                        {t("Phone Number")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <input
                             className="block w-full h-12 border px-3 py-1 text-sm focus:outline-none leading-5 rounded-md bg-gray-100 focus:bg-white focus:border-gray-200 border-gray-200 p-2"
                             type="text"
-                            placeholder="Enter Phone Number..."
+                            placeholder={t("Phone Number")}
                             value={props?.newAddress?.phoneNumber}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
@@ -45,13 +48,13 @@ function AddNewAddress(props: IAddMapInAddress) {
                 {/* Address Note */}
                 <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800 col-span-2 sm:col-span-2 font-medium text-sm">
-                        Address Note (Optional)
+                        {t("Address Note (Optional)")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <input
                             className="block w-full h-12 border px-3 py-1 text-sm focus:outline-none leading-5 rounded-md bg-gray-100 focus:bg-white focus:border-gray-200 border-gray-200 p-2"
                             type="text"
-                            placeholder="Enter Note..."
+                            placeholder={t("Address Note (Optional)")}
                             value={props?.newAddress?.note}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
@@ -62,7 +65,7 @@ function AddNewAddress(props: IAddMapInAddress) {
                 </div>
                 <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800 col-span-2 sm:col-span-2 font-medium text-sm">
-                        Address Default
+                        {t("Address Default")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <Switch color="green" crossOrigin="true" defaultChecked={props?.newAddress?.default} onChange={(e) => {
@@ -83,7 +86,7 @@ function AddNewAddress(props: IAddMapInAddress) {
                 </div>
                 {props?.newAddress?.id && <div className="grid p-1 grid-cols-8 gap-6 md:gap-2 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800 col-span-2 sm:col-span-2 font-medium text-sm">
-                        Address Detail
+                        {t("Address Detail")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <input

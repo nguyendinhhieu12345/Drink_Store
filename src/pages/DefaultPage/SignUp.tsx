@@ -9,10 +9,13 @@ import * as signupApi from "@/api/authApi/authApi"
 import { toast } from "react-toastify";
 import { messageToast, toastError } from "@/utils/hepler";
 import { AxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 
 const SignUp = () => {
     const navigate = useNavigate();
     const { isLoading, startLoading, stopLoading } = useLoading()
+    const { t } = useTranslation()
+
     const handleLogin = async (
         email: string,
         password: string,
@@ -45,7 +48,7 @@ const SignUp = () => {
                         catch (e: unknown) {
                             stopLoading()
                             if (e instanceof AxiosError && e.response) {
-                                toastError(e,"top-right")
+                                toastError(e, "top-right")
                             }
                         }
                     }
@@ -79,11 +82,11 @@ const SignUp = () => {
                 <div className="w-[65%] h-full flex-initial flex flex-col items-center justify-center">
                     <div className="mb-8">
                         <div className="flex items-center justify-center">
-                            <h1 className="text-3xl">Hey, Welcome Back </h1>
+                            <h1 className="text-3xl">{t("Hey, Welcome Back")} </h1>
                             <HandWaving size={32} color="#EFC806" weight="fill" />
                         </div>
                         <p className="text-sm">
-                            Create your account credentials to view your orders
+                            {t("Create your account credentials to view your orders")}
                         </p>
                     </div>
 
@@ -149,14 +152,14 @@ const SignUp = () => {
                         >
                             <div className="mb-5 flex w-full">
                                 <div className="w-[50%] mr-2">
-                                    <p className="font-semibold text-base">First Name</p>
+                                    <p className="font-semibold text-base">{t("First Name")}</p>
                                     <InputWrap
                                         formField={{ name: "firstName" }}
                                         className="border-2 border-gray-500 w-full rounded-md h-10 pl-3 hover:border-blue-500"
                                     />
                                 </div>
                                 <div className="w-[50%]">
-                                    <p className="font-semibold text-base">Last Name</p>
+                                    <p className="font-semibold text-base">{t("Last Name")}</p>
                                     <InputWrap
                                         formField={{ name: "lastName" }}
                                         className="border-2 border-gray-500 w-full rounded-md h-10 pl-3 hover:border-blue-500"
@@ -174,7 +177,7 @@ const SignUp = () => {
                             </div>
 
                             <div className="w-full">
-                                <p className="font-semibold text-base">Password</p>
+                                <p className="font-semibold text-base">{t("Password")}</p>
                                 <InputWrap
                                     formField={{ name: "password" }}
                                     type="password"
@@ -183,7 +186,7 @@ const SignUp = () => {
                             </div>
 
                             <div className="w-full mt-5">
-                                <p className="font-semibold text-base">Confirm Password</p>
+                                <p className="font-semibold text-base">{t("Confirm Password")}</p>
                                 <InputWrap
                                     formField={{ name: "confirmPassword" }}
                                     type="password"
@@ -215,29 +218,29 @@ const SignUp = () => {
                                             />
                                         </svg>
                                     )}
-                                    Sign up
+                                    {t("Sign up")}
                                 </button>
                             </div>
                         </FromWrap>
                         <div className="flex items-center justify-center mt-4">
                             <p className="text-sm italic">
-                                Have an account?{" "}
+                                {t("Have an account?")}{" "}
                                 <span
                                     className="text-blue-500 cursor-pointer"
                                     onClick={handleRedirectLoginPage}
                                 >
-                                    Login
+                                    {t("Login")}
                                 </span>
                             </p>
                         </div>
                         <div className="flex items-center space-x-3 mt-4">
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
-                            <p>OR</p>
+                            <p>{t("OR")}</p>
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
                         </div>
                         <div className="flex items-center justify-center mt-4">
                             <a href="/" className="text-sm italic">
-                                Continue as guest
+                                {t("Continue as guest")}
                             </a>
                         </div>
                     </div>

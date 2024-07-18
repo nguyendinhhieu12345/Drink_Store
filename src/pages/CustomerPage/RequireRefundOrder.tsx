@@ -9,6 +9,7 @@ import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { imageUrlToFile, messageToast } from '@/utils/hepler';
 import { BaseResponseApi } from '@/type';
+import { useTranslation } from 'react-i18next';
 
 interface IResponRefundOrder extends BaseResponseApi {
     data: {
@@ -31,6 +32,7 @@ const RequireRefundOrder: React.FC = () => {
     const [reason, setReason] = useState<string>('Package has not been received');
     const { id } = useParams()
     const nav = useNavigate()
+    const { t } = useTranslation()
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newText = event.target.value;
@@ -285,13 +287,13 @@ const RequireRefundOrder: React.FC = () => {
                 >
                     <ArrowLeft />
                 </button>
-                <h1 className="my-3 text-lg font-bold text-gray-700"> Invoice </h1>
+                <h1 className="my-3 text-lg font-bold text-gray-700"> {t("Invoice")} </h1>
             </div>
             <div >
                 <div className="bg-white rounded-lg shadow-base p-4">
                     {refund?.success &&
                         <>
-                            <h2 className="text-lg font-bold mb-1">Status: {refund?.data?.status}</h2>
+                            <h2 className="text-lg font-bold mb-1">{t("Status")}: {refund?.data?.status}</h2>
                             <div className="my-2">
                                 <label className="text-gray-700 mb-2">
                                     {refund?.data?.status === "PENDING" && "Your request is under consideration"}
@@ -301,16 +303,16 @@ const RequireRefundOrder: React.FC = () => {
                             </div>
                         </>
                     }
-                    <h2 className="text-lg font-bold mb-1">What problem do you have with your item?</h2>
+                    <h2 className="text-lg font-bold mb-1">{t("What problem do you have with your item?")}</h2>
                     {renderReason()}
                     <div className="mb-4">
                         <label className="text-gray-700 font-bold mb-2">
-                            Upload an image or video
+                            {t("Upload an image or video")}
                         </label>
                         {renderFileInputs()}
                     </div>
                     <div className="mb-4 relative">
-                        <label className="text-gray-700 font-bold mb-2">Add comments (optional)</label>
+                        <label className="text-gray-700 font-bold mb-2">{t("Add comments (optional)")}</label>
                         <textarea value={text} className="w-full border border-gray-300 rounded-md mt-4 p-2" rows={3} maxLength={300} onChange={handleChange} />
                         <p className="text-gray-500 text-sm absolute right-0">{text.length}/300</p>
                     </div>
@@ -319,11 +321,11 @@ const RequireRefundOrder: React.FC = () => {
                             <button onClick={handleConfirm} type="submit" className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-red-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-2 lg:py-2 hover:text-white hover:bg-red-600 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto">
                                 {isLoading ? (
                                     <p className="flex items-center justify-center">
-                                        <span className="mr-2">Confirm</span>{" "}
+                                        <span className="mr-2">{t("Confirm")}</span>{" "}
                                         <Spinner className="h-4 w-4" />
                                     </p>
                                 ) : (
-                                    <span>Confirm</span>
+                                    <span>{t("Confirm")}</span>
                                 )}
                             </button>
                         </div>

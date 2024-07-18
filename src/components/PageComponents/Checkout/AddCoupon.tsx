@@ -14,6 +14,7 @@ import { Cart } from "@/features/cart/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { formatVND } from "@/utils/hepler";
+import { useTranslation } from "react-i18next";
 
 // Assuming RewardUnit is an enum
 enum RewardUnit {
@@ -46,6 +47,7 @@ interface ICouponValidInCart {
 function AddCoupon(props: IPropsCheckout) {
     const [open, setOpen] = useState<boolean>(false)
     const [couponValidInCart, setCouponValidInCart] = useState<ICouponValidInCart[]>()
+    const { t } = useTranslation()
 
     const handleOpen = () => {
         setOpen(prev => !prev)
@@ -202,11 +204,11 @@ function AddCoupon(props: IPropsCheckout) {
 
     return (
         <div className="border shadow-base mt-5 rounded-md p-3">
-            <p className="font-semibold text-lg mb-2">Add Coupon</p>
+            <p className="font-semibold text-lg mb-2">{t("Add Coupon")}</p>
             <div className="flex flex-col text-default font-medium">
                 {
                     props?.dataCheckout?.productCouponCode &&
-                    <p>Product coupon: {props?.dataCheckout?.productCouponCode}
+                    <p>{t("Product coupon")}: {props?.dataCheckout?.productCouponCode}
                         {(couponValidInCart && couponValidInCart?.filter(prev => prev.couponType === "PRODUCT").length > 0)
                             &&
                             (!couponValidInCart?.filter(prev => prev.couponType === "PRODUCT")[0]?.reward?.productRewardList
@@ -217,7 +219,7 @@ function AddCoupon(props: IPropsCheckout) {
                                     `${couponValidInCart?.filter(prev => prev.couponType === "PRODUCT")[0]?.reward?.moneyReward?.value}%`}
                                 `:
                                 (<div className="flex">
-                                    - Bonus: {couponValidInCart?.filter(prev => prev.couponType === "PRODUCT")[0]?.reward?.productRewardList?.map((item, index) => (
+                                    - {t("Bonus")}: {couponValidInCart?.filter(prev => prev.couponType === "PRODUCT")[0]?.reward?.productRewardList?.map((item, index) => (
                                         <p key={index}> {item?.quantity} x {item?.productName}</p>
                                     ))}
                                 </div>)
@@ -229,25 +231,25 @@ function AddCoupon(props: IPropsCheckout) {
                 {
                     props?.dataCheckout?.orderCouponCode &&
                     <p>
-                        Order coupon: {props?.dataCheckout?.orderCouponCode}
+                        {t("Order coupon")}: {props?.dataCheckout?.orderCouponCode}
                         {(couponValidInCart && couponValidInCart?.filter(prev => prev.couponType === "ORDER").length > 0) && ` - ${couponValidInCart?.filter(prev => prev.couponType === "ORDER")[0]?.reward?.moneyReward?.unit === "MONEY" ? formatVND(couponValidInCart?.filter(prev => prev.couponType === "ORDER")[0]?.reward?.moneyReward?.value as number) : `${couponValidInCart?.filter(prev => prev.couponType === "ORDER")[0]?.reward?.moneyReward?.value}%`}`}
                     </p>
                 }
                 {
                     props?.dataCheckout?.shippingCouponCode &&
                     <p>
-                        Shipping coupon:
+                        {t("Shipping coupon")}:
                         {props?.dataCheckout?.shippingCouponCode}
                         {(couponValidInCart && couponValidInCart?.filter(prev => prev.couponType === "SHIPPING").length > 0) && ` - ${couponValidInCart?.filter(prev => prev.couponType === "SHIPPING")[0]?.reward?.moneyReward?.unit === "MONEY" ? formatVND(couponValidInCart?.filter(prev => prev.couponType === "SHIPPING")[0]?.reward?.moneyReward?.value as number) : `${couponValidInCart?.filter(prev => prev.couponType === "SHIPPING")[0]?.reward?.moneyReward?.value}%`}`}
                     </p>
                 }
                 {props?.dataCheckout?.total as number > 0 ?
-                    <button onClick={handleOpen} className="flex my-2"><span><SealPercentSVG /></span>Add coupon</button> :
-                    <p>Cannot select discount code when total amount is 0</p>
+                    <button onClick={handleOpen} className="flex my-2"><span><SealPercentSVG /></span>{t("Add Coupon")}</button> :
+                    <p>{t("Cannot select discount code when total amount is 0")}</p>
                 }
             </div>
             <Dialog size="md" placeholder="" open={open} handler={handleOpen}>
-                <DialogHeader placeholder="">Add Coupon</DialogHeader>
+                <DialogHeader placeholder="">{t("Add Coupon")}</DialogHeader>
                 <DialogBody className="p-0" placeholder="">
                     <ChooseCoupon dataCheckout={props?.dataCheckout} setDataCheckout={props?.setDataCheckout} />
                 </DialogBody>
@@ -259,12 +261,12 @@ function AddCoupon(props: IPropsCheckout) {
                         onClick={handleOpen}
                         className="mr-1"
                     >
-                        <span>Cancel</span>
+                        <span>{t("Cancel")}</span>
                     </Button>
                     <Button placeholder="" variant="gradient" color="green"
                         onClick={handleCheckCouponInCart}
                     >
-                        <span>Confirm</span>
+                        <span>{t("Confirm")}</span>
                     </Button>
                 </DialogFooter>
             </Dialog>

@@ -15,6 +15,7 @@ import { configRouter } from "@/configs/router";
 import { SignIn } from "@phosphor-icons/react";
 import { toast } from "react-toastify";
 import { resetStoreCart } from "@/features/cart/cartSlice";
+import { useTranslation } from "react-i18next";
 
 const AccountHeader = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -22,6 +23,7 @@ const AccountHeader = () => {
         (state) => state.authSlice.currentUser as User
     );
     const nav = useNavigate()
+    const { t } = useTranslation();
 
     const handleLogout = async () => {
         const data = await dispatch(logoutThunk(localStorage.getItem("fcmTokenId") as string));
@@ -60,21 +62,21 @@ const AccountHeader = () => {
                     </MenuHandler>
                     {currentUser?.data?.userId ?
                         <MenuList placeholder="">
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.dashboard)}>Statistics</MenuItem>
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.myOrder)}>History Order</MenuItem>
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.profile)}>Personal Information</MenuItem>
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>Default Address</MenuItem>
-                            <MenuItem placeholder="" onClick={() => nav(configRouter.historyCoin)}>History coin</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.dashboard)}>{t("Statistics")}</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.myOrder)}>{t("History Order")}</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.profile)}>{t("Personal Information")}</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.defaultAddress)}>{t("Default Address")}</MenuItem>
+                            <MenuItem placeholder="" onClick={() => nav(configRouter.historyCoin)}>{t("History coin")}</MenuItem>
                             <hr className="my-3" />
                             <MenuItem placeholder="" onClick={handleLogout}>
-                                Logout
+                                {t("Logout")}
                             </MenuItem>
                         </MenuList>
                         :
                         <MenuList placeholder="">
                             <MenuItem placeholder="" className="flex items-center" onClick={handleLogin}>
                                 <SignIn size={22} />
-                                <p className="text-base font-medium ml-3">Login</p>
+                                <p className="text-base font-medium ml-3">{t("Login")}</p>
                             </MenuItem>
                         </MenuList>
                     }

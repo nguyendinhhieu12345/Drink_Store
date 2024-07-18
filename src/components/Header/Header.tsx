@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Collapse,
     Typography,
@@ -13,8 +13,18 @@ import CartHeader from "./CartHeader";
 import SearchHeader from "./SearchHeader";
 import { Download, Newspaper, Storefront, TextOutdent } from "@phosphor-icons/react";
 import SealPercentSVG from "../SVG/SealPercentSVG";
+import { Menu, MenuHandler, MenuItem, MenuList } from "@material-tailwind/react"
+import { useTranslation } from "react-i18next";
 
 function NavList() {
+    const [language, setLanguage] = useState<string>("en")
+    const { i18n, t } = useTranslation();
+
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+        setLanguage(lng)
+    };
+
     return (
         <List
             placeholder=""
@@ -33,7 +43,7 @@ function NavList() {
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
                 >
-                    Blogs
+                    {t("Blogs")}
                 </ListItem>
             </Typography>
             <Typography
@@ -49,7 +59,7 @@ function NavList() {
                     placeholder=""
                     className=" text-md font-semibold flex items-center gap-2 py-2 pr-4"
                 >
-                    Store
+                    {t("Store")}
                 </ListItem>
             </Typography>
             <Typography
@@ -67,7 +77,7 @@ function NavList() {
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
                 >
-                    Preferential
+                    {t("Preferential")}
                 </ListItem>
             </Typography>
             <Typography
@@ -83,8 +93,39 @@ function NavList() {
                     placeholder=""
                     className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
                 >
-                    Download
+                    {t("Download")}
                 </ListItem>
+            </Typography>
+            <Typography
+                placeholder=""
+                variant="small"
+                color="blue-gray"
+                className="flex items-center"
+            >
+                <Menu>
+                    <MenuHandler>
+                        <ListItem
+                            placeholder=""
+                            className="text-md font-semibold flex items-center gap-2 py-2 pr-4"
+                        >
+                            <p className="flex items-center font-semibold text-black opacity-90">
+                                {language === "en" ?
+                                    <><img src={assets?.images?.flag_en} alt="flag_en" loading="lazy" className="mr-2" /> English</>
+                                    :
+                                    <><img src={assets?.images?.flag_vietnam} alt="flag_vietnam" loading="lazy" className="mr-2" /> Tiếng Việt</>
+                                }
+                            </p>
+                        </ListItem>
+                    </MenuHandler>
+                    <MenuList placeholder="">
+                        <MenuItem onClick={() => changeLanguage('vi')} placeholder="" className="flex items-center font-semibold text-black opacity-90">
+                            <img src={assets?.images?.flag_vietnam} alt="flag_vietnam" loading="lazy" className="mr-2" /> Tiếng Việt
+                        </MenuItem>
+                        <MenuItem onClick={() => changeLanguage('en')} placeholder="" className="flex items-center font-semibold text-black opacity-90">
+                            <img src={assets?.images?.flag_en} alt="flag_en" loading="lazy" className="mr-2" /> English
+                        </MenuItem>
+                    </MenuList>
+                </Menu>
             </Typography>
         </List>
     );

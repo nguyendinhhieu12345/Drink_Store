@@ -1,6 +1,7 @@
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard';
 import { Checks, Copy } from '@phosphor-icons/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FacebookShareButton, FacebookIcon, EmailShareButton, EmailIcon } from 'react-share';
 
 interface IShareStore {
@@ -10,6 +11,7 @@ interface IShareStore {
 const ShareStore = (props: IShareStore) => {
     const [value, copy] = useCopyToClipboard();
     const [isCopySuccess, setIsCopySuccess] = useState<boolean>(false)
+    const { t } = useTranslation();
 
     const copyToClipboard = async (url: string) => {
         await copy(url)
@@ -34,11 +36,11 @@ const ShareStore = (props: IShareStore) => {
 
     return (
         <div className="flex flex-col items-center justify-center my-2 w-full">
-            <p className="font-medium text-base">Share</p>
+            <p className="font-medium text-base">{t("Share")}</p>
             <div className="flex items-center justify-center w-full border-b py-2">
                 <p className="max-w-[85%] break-all mr-1">{props?.url}</p>
                 <button className="border rounded-2xl px-2 py-1 flex hover:bg-gray-50 hover:border-gray-300" onClick={() => copyToClipboard(props?.url)}>
-                    {!isCopySuccess ? <Copy size={25} className="mr-1 text-blue-600" /> : <Checks size={25} className="mr-1 text-blue-600" />}<span>Copy</span>
+                    {!isCopySuccess ? <Copy size={25} className="mr-1 text-blue-600" /> : <Checks size={25} className="mr-1 text-blue-600" />}<span>{t("Copy")}</span>
                 </button>
             </div>
             <div className='mt-2'>

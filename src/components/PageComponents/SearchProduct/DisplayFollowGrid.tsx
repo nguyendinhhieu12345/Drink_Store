@@ -1,7 +1,8 @@
 import { configRouter } from "@/configs/router"
 import { ISearchProduct } from "@/pages/CustomerPage/SearchProduct"
 import { formatVND } from "@/utils/hepler"
-import { Rating } from "@material-tailwind/react"
+import { Star } from "@phosphor-icons/react"
+import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 
 interface IDisplayFollowGrid {
@@ -10,6 +11,7 @@ interface IDisplayFollowGrid {
 
 function DisplayFollowGrid(props: IDisplayFollowGrid) {
     const nav = useNavigate()
+    const { t } = useTranslation();
 
     const handleRedirectProductDetail = (productId: string) => {
         nav(configRouter.productDetail.slice(0, -3) + productId)
@@ -25,7 +27,7 @@ function DisplayFollowGrid(props: IDisplayFollowGrid) {
                         <div className="flex items-center justify-between">
                             <div className="flex flex-col">
                                 <span className="text-gray-800 font-bold">{formatVND(product.price)}</span>
-                                <p className="hidden sm:flex sm:items-center sm:text-base">{product?.ratingSummary?.quantity} reviews| <Rating value={product?.ratingSummary?.star} ratedColor="amber" placeholder="" readonly /></p>
+                                <p className="hidden sm:flex sm:items-center sm:text-base">{product?.ratingSummary?.quantity} {t("reviews")}| {product?.ratingSummary?.star.toFixed(1)} <Star size={18} color="#FACC15" weight="fill" /></p>
                             </div>
                         </div>
                     </div>

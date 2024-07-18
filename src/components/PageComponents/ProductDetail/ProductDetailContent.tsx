@@ -12,6 +12,7 @@ import { BaseResponseApi } from "@/type"
 import { AxiosError } from "axios"
 import { toast } from "react-toastify"
 import { formatVND } from "@/utils/hepler"
+import { useTranslation } from "react-i18next"
 
 interface IProductDetailContent extends BaseResponseApi {
     data: {
@@ -39,6 +40,7 @@ function ProductDetailContent() {
     const [dataAddCart, setDataAddCart] = useState<IItemDetailList>()
     const [selectedToppings, setSelectedToppings] = useState<string[]>([]);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const { t } = useTranslation()
 
     const cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
@@ -166,7 +168,7 @@ function ProductDetailContent() {
                     <p className="my-2 font-medium text-2xl text-yellow-500">{productDetail?.data?.type === "CAKE" ? formatVND(productDetail?.data?.price ? productDetail?.data?.price : 0) : formatVND((productDetail?.data?.sizeList && productDetail?.data?.sizeList[0]?.price) ? (productDetail?.data?.sizeList && productDetail?.data?.sizeList[0]?.price) : 0)}</p>
                     {productDetail?.data?.type !== "CAKE" &&
                         <div className="my-6">
-                            <p className="font-medium">Select size (required)</p>
+                            <p className="font-medium">{t("Select size")} ({t("required")})</p>
                             <div className="flex flex-wrap my-4">
                                 {productDetail?.data?.sizeList?.map((size, index) => (
                                     <button id={size?.size} onClick={() => handleAddSize(size?.size, size?.price)} key={index}
@@ -182,7 +184,7 @@ function ProductDetailContent() {
                     }
                     {productDetail?.data?.type !== "CAKE" &&
                         <div className="my-6">
-                            {(productDetail?.success && productDetail?.data?.toppingList && productDetail?.data?.toppingList?.length > 0) && <p className="font-medium">Topping</p>}
+                            {(productDetail?.success && productDetail?.data?.toppingList && productDetail?.data?.toppingList?.length > 0) && <p className="font-medium">{t("Topping")}</p>}
                             <div className="flex flex-wrap my-4">
                                 {productDetail?.data?.toppingList?.map((topping, index) => (
                                     <button
@@ -200,7 +202,7 @@ function ProductDetailContent() {
                     }
 
                     <div className="my-6">
-                        <p className="font-medium">Note</p>
+                        <p className="font-medium">{t("Note")}</p>
                         <div className="flex my-4">
                             <span className="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 rounded-s-md opacity-60">
                                 <Notebook size={25} />
@@ -213,7 +215,7 @@ function ProductDetailContent() {
                     </div>
 
                     <div className="my-6">
-                        <p className="font-medium">Quantity</p>
+                        <p className="font-medium">{t("Quantity")}</p>
                         <div className="flex my-4">
                             <input type="number" min={1}
                                 onChange={(e) => setDataAddCart((prev: IItemDetailList | undefined) => ({
@@ -232,13 +234,13 @@ function ProductDetailContent() {
                             className={`${productDetail?.data?.status === "TEMPORARY_SUSPENDED" && "cursor-not-allowed opacity-60"} w-full mr-5 flex justify-center text-white px-4 py-2 rounded-md font-medium items-center gap-3 bg-select active:bg-select focus:bg-select visited:bg-select hover:bg-select`}
                         >
                             <img src={assets?.images?.imgCart} alt="img add to cart " className="w-5 h-5 object-contain" />
-                            {productDetail?.data?.status === "TEMPORARY_SUSPENDED" ? "Suspended" : "Add to cart"}
+                            {productDetail?.data?.status === "TEMPORARY_SUSPENDED" ? <>{t("Suspended")}</> : <>{t("Add to cart")}</>}
                         </button>
                     </div>
                 </div>
             </div>
             <div className="border-y border-gray-200 py-8">
-                <p className="font-semibold mb-3 text-md">Product Description</p>
+                <p className="font-semibold mb-3 text-md">{t("Product Description")}</p>
                 <p className="text-md">
                     {productDetail?.data?.description}
                 </p>

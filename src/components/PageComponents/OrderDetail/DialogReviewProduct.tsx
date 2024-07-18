@@ -8,6 +8,7 @@ import {
     Rating,
     Spinner,
 } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 
 interface IDialogReviewProduct {
     open: boolean;
@@ -30,6 +31,7 @@ interface IDialogReviewProduct {
 
 function DialogReviewProduct(props: IDialogReviewProduct) {
     const { open, handleAddreview, handleOpen, productReview, setProductReview, error, orderItemReview, isLoading } = props;
+    const { t } = useTranslation()
 
     return (
         <Dialog
@@ -43,9 +45,9 @@ function DialogReviewProduct(props: IDialogReviewProduct) {
                 <CardBody placeholder="" className="flex flex-col gap-4">
                     <div className="flex flex-col items-center justify-center">
                         <img src="https://underconstructionpage.com/wp-content/uploads/2018/03/paid-reviews.png" alt="image review" className="w-full max-h-32 rounded-lg object-cover" />
-                        <p className="font-semibold text-lg my-2">Leave a review</p>
+                        <p className="font-semibold text-lg my-2">{t("Leave a review")}</p>
                         <div className="text-left w-full">
-                            <p>Rating</p>
+                            <p>{t("Rating")}</p>
                             <Rating value={productReview?.star} onChange={(e) => {
                                 setProductReview((prev: {
                                     itemId: string,
@@ -59,7 +61,7 @@ function DialogReviewProduct(props: IDialogReviewProduct) {
                                 ))
                             }
                             } placeholder="" unratedColor="amber" ratedColor="amber" className="my-2" />
-                            <p>Content</p>
+                            <p>{t("Content")}</p>
                             <input onChange={(e) => {
                                 setProductReview((prev: {
                                     itemId: string,
@@ -75,7 +77,7 @@ function DialogReviewProduct(props: IDialogReviewProduct) {
                                 value={productReview?.content}
                                 placeholder="Additional review..." className="w-full px-4 py-2 my-2 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500 active:ring-blue-500 active:border-blue-500" />
                             {error !== "" && <p className="italic text-sm text-red-500">{error}</p>}
-                            <p className="italic text-sm">*Review will be visible to the public</p>
+                            <p className="italic text-sm">*{t("Review will be visible to the public")}</p>
                         </div>
                     </div>
                 </CardBody>
@@ -83,11 +85,11 @@ function DialogReviewProduct(props: IDialogReviewProduct) {
                     <Button placeholder="" variant="gradient" onClick={handleAddreview} fullWidth>
                         {isLoading ? (
                             <p className="flex items-center justify-center">
-                                <span className="mr-2">Send Review</span>{" "}
+                                <span className="mr-2">{t("Send Review")}</span>{" "}
                                 <Spinner className="h-4 w-4" />
                             </p>
                         ) : (
-                            <span>{(orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId) && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)?.length > 0 && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)[0]?.review) ? "Close" : "Send Review"}</span>
+                            <span>{(orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId) && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)?.length > 0 && orderItemReview?.data?.filter((product) => product?.id === productReview?.itemId)[0]?.review) ? <>{t("CLOSE")}</> : <>{t("Send Review")}</>}</span>
                         )}
                     </Button>
                 </CardFooter>

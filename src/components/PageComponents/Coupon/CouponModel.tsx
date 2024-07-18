@@ -2,6 +2,7 @@ import { BaseResponseApi } from "@/type"
 import { useEffect, useState } from "react"
 import * as couponApi from "@/api/PageApi/couponApi"
 import { formatBirthDay, formatVND } from "@/utils/hepler"
+import { useTranslation } from "react-i18next"
 
 interface ICouponDetail {
     counponId: string
@@ -40,6 +41,7 @@ interface ICouponDetailResponse extends BaseResponseApi {
 
 function CouponModel(props: ICouponDetail) {
     const [couponDetail, setCouponDetail] = useState<ICouponDetailResponse>()
+    const { t } = useTranslation()
 
     useEffect(() => {
         const getCouponDetail = async () => {
@@ -61,26 +63,26 @@ function CouponModel(props: ICouponDetail) {
             </div>
             <div className="pt-2">
                 <div>
-                    <p className="font-semibold">Expire</p>
+                    <p className="font-semibold">{t("Expire")}</p>
                     <p>{couponDetail?.success && formatBirthDay(couponDetail?.data?.startDate)} - {couponDetail?.success && formatBirthDay(couponDetail?.data?.expirationDate)}</p>
                 </div>
                 {couponDetail?.success &&
                     <div>
-                        <p className="font-semibold">Condition</p>
+                        <p className="font-semibold">{t("Condition")}</p>
                         {
                             couponDetail?.data?.conditionList.map((condition, index) => {
                                 if (condition.type === "MIN_PURCHASE") {
-                                    return <p key={index}>Min Purchase: {formatVND(condition?.minPurchaseCondition?.value ? condition?.minPurchaseCondition?.value : 0)}</p>;
+                                    return <p key={index}>{t("Min Purchase")}: {formatVND(condition?.minPurchaseCondition?.value ? condition?.minPurchaseCondition?.value : 0)}</p>;
                                 } else if (condition.type === "COMBINATION") {
-                                    return <p key={index}>Combinable: {condition?.combinationConditionList?.map((com, index) => (
+                                    return <p key={index}>{t("Combinable")}: {condition?.combinationConditionList?.map((com, index) => (
                                         <span key={index}>{com.type} </span>
                                     ))}</p>;
                                 } else if (condition.type === "USAGE") {
                                     return (
                                         <div key={index}>
-                                            <span>Usage Conditions: </span>
+                                            <span>{t("Usage Conditions")}: </span>
                                             {condition?.usageConditionList?.map((usage, usageIndex) => (
-                                                <span key={usageIndex}>{usage.type === "QUANTITY" ? `Max ${usage.value}` : "Once use per one"} </span>
+                                                <span key={usageIndex}>{usage.type === "QUANTITY" ? <>{t("Max")}{` ${usage.value}`}</> : <>{t("Once use per customer")}</>} </span>
                                             ))}
                                         </div>
                                     );

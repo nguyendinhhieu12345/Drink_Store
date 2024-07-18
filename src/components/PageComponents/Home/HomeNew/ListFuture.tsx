@@ -1,4 +1,5 @@
 import { Chat, CreditCard, Money, Truck } from '@phosphor-icons/react';
+import { useTranslation } from 'react-i18next';
 
 const features = [
     {
@@ -9,7 +10,7 @@ const features = [
     {
         icon: <Money size={25} />,
         title: "Refund",
-        description: "Within 30 days for an exchange.",
+        description: "Within 30 days for an exchange",
     },
     {
         icon: <Chat size={25} />,
@@ -24,6 +25,8 @@ const features = [
 ]
 
 function ListFuture() {
+    const { t } = useTranslation()
+
     return (
         <div className='hidden sm:flex items-center justify-between py-5'>
             {features?.map((feature, index) => (
@@ -32,8 +35,8 @@ function ListFuture() {
                         {feature?.icon}
                     </div>
                     <div className='flex flex-col items-start ml-2'>
-                        <h3 className="font-bold text-lg">{feature?.title}</h3>
-                        <p className="text-sm text-gray-600">{feature?.description}</p>
+                        <h3 className="font-bold text-lg">{t(`${feature?.title}`)}</h3>
+                        <p className="text-sm text-gray-600">{t(`${feature?.description}`)}</p>
                     </div>
                 </div>
             ))}

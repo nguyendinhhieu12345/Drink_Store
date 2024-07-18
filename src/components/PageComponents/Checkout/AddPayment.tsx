@@ -4,11 +4,14 @@ import { ICheckout, IPropsCheckout } from "./CheckoutDetail";
 import { Cart } from "@/features/cart/cartSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useTranslation } from "react-i18next";
 
 function AddPayment(props: IPropsCheckout) {
     const cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
     )
+    const { t } = useTranslation()
+
     const calculateTotalPrice = (cart: Cart[]): number => {
         let totalPrice = 0;
 
@@ -28,7 +31,7 @@ function AddPayment(props: IPropsCheckout) {
 
     return (
         <div className="border shadow-base mt-5 rounded-md p-3">
-            <p className="font-semibold text-lg mb-2">Payment Method</p>
+            <p className="font-semibold text-lg mb-2">{t("Payment Method")}</p>
             <div className="flex flex-col justify-center gap-3 border-b">
                 <Radio
                     onClick={() => props?.setDataCheckout((prev: ICheckout | undefined) => (
@@ -44,7 +47,7 @@ function AddPayment(props: IPropsCheckout) {
                         <div className="flex items-center">
                             <Money size={20} className="mr-1" />
                             <Typography placeholder="" color="blue-gray" className="font-medium">
-                                Cash
+                                {t("Cash")}
                             </Typography>
                         </div>
                     }
@@ -87,13 +90,13 @@ function AddPayment(props: IPropsCheckout) {
                 />
             </div>
             <div>
-                <p className="font-semibold text-base my-2">Coin</p>
+                <p className="font-semibold text-base my-2">{t("Coin")}</p>
                 <div className="flex items-center justify-between px-3">
                     <div className="flex items-start">
                         <Coin size={20} weight="fill" className="text-yellow-300 mr-2" />
                         <div>
-                            <p className="text-sm">Use coins</p>
-                            <p className="text-sm">(Current coins: {JSON.parse(localStorage.getItem("profile") as string)?.coin ?? 0} coins)</p>
+                            <p className="text-sm">{t("Use coins")}</p>
+                            <p className="text-sm">({t("Current coins")}: {JSON.parse(localStorage.getItem("profile") as string)?.coin ?? 0} {t("coins")})</p>
                         </div>
                     </div>
                     <div>

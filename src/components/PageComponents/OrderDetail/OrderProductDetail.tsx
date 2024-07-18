@@ -1,6 +1,7 @@
 import { Edit } from "@/components/SVG/Edit.svg"
 import { IOrderDetail, IOrderItemReview, OrderStatusData } from "@/pages/CustomerPage/OrderDetail"
 import { formatVND } from "@/utils/hepler"
+import { useTranslation } from "react-i18next"
 
 interface IOrderStatusLine {
     orderDetail: IOrderDetail | undefined,
@@ -11,6 +12,7 @@ interface IOrderStatusLine {
 
 function OrderProductDetail(props: IOrderStatusLine) {
     const { orderDetail, statusOrderLine, orderItemReview, handleOpenReview } = props
+    const { t } = useTranslation()
 
     return (
         <div>
@@ -20,9 +22,9 @@ function OrderProductDetail(props: IOrderStatusLine) {
                         <thead className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200  bg-gray-100 ">
                             <tr>
                                 <td className="px-4 py-2 text-center">SR.</td>
-                                <td className="px-4 py-2 text-center">Product Title</td>
-                                <td className="px-4 py-2 text-center">DETAIL</td>
-                                {statusOrderLine?.data[0]?.orderStatus === "SUCCEED" && <td className="px-4 py-2 text-center">Review</td>}
+                                <td className="px-4 py-2 text-center">{t("PRODUCT TITLE")}</td>
+                                <td className="px-4 py-2 text-center">{t("DETAIL")}</td>
+                                {statusOrderLine?.data[0]?.orderStatus === "SUCCEED" && <td className="px-4 py-2 text-center">{t("REVIEW")}</td>}
                             </tr>
                         </thead>
                         <tbody className="text-gray-800  bg-white  divide-y divide-gray-100 text-serif text-sm my-2">

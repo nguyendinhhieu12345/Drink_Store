@@ -4,6 +4,7 @@ import { configRouter } from "@/configs/router";
 import { RootState } from "@/redux/store";
 import { User } from "@/type";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -13,6 +14,7 @@ function ProfileUser() {
     const currentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (!currentUser?.success && !currentUser?.data?.userId || !currentUser) {
@@ -26,7 +28,7 @@ function ProfileUser() {
             <div className="md:grid md:grid-cols-3 md:gap-6">
                 <div className="md:col-span-1">
                     <div className="px-4 sm:px-0">
-                        <h2 className="text-xl font-semibold mb-5">Update profile</h2>
+                        <h2 className="text-xl font-semibold mb-5">{t("Update profile")}</h2>
                     </div>
                 </div>
             </div>

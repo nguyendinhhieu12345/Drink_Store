@@ -16,6 +16,7 @@ import DialogReviewProduct from "@/components/PageComponents/OrderDetail/DialogR
 import socket from "@/socket/socket";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useTranslation } from "react-i18next";
 
 interface ItemDetail {
     quantity: number;
@@ -124,6 +125,7 @@ function OrderDetail() {
     const [error, setError] = useState<string>("")
     const [activeStep, setActiveStep] = useState<number>(0);
     const location = useLocation()
+    const { t } = useTranslation()
 
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
@@ -259,6 +261,7 @@ function OrderDetail() {
         socket.on('employee_update_order', (data) => {
             console.log('Order update received:', data);
             if (location.pathname === (configRouter.orderDetail.slice(0, -3) + id)) {
+                console.log("call")
                 id && getOrderStatusLine()
             }
         });
@@ -277,7 +280,7 @@ function OrderDetail() {
                 >
                     <ArrowLeft />
                 </button>
-                <h1 className="my-6 text-lg font-bold text-gray-700"> Invoice </h1>
+                <h1 className="my-6 text-lg font-bold text-gray-700"> {t("Invoice")} </h1>
             </div>
 
             {/* info order */}
@@ -301,7 +304,7 @@ function OrderDetail() {
                             onClick={() => handleRedirectOrderRefund(orderDetail?.data?.id as string)}
                             className="flex items-center text-sm leading-5 transition-colors duration-150 font-medium focus:outline-none px-5 py-2 rounded-md text-white bg-green-500 border border-transparent w-auto"
                         >
-                            {orderDetail?.data?.refundStatus === "CAN_REFUND" ? "Require refund" : "See Require Refund"}
+                            {orderDetail?.data?.refundStatus === "CAN_REFUND" ? <>{t("Require refund")}</> : <>{t("See Require Refund")}</>}
                         </button>
                     </div>
                 }

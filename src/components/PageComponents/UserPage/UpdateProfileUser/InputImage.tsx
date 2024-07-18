@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import * as userApi from "@/api/PageApi/userApi"
 import { AxiosError } from "axios";
+import { useTranslation } from "react-i18next";
 
 function InputImage() {
     const profileUser = JSON.parse(localStorage.getItem("profile") as string)
     const [image, setImage] = useState<File[]>([]);
+    const { t } = useTranslation()
 
     const handleInputImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -27,7 +29,7 @@ function InputImage() {
                 }
                 catch (e: unknown) {
                     if (e instanceof AxiosError && e.response) {
-                        toastError(e,"top-right")
+                        toastError(e, "top-right")
                     }
                 }
             } else {
@@ -59,7 +61,7 @@ function InputImage() {
     return (
         <div className="bg-white space-y-6">
             <div>
-                <label className="block text-gray-500 font-medium text-sm leading-none mb-2">Photo</label>
+                <label className="block text-gray-500 font-medium text-sm leading-none mb-2">{t("Photo")}</label>
                 <div className="w-full text-center">
                     <div className="border-2 border-gray-300 border-dashed rounded-md cursor-pointer px-6 pt-5 pb-6">
                         <input
@@ -101,9 +103,9 @@ function InputImage() {
                                                     <polyline points="16 16 12 12 8 16"></polyline>
                                                 </svg>
                                             </span>
-                                            <p className="text-sm mt-2">Choose your images here</p>
+                                            <p className="text-sm mt-2">{t("Choose your images here")}</p>
                                             <em className="text-xs text-gray-400">
-                                                (Only *.jpeg, *.jpg and *.png images will be accepted)
+                                                {t("(Only *.jpeg, *.jpg and *.png images will be accepted)")}
                                             </em>
                                         </>
                                     )}

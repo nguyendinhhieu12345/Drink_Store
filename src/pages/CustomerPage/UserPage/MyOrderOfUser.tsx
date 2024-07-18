@@ -10,6 +10,7 @@ import { configRouter } from "@/configs/router";
 import { toast } from "react-toastify";
 import TablePaging from "@/components/PageComponents/SearchProduct/Paging";
 import socket from "@/socket/socket";
+import { useTranslation } from "react-i18next";
 
 export interface IOrdersResponse extends BaseResponseApi {
     data: {
@@ -32,6 +33,7 @@ function MyOrderOfUser() {
     const [statusOrder, setStatusOrder] = useState<string>("WAITING")
     const nav = useNavigate()
     const location = useLocation()
+    const { t } = useTranslation()
 
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
@@ -69,18 +71,18 @@ function MyOrderOfUser() {
     return (
         <div className="bg-white h-auto w-full mt-5 sm:mt-0 sm:w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold mb-5">My Orders</h2>
+                <h2 className="text-xl font-semibold mb-5">{t("My Orders")}</h2>
                 <select className="rounded-lg"
                     onChange={(e) => {
                         setStatusOrder(e.target.value)
 
                     }}
                 >
-                    <option value="WAITING">Waiting</option>
-                    <option value="IN_PROCESS">Processing</option>
-                    <option value="SUCCEED">Succeed</option>
-                    <option value="CANCELED">Canceled</option>
-                    <option value="NOT_RECEIVED">Not Received</option>
+                    <option value="WAITING">{t("Waiting")}</option>
+                    <option value="IN_PROCESS">{t("Processing")}</option>
+                    <option value="SUCCEED">{t("Succeed")}</option>
+                    <option value="CANCELED">{t("Canceled")}</option>
+                    <option value="NOT_RECEIVED">{t("Not Received")}</option>
                 </select>
             </div>
             <div className="w-full my-5 overflow-hidden border border-gray-200 rounded-lg mb-8 rounded-b-lg">
@@ -90,11 +92,11 @@ function MyOrderOfUser() {
                         <thead className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-100">
                             <tr className="bg-gray-100">
                                 <th scope="col" className="text-left text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">ID</th>
-                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">OrderTime</th>
-                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">Method</th>
-                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">Status</th>
-                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">Total</th>
-                                <th scope="col" className="text-right text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">Action</th>
+                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">{t("ORDERTIME")}</th>
+                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">{t("METHOD")}</th>
+                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">{t("STATUS")}</th>
+                                <th scope="col" className="text-center text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">{t("TOTAL")}</th>
+                                <th scope="col" className="text-right text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">{t("ACTION")}</th>
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -105,7 +107,7 @@ function MyOrderOfUser() {
                                     <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm">{order?.orderType}</span></td>
                                     <td className="px-5 py-3 leading-6 text-center whitespace-nowrap font-medium text-sm"><span className="text-green-500">{order?.statusLastEvent}</span></td>
                                     <td className="px-5 py-3 leading-6 text-center whitespace-nowrap"><span className="text-sm font-bold">{formatVND(order?.total ?? 0)}</span></td>
-                                    <td className="px-5 py-3 whitespace-nowrap text-right text-sm"><a className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-50 transition-all font-semibold rounded-full" href={`/order/${order?.id}`}>Details</a></td>
+                                    <td className="px-5 py-3 whitespace-nowrap text-right text-sm"><a className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-50 transition-all font-semibold rounded-full" href={`/order/${order?.id}`}>{t("Details")}</a></td>
                                 </tr>
                             ))}
                         </tbody>
