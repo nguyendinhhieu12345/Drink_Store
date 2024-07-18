@@ -361,7 +361,8 @@ function AddAddress(props: IPropsCheckout) {
                 phoneNumber: JSON.parse(localStorage?.getItem("profile") as string)?.phoneNumber,
                 shippingFee: 0,
                 total: (prev?.total as number) - (prev?.shippingFee as number),
-                receiveTime: getCurrentDateTime()
+                receiveTime: getCurrentDateTime(),
+                shippingCouponCode: undefined
             }
         ))
         if (navigator.geolocation) {
