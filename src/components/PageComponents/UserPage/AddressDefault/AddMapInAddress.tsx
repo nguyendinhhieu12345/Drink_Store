@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import * as userApi from "@/api/PageApi/userApi"
 import { IAddNewAddress } from "@/pages/CustomerPage/UserPage/DefaultAddress";
 import Map from "@/components/Map/Map";
+import { useTranslation } from "react-i18next";
 
 interface IProvince {
     province_id: string;
@@ -36,6 +37,7 @@ function AddMapInAddress(props: IAddMapInAddress) {
     const [ward, setWard] = useState<IWard[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [open, setOpen] = useState<boolean>(false);
+    const { t } = useTranslation()
 
     const getAllProvince = async () => {
         const data = await userApi.getAllProvince();
@@ -122,16 +124,16 @@ function AddMapInAddress(props: IAddMapInAddress) {
                 {/* Input Province */}
                 <div className="grid grid-cols-8 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800 col-span-4 sm:col-span-2 font-medium text-sm">
-                        Province
+                        {t("Province")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <select
                             className="mt-3 rounded-md w-full border-slate-400 hover:border-slate-900 focus:border-sky-600"
                             onChange={(e) => handleChangeProvinces(e)}
-                            defaultValue={"Choose province"}
+                            defaultValue={t("Province")}
                         >
                             <option disabled>
-                                Choose province
+                                {t("Province")}
                             </option>
                             {province?.map((dt) => (
                                 <option
@@ -148,16 +150,16 @@ function AddMapInAddress(props: IAddMapInAddress) {
                 {/* Input District */}
                 <div className="grid grid-cols-8 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800  col-span-4 sm:col-span-2 font-medium text-sm">
-                        District
+                        {t("District")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <select
                             className="mt-3 rounded-md w-full border-slate-400 hover:border-slate-900 focus:border-sky-600"
                             onChange={(e) => handleChangeDistrict(e)}
-                            defaultValue={"Choose district"}
+                            defaultValue={t("District")}
                         >
                             <option disabled>
-                                Choose district
+                                {t("District")}
                             </option>
                             {district?.map((dt, index) => (
                                 <option
@@ -174,16 +176,16 @@ function AddMapInAddress(props: IAddMapInAddress) {
                 {/* Input Ward */}
                 <div className="grid grid-cols-8 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-2">
                     <label className="block text-gray-800  col-span-4 sm:col-span-2 font-medium text-sm">
-                        Ward
+                        {t("Ward")}
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <select
                             className="mt-3 rounded-md w-full border-slate-400 hover:border-slate-900 focus:border-sky-600"
                             onChange={(e) => handleChangeWard(e)}
-                            defaultValue={"Choose ward"}
+                            defaultValue={t("Ward")}
                         >
                             <option disabled>
-                                Choose ward
+                                {t("Ward")}
                             </option>
                             {ward?.map((dt, index) => (
                                 <option key={index} value={[dt?.ward_id, dt?.ward_name]}>
@@ -197,13 +199,13 @@ function AddMapInAddress(props: IAddMapInAddress) {
                 {/* Input Village */}
                 <div className="grid grid-cols-8 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mt-4">
                     <label className="block text-gray-800  col-span-4 sm:col-span-2 font-medium text-sm">
-                        No.
+                        {t("No")}.
                     </label>
                     <div className="col-span-8 sm:col-span-6">
                         <input
                             className="block w-full h-12 border px-3 py-1 text-sm focus:outline-none leading-5 rounded-md bg-gray-100 focus:bg-white focus:border-gray-200 border-gray-200 p-2"
                             name="Village"
-                            placeholder="No."
+                            placeholder={t("No")}
                             value={props?.newAddress?.detail}
                             onChange={(e) => props?.setNewAddress((prev: IAddNewAddress) => ({
                                 ...prev,
@@ -215,7 +217,7 @@ function AddMapInAddress(props: IAddMapInAddress) {
             </div>
             <div className="flex flex-col justify-center items-center">
                 <button onClick={handleShowMap} className="my-4 w-full rounded-lg flex justify-center text-white px-4 py-2 font-medium items-center gap-3 bg-select active:bg-select focus:bg-select visited:bg-select hover:bg-select">
-                    Choose Map
+                    {t("Choose Map")}
                 </button>
                 {open && <Map latitude={props?.newAddress?.latitude} longitude={props?.newAddress?.longitude} setNewAddress={props?.setNewAddress} />}
                 {error && (

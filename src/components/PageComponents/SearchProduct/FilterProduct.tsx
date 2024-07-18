@@ -4,6 +4,7 @@ import { Broom, Funnel, ListDashes, SquaresFour } from "@phosphor-icons/react"
 import { useState } from "react"
 import * as searchApi from "@/api/PageApi/searchApi"
 import { toast } from "react-toastify"
+import { useTranslation } from "react-i18next"
 
 interface IFilterProduct {
     activeDisplay: boolean,
@@ -23,6 +24,7 @@ function FilterProduct(props: IFilterProduct) {
         min_star: 0,
         sort_type: "PRICE_DESC"
     })
+    const { t } = useTranslation();
 
     const handleApplyFilter = async () => {
         if (dataSearch?.min_price <= dataSearch?.max_price) {
@@ -80,7 +82,7 @@ function FilterProduct(props: IFilterProduct) {
             </div>
             <div className="flex items-center">
                 <div className="flex items-center">
-                    <p className="text-xs sm:text-sm">Sort by:</p>
+                    <p className="text-xs sm:text-sm">{t("Sort by")}:</p>
                     <select className="rounded-lg px-2 py-1 ml-2 text-xs sm:text-sm" onChange={async (e) => {
                         if (localStorage?.getItem("categorySearch")) {
                             const data = await searchApi.getProductByCategoryId(localStorage.getItem("categorySearch") as string, 1, 0, 0, 0, e.target.value)
@@ -98,15 +100,15 @@ function FilterProduct(props: IFilterProduct) {
                         defaultValue="PRICE_ASC"
                     >
                         <option value="PRICE_ASC">
-                            Price low to hight
+                            {t("Price low to hight")}
                         </option>
                         <option value="PRICE_DESC">
-                            Price hight to low
+                            {t("Price hight to low")}
                         </option>
                     </select>
                 </div>
                 <div className="flex items-center text-xs sm:text-sm ml-5">
-                    <p>View</p>
+                    <p>{t("View")}</p>
                     <button className="mr-1" onClick={() => props?.setActiveDisplay(true)}>
                         <SquaresFour size={20} weight={props?.activeDisplay ? "fill" : undefined} className={`${!props.activeDisplay && "opacity-50"}`} />
                     </button>
@@ -126,7 +128,7 @@ function FilterProduct(props: IFilterProduct) {
                                 color="blue-gray"
                                 className="mb-1 font-bold"
                             >
-                                Price (đ)
+                                {t("Price")} (đ)
                             </Typography>
                             <div className="flex items-center justify-between w-full">
                                 <input
@@ -166,7 +168,7 @@ function FilterProduct(props: IFilterProduct) {
                                     type="number"
                                     className="block w-25 p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-none focus:border-gray-50 "
                                 />
-                                <button className="px-4 py-2 bg-select rounded-lg text-white" onClick={handleApplyFilter}>Apply</button>
+                                <button className="px-4 py-2 bg-select rounded-lg text-white" onClick={handleApplyFilter}>{t("Apply")}</button>
                             </div>
                             <Typography
                                 placeholder=""
@@ -174,7 +176,7 @@ function FilterProduct(props: IFilterProduct) {
                                 color="blue-gray"
                                 className="my-1 font-bold"
                             >
-                                Rating
+                                {t("Rating")}
                             </Typography>
                             <div className="flex flex-col">
                                 {Array.from({ length: 5 }).map((_, index) => (
@@ -188,7 +190,7 @@ function FilterProduct(props: IFilterProduct) {
                                         min_star: index + 1
                                     }))}>
                                         <Rating placeholder="" value={5 - index} ratedColor="amber" readonly />
-                                        {index + 1 !== 0 && <p className="ml-2 text-base">And up</p>}
+                                        {index + 1 !== 0 && <p className="ml-2 text-base">{t("And up")}</p>}
                                     </button>
                                 ))}
                             </div>

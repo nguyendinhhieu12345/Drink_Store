@@ -15,6 +15,7 @@ import { configRouter } from "@/configs/router";
 import { BaseResponseApi } from "@/type";
 import * as storeApi from "@/api/PageApi/StoreApi"
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 export interface IBranchList {
     id: string,
@@ -51,6 +52,7 @@ function Store() {
         lat: 0,
         lng: 0
     })
+    const { t } = useTranslation();
 
     const handleOpen = () => setOpen((cur) => !cur);
     const handleRedirectProduct = () => {
@@ -97,6 +99,8 @@ function Store() {
     const getCurrentPosition = () => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
+                // console.log(position.coords)
+                // 10.849768058664578,106.77279001374357
                 setCurrentPosition({
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
@@ -134,7 +138,7 @@ function Store() {
                     className="mr-3 p-2 rounded-full bg-yellow-300 text-white"
                     size={35}
                 />
-                <h1 className="font-medium">Shopfee System</h1>
+                <h1 className="font-medium">{t("Shopfee System")}</h1>
             </div>
             <div className="flex justify-around items-center">
                 <div>
@@ -142,7 +146,7 @@ function Store() {
                         htmlFor="search"
                         className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white w-96"
                     >
-                        Search
+                        {t("Search")}
                     </label>
                     <div className="relative w-full sm:w-[400px]">
                         <div className="absolute inset-y-0 left-0 flex items-center pl-3  cursor-pointer z-999999">
@@ -151,7 +155,7 @@ function Store() {
                         <input
                             type="text"
                             className="block w-full h-11 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                            placeholder="Enter store name..."
+                            placeholder={t("Enter store name")}
                             onChange={(e) => setAddress(e.target.value)}
                             onKeyDown={(e) => handleGetGeocode(e)}
                         />
@@ -172,7 +176,7 @@ function Store() {
             )}
             <div className="my-6 text-left w-full">
                 <div className="text-left px-4 font-semibold text-xl">
-                    Found {stores?.data?.branchList?.length} stores
+                    {t("Found")} {stores?.data?.branchList?.length} {t("stores")}
                 </div>
                 <div className="grid grid-cols-1 gap-1 lg:grid-cols-2 lg:gap-2 w-full justify-start">
                     {stores?.data?.branchList?.map((store, index) => (
@@ -192,7 +196,7 @@ function Store() {
                             <div className="flex flex-col items-start justify-center ml-5">
                                 <p className="font-semibold">{store?.name}</p>
                                 <p className="break-all text-start">{store?.fullAddress}</p>
-                                <p className="break-all text-start">Away: {store?.distance}</p>
+                                <p className="break-all text-start">{t("Away")}: {store?.distance}</p>
                             </div>
                         </button>
                     ))}
@@ -211,7 +215,7 @@ function Store() {
                     </CardBody>
                     <CardFooter placeholder="" className="pt-0">
                         <Button placeholder="" variant="gradient" onClick={handleRedirectProduct} fullWidth>
-                            Order Product
+                            {t("ORDER PRODUCT")}
                         </Button>
                     </CardFooter>
                 </Card>

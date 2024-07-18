@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as homeApi from "@/api/PageApi/homeApi"
 import { IListCategory } from "../ListCategory";
+import { useTranslation } from "react-i18next";
 
 function ListCategoryHome() {
     const [categorys, setCategorys] = useState<IListCategory>()
+    const { t } = useTranslation()
 
     useEffect(() => {
         const getAllCategory = async () => {
@@ -28,7 +30,7 @@ function ListCategoryHome() {
 
     return (
         <div className="mb-5 w-full">
-            <h2 className="text-xl sm:text-3xl font-bold mb-4 border-l-4 border-red-500 pl-5 my-5">Categorys</h2>
+            <h2 className="text-xl sm:text-3xl font-bold mb-4 border-l-4 border-red-500 pl-5 my-5">{t("Categorys")}</h2>
             <div className='my-10'>
                 <Swiper
                     spaceBetween={30}

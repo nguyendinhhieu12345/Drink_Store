@@ -8,6 +8,7 @@ import ImageWithError from "../ImageError/ImageWithError";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { Cart, removeToCart } from "@/features/cart/cartSlice";
+import { useTranslation } from "react-i18next";
 
 const CartHeader = () => {
     const [isHovered, setIsHovered] = useState<boolean>(false);
@@ -15,6 +16,7 @@ const CartHeader = () => {
     const cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
     )
+    const { t } = useTranslation();
 
     const handleRedirectCart = () => {
         if (cartCurrent?.length > 0)
@@ -38,7 +40,7 @@ const CartHeader = () => {
                 cartCurrent?.length > 0 ?
                     (<div className="absolute w-[350px] sm:w-[415px] h-[350px] right-0 z-1 bg-white p-3 border border-[#ccc] rounded-md shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-y-auto">
                         <div className="pb-2 font-semibold opacity-70 text-[14px]">
-                            New products added
+                            {t("New products added")}
                         </div>
                         {cartCurrent?.map((product, index) => (
                             <ItemCart key={index} name={product?.name as string} productId={product?.productId} imageUrl={product?.imageUrl as string} quantity={product?.itemDetailList?.reduce((value, item) => item?.quantity + value, 0)} price={product?.itemDetailList[0]?.price as number} />
@@ -48,13 +50,13 @@ const CartHeader = () => {
                                 onClick={handleRedirectCart}
                                 className="bg-blue-600 text-white px-3 py-2 rounded-md"
                             >
-                                See All
+                                {t("See All")}
                             </button>
                         </div>
                     </div>)
                     : (<div className="absolute flex flex-col items-center justify-center w-[415px] h-[350px] right-0 z-1 bg-white p-3 border border-[#ccc] rounded-md shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)] overflow-y-auto">
                         <Coffee size={40} color="blue" className="my-2" />
-                        There are no products in the cart
+                        {t("There are no products in the cart")}
                     </div>)
             )}
         </div>

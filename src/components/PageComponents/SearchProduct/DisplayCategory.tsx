@@ -5,6 +5,7 @@ import { ISearchProduct } from "@/pages/CustomerPage/SearchProduct";
 import { SwiperSlide, Swiper } from "swiper/react";
 import "swiper/css"
 import assets from "@/assets";
+import { useTranslation } from "react-i18next";
 
 interface IListCategory extends BaseResponseApi {
     data: {
@@ -20,6 +21,7 @@ interface IDisplayCategory {
 
 function DisplayCategory(props: IDisplayCategory) {
     const [categorys, setCategorys] = useState<IListCategory>()
+    const { t } = useTranslation();
 
     const getAllCategory = async () => {
         const data = await searchApi?.getCategory()
@@ -46,7 +48,7 @@ function DisplayCategory(props: IDisplayCategory) {
     return (
         <div className="mb-5">
             <div className="mb-2 font-semibold text-start text-lg">
-                Category
+                {t("Category")}
             </div>
             <div className="flex overflow-auto items-center w-full">
                 <Swiper
@@ -98,7 +100,7 @@ function DisplayCategory(props: IDisplayCategory) {
                                 />
                             </div>
                             <p className="my-2 text-center text-sm text-slate-600 line-clamp-1">
-                                All
+                                {t("All")}
                             </p>
                         </div>
                     </SwiperSlide>

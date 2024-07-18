@@ -4,6 +4,7 @@ import { isPhone, messageToast, toastError } from "@/utils/hepler";
 import { Spinner } from "@material-tailwind/react";
 import { AxiosError } from "axios";
 import { ChangeEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 interface IDataUpdateUser {
@@ -24,6 +25,7 @@ function InputInformation() {
         phoneNumber: profileBase?.phoneNumber ? profileBase?.phoneNumber : ""
     })
     const { isLoading, startLoading, stopLoading } = useLoading()
+    const { t } = useTranslation()
 
     const handleUpdateProfile = async () => {
         try {
@@ -53,7 +55,7 @@ function InputInformation() {
         catch (e: unknown) {
             stopLoading()
             if (e instanceof AxiosError && e.response) {
-                toastError(e,"top-right")
+                toastError(e, "top-right")
             }
         }
     }
@@ -70,7 +72,7 @@ function InputInformation() {
                             <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={profileBase?.email} title="Email" type="email" keyData="email" />
                             <InputWrap dataUpdate={dataUpdate} setDataUpdate={setDataUpdate} value={dataUpdate?.birthDate} title="Birthday" type="date" keyData="birthDate" />
                             <div className="col-span-6 sm:col-span-3">
-                                <label className="block text-gray-500 font-medium text-sm leading-none mb-2">Gender</label>
+                                <label className="block text-gray-500 font-medium text-sm leading-none mb-2">{t(`Gender`)}</label>
                                 <div className="relative">
                                     <select value={dataUpdate?.gender}
                                         onChange={(e) => {
@@ -82,8 +84,8 @@ function InputInformation() {
                                             ))
                                         }}
                                         className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12">
-                                        <option value="MALE">Male</option>
-                                        <option value="FEMALE">Female</option>
+                                        <option value="MALE">{t(`Male`)}</option>
+                                        <option value="FEMALE">{t(`Female`)}</option>
                                     </select>
                                 </div>
                             </div>
@@ -92,11 +94,11 @@ function InputInformation() {
                             <button onClick={handleUpdateProfile} type="submit" className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-green-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-green-600 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto">
                                 {isLoading ? (
                                     <p className="flex items-center justify-center">
-                                        <span className="mr-2">Update Profile</span>{" "}
+                                        <span className="mr-2">{t(`Update Profile`)}</span>{" "}
                                         <Spinner className="h-4 w-4" />
                                     </p>
                                 ) : (
-                                    <span>Update Profile</span>
+                                    <span>{t(`Update Profile`)}</span>
                                 )}
                             </button>
                         </div>
@@ -119,6 +121,7 @@ interface IInputWrap {
 }
 
 const InputWrap = (props: IInputWrap) => {
+    const { t } = useTranslation()
 
     const handleInputChange = (
         event: ChangeEvent<HTMLInputElement>,
@@ -135,7 +138,7 @@ const InputWrap = (props: IInputWrap) => {
 
     return (
         <div className="col-span-6 sm:col-span-3">
-            <label className="block text-gray-500 font-medium text-sm leading-none mb-2">{props?.title}</label>
+            <label className="block text-gray-500 font-medium text-sm leading-none mb-2">{t(`${props?.title}`)}</label>
             <div className="relative">
                 <input
                     value={props?.value}

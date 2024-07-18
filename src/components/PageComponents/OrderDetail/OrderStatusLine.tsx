@@ -2,6 +2,7 @@ import { Typography } from "@material-tailwind/react";
 import assets from "@/assets";
 import { OrderStatusData } from "@/pages/CustomerPage/OrderDetail";
 import { ReceiptX, User, X } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 interface IOrderStatusLine {
     activeStep: number,
@@ -10,6 +11,7 @@ interface IOrderStatusLine {
 
 function OrderStatusLine(props: IOrderStatusLine) {
     const { activeStep, statusOrderLine } = props;
+    const { t } = useTranslation()
 
     const renderStatus = (status: string) => {
         switch (status) {
@@ -87,7 +89,7 @@ function OrderStatusLine(props: IOrderStatusLine) {
                                     variant="h6"
                                     className={`text-blue-gray-800`}
                                 >
-                                    {renderStatus(statusOrderLine?.data[statusOrderLine?.data?.length - index - 1]?.orderStatus as string)}
+                                    {t(`${renderStatus(statusOrderLine?.data[statusOrderLine?.data?.length - index - 1]?.orderStatus as string)}`)}
                                 </Typography>
                                 <Typography
                                     placeholder=""

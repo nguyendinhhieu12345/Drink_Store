@@ -7,13 +7,14 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
-import { getOneWeekAgo, getToday } from "@/utils/hepler";
+import { getNextDay, getOneWeekAgo } from "@/utils/hepler";
 import { useEffect, useState } from "react";
 import * as dashboardApi from "@/api/PageApi/userApi"
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { User } from "@/type";
 import { ArrowRight } from "@phosphor-icons/react";
+import { useTranslation } from "react-i18next";
 
 interface IRevenueChart {
     success: boolean,
@@ -33,11 +34,12 @@ const RevenueChart = () => {
         end_date: string;
     }>({
         start_date: getOneWeekAgo(),
-        end_date: getToday(),
+        end_date: getNextDay(),
     })
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
+    const { t } = useTranslation()
 
     const [chartRevenue, setChartRevenue] = useState<IRevenueChart>()
 
@@ -69,7 +71,7 @@ const RevenueChart = () => {
                     </p>
                     <div className="flex items-center justify-center">
                         <p className="font-medium text-base">
-                            Select time
+                            {t("Select time")}
                         </p>
                         <input
                             className="bg-gray-50 w-auto border border-gray-300 text-gray-900 text-sm rounded-lg p-2 ml-2"
@@ -90,6 +92,7 @@ const RevenueChart = () => {
                             className="bg-gray-50 w-auto border border-gray-300 text-gray-900 text-sm rounded-lg p-2"
                             type="date"
                             value={dataGet?.end_date}
+                            min={dataGet.start_date}
                             onChange={(e) => {
                                 setDataGet((prev: {
                                     start_date: string;
@@ -100,7 +103,7 @@ const RevenueChart = () => {
                                 }))
                             }}
                         />
-                        <button onClick={getOverviewRevenue} className="p-2 text-base mx-2 bg-blue-500 text-white rounded-lg">Appy</button>
+                        <button onClick={getOverviewRevenue} className="p-2 text-base mx-2 bg-blue-500 text-white rounded-lg">{t("Apply")}</button>
                     </div>
                 </div>
                 <div className="flex items-center justify-center w-full h-[350px]">

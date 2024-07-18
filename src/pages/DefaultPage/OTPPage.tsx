@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { signup } from "@/features/auth/authSlice";
 import { messageToast, toastError } from "@/utils/hepler";
+import { useTranslation } from "react-i18next";
 
 function OTPPage() {
 
@@ -18,6 +19,7 @@ function OTPPage() {
     const DataSignUp = JSON.parse(localStorage.getItem("user") as string)
     const emailForgetPass = JSON.parse(localStorage.getItem("emailForgetPass") as string)
     const dispatch = useDispatch<AppDispatch>()
+    const { t } = useTranslation()
 
     const handleChange = (
         index: number,
@@ -81,7 +83,7 @@ function OTPPage() {
         }
         catch (e: unknown) {
             if (e instanceof AxiosError && e.response) {
-                toastError(e,"top-right")
+                toastError(e, "top-right")
             }
         }
     };
@@ -115,7 +117,7 @@ function OTPPage() {
             }
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
-                    toastError(e,"top-right")
+                    toastError(e, "top-right")
                 }
             }
         }
@@ -127,8 +129,7 @@ function OTPPage() {
                 <div className="flex flex-col items-center justify-center">
                     <div className="font-semibold text-2xl my-2">Email</div>
                     <div className="mt-2">
-                        Enter the 6-digit OTP code that has been sent from email to complete
-                        your account registration
+                        {t("Enter the 6-digit OTP code that has been sent from email to complete your account registration")}
                     </div>
                 </div>
                 <div className="container mx-auto mt-8 text-center">
@@ -146,14 +147,14 @@ function OTPPage() {
                     ))}
                 </div>
                 <div className="text-center mt-2 text-sm">
-                    Haven't got the confirmation code yet? <button className="font-semibold italic" onClick={handleResendVerifyCode}>{seconds > 0 ? `${seconds}s` : "resend"}</button>
+                    {t("Haven't got the confirmation code yet?")} <button className="font-semibold italic" onClick={handleResendVerifyCode}>{seconds > 0 ? `${seconds}s` : "resend"}</button>
                 </div>
                 <div className="text-center my-3 w-full">
                     <button
                         className="bg-btnActive text-white rounded-lg px-3 py-2 w-[45%]"
                         onClick={handleConfirmOTP}
                     >
-                        Confirm
+                        {t("Confirm")}
                     </button>
                 </div>
             </div>

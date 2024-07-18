@@ -6,6 +6,7 @@ import { AxiosError } from "axios"
 import { toast } from "react-toastify"
 import { IShowAddressResponse } from "@/pages/CustomerPage/UserPage/DefaultAddress"
 import { toastError } from "@/utils/hepler"
+import { useTranslation } from "react-i18next"
 
 
 
@@ -18,6 +19,7 @@ interface IShowAddress {
 }
 
 function ShowAddress(props: IShowAddress) {
+    const { t } = useTranslation()
 
     useEffect(() => {
         props?.getAllAddresUser()
@@ -50,8 +52,8 @@ function ShowAddress(props: IShowAddress) {
                 <table className="w-full whitespace-nowrap">
                     <thead className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 ">
                         <tr className="">
-                            <th scope="col" className="text-left text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">Address</th>
-                            <th scope="col" className="text-right text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">Action</th>
+                            <th scope="col" className="text-left text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">{t("ADDRESS")}</th>
+                            <th scope="col" className="text-right text-xs font-semibold px-6 py-2 text-gray-700 uppercase tracking-wider">{t("ACTION")}</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -68,7 +70,7 @@ function ShowAddress(props: IShowAddress) {
                                             </span>
                                         </p>
                                         <p className="w-[80%] break-all">{add?.detail}</p>
-                                        {add?.default && <p className="text-brown-600 px-2 py-1 border border-brown-300 rounded-2xl">Default</p>}
+                                        {add?.default && <p className="text-brown-600 px-2 py-1 border border-brown-300 rounded-2xl">{t("Default")}</p>}
                                     </div>
                                 </td>
                                 <td className="px-5 py-3 whitespace-nowrap text-right text-sm"><div className="flex justify-end text-right">

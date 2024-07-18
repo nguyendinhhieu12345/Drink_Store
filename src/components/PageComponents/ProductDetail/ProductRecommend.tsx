@@ -9,7 +9,7 @@ import * as homeApi from "@/api/PageApi/homeApi"
 import { configRouter } from "@/configs/router";
 import { formatVND } from "@/utils/hepler";
 import { Eye } from "@phosphor-icons/react";
-import { Rating } from "@material-tailwind/react";
+import { useTranslation } from "react-i18next";
 
 function ProductRecommend() {
     const [products, setProducts] = useState<IProduct[]>()
@@ -18,6 +18,7 @@ function ProductRecommend() {
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
+    const { t } = useTranslation()
 
     useEffect(() => {
         const getProductsRecommend = async () => {
@@ -27,7 +28,7 @@ function ProductRecommend() {
                     setProducts(data?.data)
                 }
             }
-            else{
+            else {
                 const data = await homeApi?.getTopSellingProduct(4)
                 if (data?.success) {
                     setProducts(data?.data)
@@ -43,7 +44,7 @@ function ProductRecommend() {
 
     return (
         <div className="py-8">
-            <p className="font-semibold mb-3 text-md">Recommended products</p>
+            <p className="font-semibold mb-3 text-md">{t("Recommended products")}</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-8">
                 {products?.map((product, index) => (
                     <div key={index} className="bg-white m-2 shadow-base p-3 rounded-lg overflow-hidden" onClick={() => handleRedirectProductDetail(product?.id)}>
@@ -53,7 +54,6 @@ function ProductRecommend() {
                             <div className="flex items-center justify-between">
                                 <div className="flex flex-col">
                                     <span className="text-gray-800 font-bold">{formatVND(product.price)}</span>
-                                    <p className="hidden sm:flex sm:items-center sm:text-base">{product?.ratingSummary?.quantity} reviews| <Rating value={product?.ratingSummary?.star} ratedColor="amber" placeholder="" readonly /></p>
                                 </div>
                                 <button className="focus:outline-none z-10 text-white hover:bg-btnActive hover:text-white bg-btnDisable p-2.5 rounded-lg">
                                     <Eye />

@@ -15,6 +15,9 @@ import succeed_icon from "./images/succeed_icon.svg"
 import app_store from "./images/badge-app-store.webp"
 import google_play from "./images/badge-google-play.webp"
 import download_app from "./images/download_master.webp"
+import qr_app from "./images/shopfee.png"
+import flag_en from "./images/flag_en.png"
+import flag_vietnam from "./images/flag_vietnam.png"
 
 const assets = {
     images: {
@@ -34,7 +37,10 @@ const assets = {
         succeed_icon: succeed_icon,
         app_store: app_store,
         google_play: google_play,
-        download_app: download_app
+        download_app: download_app,
+        qr_app: qr_app,
+        flag_en: flag_en,
+        flag_vietnam: flag_vietnam
     },
     audios: {},
 

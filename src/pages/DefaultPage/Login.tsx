@@ -15,11 +15,13 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { AxiosError } from "axios";
 import { messageToast, toastError } from "@/utils/hepler";
 import * as signupApi from "@/api/authApi/authApi"
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch<AppDispatch>();
+    const { t } = useTranslation()
 
     const handleRedirectForgetPassword = () => {
         navigate(configRouter.forgetPassword);
@@ -100,11 +102,11 @@ const Login = () => {
                 <div className="w-[65%] h-full flex-initial flex flex-col items-center justify-center">
                     <div className="mb-8">
                         <div className="flex items-center justify-center">
-                            <h1 className="text-3xl">Hey, Welcome Back </h1>
+                            <h1 className="text-3xl">{t("Hey, Welcome Back")} </h1>
                             <HandWaving size={32} color="#EFC806" weight="fill" />
                         </div>
                         <p className="text-sm">
-                            Enter your account credentials to view your orders
+                            {t("Enter your account credentials to view your orders")}
                         </p>
                     </div>
 
@@ -127,7 +129,7 @@ const Login = () => {
                                 />
                             </div>
                             <div>
-                                <p className="font-semibold text-base">Password</p>
+                                <p className="font-semibold text-base">{t("Password")}</p>
                                 <InputWrap
                                     type="password"
                                     formField={{ name: "password" }}
@@ -140,7 +142,7 @@ const Login = () => {
                                     className="italic text-blue-500 cursor-pointer text-sm"
                                     onClick={handleRedirectForgetPassword}
                                 >
-                                    Forgot password?
+                                    {t("Forgot password?")}
                                 </p>
                             </div>
                             <div className="flex space-x-5 mt-5">
@@ -167,14 +169,14 @@ const Login = () => {
                                             />
                                         </svg>
                                     )}
-                                    Login
+                                    {t("LOGIN")}
                                 </button>
                             </div>
                         </FromWrap>
 
                         <div className="flex items-center space-x-3 mt-4">
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
-                            <p>OR</p>
+                            <p>{t("OR")}</p>
                             <div className="h-px flex-1 bg-gray-200 dark:bg-navy-500"></div>
                         </div>
                         <div className="flex items-center justify-center space-x-2 mt-3">
@@ -185,12 +187,12 @@ const Login = () => {
                         </div>
                         <div className="flex items-center justify-center mt-4">
                             <p className="text-sm italic">
-                                New User?{" "}
+                                {t("New User?")}{" "}
                                 <span
                                     className="text-blue-500 cursor-pointer"
                                     onClick={handleRedirectSignupPage}
                                 >
-                                    Register
+                                    {t("Register")}
                                 </span>
                             </p>
                         </div>

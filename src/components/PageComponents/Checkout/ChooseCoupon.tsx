@@ -7,6 +7,7 @@ import { Cart } from "@/features/cart/cartSlice";
 import { formatBirthDay, formatVND } from "@/utils/hepler";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { useTranslation } from "react-i18next";
 
 interface Coupon {
     couponId: string;
@@ -41,6 +42,7 @@ function ChooseCoupon(props: IPropsCheckout) {
     const cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
     )
+    const { t } = useTranslation()
 
     const getCouponValid = async () => {
         const productCouponCode = props?.dataCheckout?.productCouponCode;
@@ -219,11 +221,11 @@ function ChooseCoupon(props: IPropsCheckout) {
     return (
         <div className="p-2 border-t max-h-[32rem] overflow-y-auto">
             {(couponValid?.success && couponValid?.data?.productCouponList?.length === 0 && couponValid?.data?.shippingCouponList?.length === 0 && couponValid?.data?.orderCouponList?.length === 0) &&
-                <p>There are no coupons displayed</p>
+                <p>{t("There are no coupons displayed")}</p>
             }
             {(couponValid?.success && couponValid?.data?.productCouponList?.length > 0) &&
                 <div className="w-full flex items-center justify-between px-3">
-                    <h5 className="text-base font-bold uppercase">Product Coupons</h5>
+                    <h5 className="text-base font-bold uppercase">{t("PRODUCT COUPONS")}</h5>
                 </div>
             }
             <div className="flex flex-wrap w-full items-center">
@@ -242,7 +244,7 @@ function ChooseCoupon(props: IPropsCheckout) {
                                     after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                                         <div className="w-full flex flex-col items-start justify-start">
                                             <p className="font-semibold leading-5 text-base break-words">{coupon?.description}</p >
-                                            <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : "Not expired"}</p>
+                                            <p className="text-sm leading-5 text-gray-500 mt-2">{t("Expire")}: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : <>{t("Not expired")}</>}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -250,14 +252,14 @@ function ChooseCoupon(props: IPropsCheckout) {
                             <Checkbox disabled={checkDisableCheckBox(coupon.valid, coupon.code, "product")} defaultChecked={props?.dataCheckout?.productCouponCode === coupon?.code ? true : false} name="product" crossOrigin="true" onChange={(e) => coupon.valid && handleGetCoupon("product", coupon?.code, e)} />
                         </div>
                         <div className="flex flex-col mx-16">
-                            {coupon?.minPurchaseCondition && <p>Min purchase require: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
+                            {coupon?.minPurchaseCondition && <p>{t("Min purchase require")}: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
                             {coupon?.subjectConditionList && <div>
-                                Bonus: {coupon?.subjectConditionList?.map((sub, index) => (
+                                {t("Bonus")}: {coupon?.subjectConditionList?.map((sub, index) => (
                                     <span>{sub?.value} x {sub?.productName} {index + 1 !== coupon?.subjectConditionList?.length && ", "}</span>
                                 ))}
                             </div>}
                             <div>
-                                {(!coupon?.valid && couponValid?.data?.productNoCombineBy?.length > 0) && <p>Coupon not combine with: {couponValid?.data?.productNoCombineBy}</p>}
+                                {(!coupon?.valid && couponValid?.data?.productNoCombineBy?.length > 0) && <p>{t("Coupon not combine with")}: {couponValid?.data?.productNoCombineBy}</p>}
                             </div>
                         </div>
                     </>
@@ -267,7 +269,7 @@ function ChooseCoupon(props: IPropsCheckout) {
                 <>
                     {(couponValid?.success && couponValid?.data?.shippingCouponList?.length > 0) &&
                         <div className="w-full flex items-center justify-between px-3">
-                            <h5 className="text-base font-bold uppercase">Shipping Coupons</h5>
+                            <h5 className="text-base font-bold uppercase">{t("SHIPPING COUPONS")}</h5>
                         </div>
                     }
                     <div className="flex flex-wrap w-full items-center">
@@ -286,7 +288,7 @@ function ChooseCoupon(props: IPropsCheckout) {
                                 after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                                                 <div className="w-full flex flex-col items-start justify-start">
                                                     <p className="font-semibold leading-5 text-base break-words">{coupon?.description}</p >
-                                                    <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : "Not expired"}</p>
+                                                    <p className="text-sm leading-5 text-gray-500 mt-2">{t("Expire")}: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : <>{t("Not expired")}</>}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -295,9 +297,9 @@ function ChooseCoupon(props: IPropsCheckout) {
                                     <Checkbox disabled={checkDisableCheckBox(coupon.valid, coupon.code, "shipping")} name="shipping" defaultChecked={props?.dataCheckout?.shippingCouponCode === coupon?.code ? true : false} crossOrigin="true" onChange={(e) => handleGetCoupon("shipping", coupon?.code, e)} />
                                 </div>
                                 <div className="flex flex-col mx-16">
-                                    {coupon?.minPurchaseCondition && <p>Min purchase require: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
+                                    {coupon?.minPurchaseCondition && <p>{t("Min purchase require")}: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
                                     <div>
-                                        {(!coupon?.valid && couponValid?.data?.shippingNoCombineBy?.length > 0) && <p>Coupon not combine with: {couponValid?.data?.shippingNoCombineBy}</p>}
+                                        {(!coupon?.valid && couponValid?.data?.shippingNoCombineBy?.length > 0) && <p>{t("Coupon not combine with")}: {couponValid?.data?.shippingNoCombineBy}</p>}
                                     </div>
                                 </div>
                             </>
@@ -307,7 +309,7 @@ function ChooseCoupon(props: IPropsCheckout) {
 
             {(couponValid?.success && couponValid?.data?.orderCouponList?.length > 0) &&
                 <div className="w-full flex items-center justify-between px-3">
-                    <h5 className="text-base font-bold uppercase">Order Coupons</h5>
+                    <h5 className="text-base font-bold uppercase">{t("ORDER COUPONS")}</h5>
                 </div>
             }
             <div className="flex flex-wrap w-full items-center">
@@ -326,7 +328,7 @@ function ChooseCoupon(props: IPropsCheckout) {
                                     after:absolute after:p-4 after:rounded-full after:bg-white after:-bottom-4 after:border-t after:border-gray-300 after:-left-4">
                                         <div className="w-full flex flex-col items-start justify-start">
                                             <p className="font-semibold leading-5 text-base break-words">{coupon?.description}</p >
-                                            <p className="text-sm leading-5 text-gray-500 mt-2">Expire: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : "Not expired"}</p>
+                                            <p className="text-sm leading-5 text-gray-500 mt-2">{t("Expire")}: {coupon?.expirationDate ? formatBirthDay(coupon?.expirationDate.toString()) : <>{t("Not expired")}</>}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -334,9 +336,9 @@ function ChooseCoupon(props: IPropsCheckout) {
                             <Checkbox disabled={checkDisableCheckBox(coupon.valid, coupon.code, "order")} name="order" crossOrigin="true" defaultChecked={props?.dataCheckout?.orderCouponCode === coupon?.code ? true : false} onChange={(e) => handleGetCoupon("order", coupon?.code, e)} />
                         </div>
                         <div className="flex flex-col mx-16">
-                            {coupon?.minPurchaseCondition && <p>Min purchase require: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
+                            {coupon?.minPurchaseCondition && <p>{t("Min purchase require")}: {formatVND(coupon?.minPurchaseCondition?.value)}</p>}
                             <div>
-                                {(!coupon?.valid && couponValid?.data?.orderNoCombineBy?.length > 0) && <p>Coupon not combine with: {couponValid?.data?.orderNoCombineBy}</p>}
+                                {(!coupon?.valid && couponValid?.data?.orderNoCombineBy?.length > 0) && <p>{t("Coupon not combine with")}: {couponValid?.data?.orderNoCombineBy}</p>}
                             </div>
                         </div>
                     </>

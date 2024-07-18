@@ -112,6 +112,20 @@ export const getToday = () => {
     return `${year}-${month}-${day}`;
 }
 
+// src/utils/dateUtils.ts
+export const getNextDay = () => {
+    const date = new Date();
+    const nextDay = new Date(date);
+    nextDay.setDate(date.getDate() + 1);
+
+    const year = nextDay.getFullYear();
+    const month = (nextDay.getMonth() + 1).toString().padStart(2, '0');
+    const day = nextDay.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+};
+
+
 export const getOneWeekAgo = () => {
     const now = new Date();
     const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);

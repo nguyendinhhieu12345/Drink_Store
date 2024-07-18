@@ -5,6 +5,7 @@ import { configRouter } from "@/configs/router";
 import { RootState } from "@/redux/store";
 import { User } from "@/type";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,6 +15,7 @@ function DashboardUser() {
     const currentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
+    const { t } = useTranslation()
 
     useEffect(() => {
         if (!currentUser?.success && !currentUser?.data?.userId || !currentUser) {
@@ -25,12 +27,12 @@ function DashboardUser() {
     return (
         <div className="bg-white h-auto w-full mt-5 sm:mt-0 sm:w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <h1 className="mb-4 mt-2 text-lg font-bold text-gray-700 ">
-                Statistics Overview
+                {t("Statistics Overview")}
             </h1>
             <div className="flex">
                 <div className="w-full">
                     <h2 className="my-3 text-base font-semibold text-gray-700 ">
-                        Tracking amount paid
+                        {t("Tracking amount paid")}
                     </h2>
                     <RevenueChart />
                 </div>
@@ -39,7 +41,7 @@ function DashboardUser() {
             <div className="flex">
                 <div className="w-full">
                     <h2 className="my-3 text-base font-semibold text-gray-700 ">
-                        Tracking amount order
+                        {t("Tracking amount order")}
                     </h2>
                     <OrderChart />
                 </div>

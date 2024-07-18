@@ -22,6 +22,7 @@ import useLoading from "@/hooks/useLoading"
 import { toast } from "react-toastify"
 import { getCurrentDateTime, messageToast, toastError } from "@/utils/hepler"
 import { Cart, removeToCart } from "@/features/cart/cartSlice"
+import { useTranslation } from "react-i18next"
 
 interface IBranchNearest extends BaseResponseApi {
     data: {
@@ -82,6 +83,7 @@ function AddAddress(props: IPropsCheckout) {
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
+    const { t } = useTranslation()
 
     let cartCurrent = useSelector<RootState, Cart[]>(
         (state) => state?.cartSlice?.cartCurrent as Cart[]
@@ -294,7 +296,7 @@ function AddAddress(props: IPropsCheckout) {
             catch (e: unknown) {
                 if (e instanceof AxiosError && e.response) {
                     stopLoading()
-                    toastError(e,"top-right")
+                    toastError(e, "top-right")
                 }
             }
         }
@@ -551,10 +553,10 @@ function AddAddress(props: IPropsCheckout) {
     return (
         <div className="border shadow-base rounded-md p-3">
             <div className="flex items-center justify-between">
-                <p className="font-semibold text-lg mb-2">Add Address</p>
+                <p className="font-semibold text-lg mb-2">{t("Add Address")}</p>
                 <Menu>
                     <MenuHandler>
-                        <button className="px-3 py-1.5 hover:bg-gray-50 border rounded-xl">{props?.dataCheckout?.type}</button>
+                        <button className="px-3 py-1.5 hover:bg-gray-50 border rounded-xl">{t(`${props?.dataCheckout?.type}`)}</button>
                     </MenuHandler>
                     <MenuList placeholder="">
                         <MenuItem placeholder="" onClick={() => {
@@ -566,8 +568,8 @@ function AddAddress(props: IPropsCheckout) {
                             ))
                             props?.setIsDisable && props?.setIsDisable(false)
                             getAllAddresUser()
-                        }}>Home Delivery</MenuItem>
-                        <MenuItem placeholder="" onClick={() => handleAddTakeAway()}>Take Away</MenuItem>
+                        }}>{t("Home Delivery")}</MenuItem>
+                        <MenuItem placeholder="" onClick={() => handleAddTakeAway()}>{t("Take Away")}</MenuItem>
                     </MenuList>
                 </Menu>
             </div>
@@ -581,12 +583,12 @@ function AddAddress(props: IPropsCheckout) {
                                 <p>{addresss?.data?.filter((add) => add.id == props?.dataCheckout?.addressId)[0]?.detail}</p>
                             </div>
                         </div>
-                        <button onClick={() => setOpen(prev => !prev)} className="px-4 py-2 bg-btnActive text-white rounded-lg">Change</button>
+                        <button onClick={() => setOpen(prev => !prev)} className="px-4 py-2 bg-btnActive text-white rounded-lg">{t("Change")}</button>
                     </div>
                     :
                     <div>
                         <div className="flex items-center my-5">
-                            <p>Branch Receive: </p>
+                            <p>{t("Branch Receive")}: </p>
                             <select
                                 className="min-w-44 ml-3 rounded-lg"
                                 value={props?.dataCheckout?.branchId}
@@ -608,11 +610,11 @@ function AddAddress(props: IPropsCheckout) {
                             </select>
                         </div>
                         <div className="flex items-center my-5">
-                            <p>Recipient Name: </p>
+                            <p>{t("Recipient Name")}: </p>
                             <input
                                 className="ml-5 block h-10 border px-3 py-1 text-sm rounded-md  focus:bg-white border-gray-600"
                                 type="text"
-                                placeholder="Recipient Name"
+                                placeholder={t("Recipient Name")}
                                 value={props?.dataCheckout?.recipientName}
                                 onChange={e => props?.setDataCheckout((prev: ICheckout | undefined) => (
                                     {
@@ -623,11 +625,11 @@ function AddAddress(props: IPropsCheckout) {
                             />
                         </div>
                         <div className="flex items-center">
-                            <p>Phone Number: </p>
+                            <p>{t("Phone Number")}: </p>
                             <input
                                 className="ml-5 block h-10 border px-3 py-1 text-sm rounded-md  focus:bg-white border-gray-600"
                                 type="text"
-                                placeholder="Phone Number"
+                                placeholder={t("Phone Number")}
                                 value={props?.dataCheckout?.phoneNumber}
                                 onChange={e => props?.setDataCheckout((prev: ICheckout | undefined) => (
                                     {
@@ -638,11 +640,11 @@ function AddAddress(props: IPropsCheckout) {
                             />
                         </div>
                         <div className="flex items-center mt-4">
-                            <p>Time Receive: </p>
+                            <p>{t("Time Receive")}: </p>
                             <input
                                 className="ml-5 block h-10 border px-3 py-1 text-sm rounded-md  focus:bg-white border-gray-600"
                                 type="time"
-                                placeholder="Time start"
+                                placeholder={t("Time Receive")}
                                 value={extractTimeFromIsoString(props?.dataCheckout?.receiveTime as string)}
                                 onChange={(e) => {
                                     const branchSelect = allBranch?.data?.branchList?.filter(item => item?.id === props?.dataCheckout?.branchId)
@@ -674,7 +676,7 @@ function AddAddress(props: IPropsCheckout) {
 
             {/* dialog change address */}
             <Dialog size="md" placeholder="" open={open} handler={handleOpen}>
-                <DialogHeader placeholder="">{isAddAddress ? "Add Address" : "Add Coupon"}</DialogHeader>
+                <DialogHeader placeholder="">{!isAddAddress ? <>{t("Add Address")}</> : <>{t("Add Coupon")}</>}</DialogHeader>
                 <DialogBody className="p-0" placeholder="">
                     {!isAddAddress ?
                         <div>
@@ -691,7 +693,7 @@ function AddAddress(props: IPropsCheckout) {
                                 {addresss?.data?.length === 0 && <p>No address display</p>}
                             </div>
                             <div className="px-2 mt-4">
-                                <button onClick={() => setIsAddAddress(prev => !prev)} className="flex items-center px-3 py-2 bg-btnActive text-white rounded-lg">+ Add Address</button>
+                                <button onClick={() => setIsAddAddress(prev => !prev)} className="flex items-center px-3 py-2 bg-btnActive text-white rounded-lg">+ {t("Add Address")}</button>
                             </div>
                         </div>
                         :
@@ -706,7 +708,7 @@ function AddAddress(props: IPropsCheckout) {
                         onClick={handleOpen}
                         className="mr-1"
                     >
-                        <span>Cancel</span>
+                        <span>{t("Cancel")}</span>
                     </Button>
                     <Button placeholder="" variant="gradient" color="green"
                         onClick={handleConfirm}
@@ -714,12 +716,12 @@ function AddAddress(props: IPropsCheckout) {
                         {isLoading ? (
                             <p className="flex items-center justify-center">
                                 <span className="mr-2">
-                                    Confirm
+                                    {t("Confirm")}
                                 </span>{" "}
                                 <Spinner className="h-4 w-4" />
                             </p>
                         ) : (
-                            <span>Confirm</span>
+                            <span>{t("Confirm")}</span>
                         )}
                     </Button>
                 </DialogFooter>

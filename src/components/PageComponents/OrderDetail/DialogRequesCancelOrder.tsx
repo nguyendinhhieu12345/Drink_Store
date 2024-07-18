@@ -13,6 +13,7 @@ import {
 import { Radio, Typography } from "@material-tailwind/react";
 import { AxiosError } from "axios";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface IDialogRequestCancelOrder {
     orderId: string,
@@ -30,6 +31,7 @@ function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
     const { type, orderId, branchId, open, handleOpen, setOpen, getOrderDetails, getOrderStatusLine, getOrderItemReview } = props;
     const [reason, setReason] = useState<string>("I want to update address")
     const { isLoading, startLoading, stopLoading } = useLoading()
+    const { t } = useTranslation()
 
     const renderReason = () => {
         return (
@@ -150,7 +152,7 @@ function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
         catch (e: unknown) {
             stopLoading()
             if (e instanceof AxiosError && e.response) {
-                toastError(e,"top-right")
+                toastError(e, "top-right")
             }
         }
     }
@@ -166,7 +168,7 @@ function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
             <Card placeholder="" className="mx-auto w-full">
                 <CardBody placeholder="" className="flex flex-col gap-4">
                     <div className="flex flex-col items-center justify-center font-bold text-lg">
-                        Reason Cancel Order
+                        {t("Reason Cancel Order")}
                     </div>
                     {renderReason()}
                 </CardBody>
@@ -174,11 +176,11 @@ function DialogRequestCancelOrder(props: IDialogRequestCancelOrder) {
                     <Button onClick={() => handleConfirmRequestOrder(type)} placeholder="" variant="gradient" fullWidth>
                         {isLoading ? (
                             <p className="flex items-center justify-center">
-                                <span className="mr-2">Confirm</span>{" "}
+                                <span className="mr-2">{t("Confirm")}</span>{" "}
                                 <Spinner className="h-4 w-4" />
                             </p>
                         ) : (
-                            <span>Confirm</span>
+                            <span>{t("Confirm")}</span>
                         )}
                     </Button>
                 </CardFooter>

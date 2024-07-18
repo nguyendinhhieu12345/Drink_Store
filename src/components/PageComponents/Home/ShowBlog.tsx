@@ -4,6 +4,7 @@ import { BaseResponseApi } from "@/type"
 import { useEffect, useState } from "react"
 import * as homeApi from "@/api/PageApi/homeApi"
 import { formatTimeStamp } from "@/utils/hepler"
+import { useTranslation } from "react-i18next"
 
 interface IShowBlog {
     title: string,
@@ -25,6 +26,7 @@ interface IListBlog extends BaseResponseApi {
 
 function ShowBlog(props: IShowBlog) {
     const [blogs, setBlogs] = useState<IListBlog>()
+    const { t } = useTranslation()
 
     useEffect(() => {
         const getAllBlog = async () => {
@@ -40,7 +42,7 @@ function ShowBlog(props: IShowBlog) {
         <div className="w-full">
             <div className="flex items-center justify-center my-5">
                 <div className="mr-2 p-1 text-center rounded-full bg-yellow-300 text-white"><Cup className="w-5 h-5" /></div>
-                <h1 className="font-medium text-2xl">{props?.title}</h1>
+                <h1 className="font-medium text-2xl">{t(`${props?.title}`)}</h1>
             </div>
             <div className="w-full flex items-center flex-wrap">
                 {

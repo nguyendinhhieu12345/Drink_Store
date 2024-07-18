@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { useLocation } from "react-router-dom"
 import * as searchApi from "@/api/PageApi/searchApi"
 import TablePaging from "@/components/PageComponents/SearchProduct/Paging"
+import { useTranslation } from "react-i18next"
 
 export interface ISearchProduct extends BaseResponseApi {
     data: {
@@ -32,6 +33,7 @@ function SearchProduct() {
     const [activeDisplay, setActiveDisplay] = useState<boolean>(true)
     const [pageActive, setPageActive] = useState<number>(1);
     const location = useLocation()
+    const { t } = useTranslation();
 
     const handleGetProduct = async (categoryId: string, keySearch: string) => {
         if (categoryId === "") {
@@ -69,9 +71,9 @@ function SearchProduct() {
             <div className="py-5 text-md">
                 <Breadcrumbs placeholder="" className="bg-white p-0 m-0">
                     <a href="/" className="font-semibold">
-                        Home
+                        {t(`Home`)}
                     </a>
-                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">Search {location.search.split("?key=")[1] && `"${location.search.split("?key=")[1].replace(/%20/g, " ")}"`}</p>
+                    <p className="opacity-65 select-none cursor-text hover:text-black focus:text-black visited:text-black">{t(`Search`)} {location.search.split("?key=")[1] && `"${location.search.split("?key=")[1].replace(/%20/g, " ")}"`}</p>
                 </Breadcrumbs>
             </div >
             {!location.search.split("?key=")[1] && <DisplayCategory setProducts={setProducts} />}

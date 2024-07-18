@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { User } from "@/type";
 import { formatVND } from '@/utils/hepler';
+import { useTranslation } from 'react-i18next';
 
 interface IOrderChart {
     success: boolean,
@@ -23,6 +24,7 @@ const OrderChart = () => {
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
     );
+    const { t } = useTranslation()
 
     const [chartRevenue, setChartRevenue] = useState<IOrderChart>()
 
@@ -45,14 +47,14 @@ const OrderChart = () => {
                     </p>
                     <div className="flex items-center justify-center">
                         <p className="font-medium text-base mr-2">
-                            Select type:
+                            {t("Select type")}:
                         </p>
                         <select className="bg-gray-50 w-auto border border-gray-300 text-gray-900 text-sm rounded-lg p-2"
                             onChange={(e) => {
                                 setDataGet(e.target.value)
                             }}>
-                            <option value="PAYMENT_TYPE">PAYMENT_TYPE</option>
-                            <option value="ORDER_STATUS">ORDER_STATUS</option>
+                            <option value="PAYMENT_TYPE">{t("PAYMENT TYPE")}</option>
+                            <option value="ORDER_STATUS">{t("ORDER STATUS")}</option>
                         </select>
                     </div>
                 </div>

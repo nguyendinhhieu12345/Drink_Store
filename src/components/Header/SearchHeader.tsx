@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import SearchHeaderResult from "./SearchHeaderResult";
 import { BaseResponseApi } from "@/type";
+import { useTranslation } from "react-i18next";
 
 interface Inputs {
     dataInput: string;
@@ -29,6 +30,7 @@ const SearchHeader = (): React.ReactElement => {
         watch,
     } = useForm<Inputs>();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const debouncedValue = useDebounce<string>(watch("dataInput"), 500);
 
@@ -88,7 +90,7 @@ const SearchHeader = (): React.ReactElement => {
                         onFocus={() => setIsFocus(true)}
                         type="text"
                         className="block w-full  pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Enter a search keyword"
+                        placeholder={t("Enter a search keyword")}
                     />
                 </div>
             </form>

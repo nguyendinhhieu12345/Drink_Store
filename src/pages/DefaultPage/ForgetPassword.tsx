@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { Button, Spinner, Typography } from "@material-tailwind/react";
 import { AxiosError } from "axios";
 import { isEmail, toastError } from "@/utils/hepler";
+import { useTranslation } from "react-i18next";
 
 function ForgetPassword() {
     const [email, setEmail] = useState<string>("");
@@ -13,6 +14,7 @@ function ForgetPassword() {
     const [error, setError] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const nav = useNavigate();
+    const { t } = useTranslation()
 
     useEffect(() => {
         setError("");
@@ -35,7 +37,7 @@ function ForgetPassword() {
             catch (e: unknown) {
                 setLoading(false);
                 if (e instanceof AxiosError && e.response) {
-                    toastError(e,"top-right")
+                    toastError(e, "top-right")
                     if (inputRef.current) inputRef.current.focus();
                 }
             }
@@ -51,12 +53,12 @@ function ForgetPassword() {
             <div className="w-1/2 h-[300px] flex flex-col justify-center text-black absolute top-1/4 left-1/4 shadow-md bg-white rounded-lg p-3">
                 <div className="m-[10px_15px]">
                     <Typography placeholder="" className="font-semibold text-[25px]">
-                        You forgot password?
+                        {t("You forgot password?")}
                     </Typography>
                 </div>
                 <div className="m-[10px_12px]">
                     <Typography placeholder="" className="text-[15px]">
-                        Please enter your email to search your account.
+                        {t("Please enter your email to search your account.")}
                     </Typography>
                 </div>
                 <div className="m-[10px_12px]">
@@ -66,7 +68,7 @@ function ForgetPassword() {
                         onChange={(e) => {
                             setEmail(e.target.value);
                         }}
-                        placeholder="Enter email..."
+                        placeholder="Email..."
                         style={{
                             width: "100%",
                             margin: "5px 0",
@@ -81,7 +83,7 @@ function ForgetPassword() {
                 </div>
                 <div className="m-[10px_15px] flex flex-row justify-end">
                     <Button placeholder="" onClick={handleForgetPass}>
-                        {loading ? <Spinner /> : "Continue"}
+                        {loading ? <Spinner /> : <>{t("CONTINUE")}</>}
                     </Button>
                 </div>
             </div>

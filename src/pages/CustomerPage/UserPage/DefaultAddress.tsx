@@ -19,6 +19,7 @@ import { BaseResponseApi, User } from "@/type";
 import { messageToast, toastError } from "@/utils/hepler";
 import { configRouter } from "@/configs/router";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export interface IShowAddressResponse extends BaseResponseApi {
     data: {
@@ -61,6 +62,7 @@ function DefaultAddress() {
     })
     const [addressEdit, setAddressEdit] = useState<string>("")
     const [addresss, setAddresss] = useState<IShowAddressResponse>()
+    const { t } = useTranslation()
 
     const useCurrentUser = useSelector<RootState, User>(
         (state) => state.authSlice.currentUser as User
@@ -244,7 +246,7 @@ function DefaultAddress() {
         catch (e: unknown) {
             if (e instanceof AxiosError && e.response) {
                 stopLoading()
-                toastError(e,"top-right")
+                toastError(e, "top-right")
             }
         }
     }
@@ -259,12 +261,12 @@ function DefaultAddress() {
     return (
         <div className="bg-white h-auto w-full mt-5 sm:mt-0 sm:w-3/4 border border-gray-50 shadow-base rounded-md p-3">
             <div className="flex items-center justify-between py-1 border-b">
-                <h2 className="text-xl font-semibold mb-5">My Address</h2>
-                <button onClick={handleOpen} className="flex items-center px-3 py-2 bg-btnActive text-white rounded-lg">+ Add Address</button>
+                <h2 className="text-xl font-semibold mb-5">{t("My Address")}</h2>
+                <button onClick={handleOpen} className="flex items-center px-3 py-2 bg-btnActive text-white rounded-lg">+ {t("Add Address")}</button>
             </div>
             <ShowAddress setAddressEdit={setAddressEdit} setOpen={setOpen} addresss={addresss} setAddresss={setAddresss} getAllAddresUser={getAllAddresUser} />
             <Dialog size="md" placeholder="" open={open} handler={handleOpen}>
-                <DialogHeader placeholder="">{addressEdit ? "Edit" : "Add"} Address</DialogHeader>
+                <DialogHeader placeholder="">{addressEdit ? <>{t("Edit Address")}</> : <>{t("Add Address")}</>}</DialogHeader>
                 <DialogBody className="p-0" placeholder="">
                     <AddNewAddress newAddress={newAddress} setNewAddress={setNewAddress} />
                 </DialogBody>
@@ -276,7 +278,7 @@ function DefaultAddress() {
                         onClick={handleOpen}
                         className="mr-1"
                     >
-                        <span>Cancel</span>
+                        <span>{t("Cancel")}</span>
                     </Button>
                     <Button placeholder="" variant="gradient" color="green"
                         onClick={handleAddNewAddress}
@@ -284,12 +286,12 @@ function DefaultAddress() {
                         {isLoading ? (
                             <p className="flex items-center justify-center">
                                 <span className="mr-2">
-                                    Confirm
+                                    {t("Confirm")}
                                 </span>{" "}
                                 <Spinner className="h-4 w-4" />
                             </p>
                         ) : (
-                            <span>Confirm</span>
+                            <span>{t("Confirm")}</span>
                         )}
                     </Button>
                 </DialogFooter>

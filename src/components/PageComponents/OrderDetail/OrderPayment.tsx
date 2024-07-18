@@ -1,6 +1,7 @@
 import { Edit } from "@/components/SVG/Edit.svg"
 import { IOrderDetail } from "@/pages/CustomerPage/OrderDetail"
 import { formatVND } from "@/utils/hepler"
+import { useTranslation } from "react-i18next"
 
 interface IOrderPayment {
     orderDetail: IOrderDetail | undefined
@@ -8,17 +9,18 @@ interface IOrderPayment {
 
 function OrderPayment(props: IOrderPayment) {
     const orderDetail = props.orderDetail
+    const { t } = useTranslation()
 
     return (
         <div className="border rounded-xl border-gray-100 p-8 py-6 bg-gray-50 ">
             <div className="flex lg:flex-row md:flex-row flex-col justify-between">
                 <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
                     <span className="mb-1 font-bold font-serif text-sm uppercase text-gray-600  block">
-                        PAYMENT METHOD
+                        {t("PAYMENT METHOD")}
                     </span>
                     <span className="text-sm text-gray-500  font-semibold font-serif block">
-                        {orderDetail?.data?.transaction?.paymentType}
-                        <span className="text-yellow-300 px-2.5 py-1 border border-yellow-300 rounded-xl">{orderDetail?.data?.transaction?.status}</span>
+                        {t(`${orderDetail?.data?.transaction?.paymentType}`)}
+                        <span className="text-yellow-300 px-2.5 py-1 border border-yellow-300 rounded-xl">{t(`${orderDetail?.data?.transaction?.status}`)}</span>
                         {(orderDetail?.data?.transaction?.status === "UNPAID" && orderDetail?.data?.transaction?.paymentUrl) &&
                             <button className="ml-2" onClick={() => {
                                 localStorage.setItem("orderId", orderDetail?.data?.id)
@@ -29,7 +31,7 @@ function OrderPayment(props: IOrderPayment) {
                 </div>
                 <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
                     <span className="mb-1 font-bold font-serif text-sm uppercase text-gray-600  block">
-                        SHIPPING COST
+                        {t("SHIPPING COST")}
                     </span>
                     <span className="text-sm text-gray-500  font-semibold font-serif block">
                         {formatVND(
@@ -39,7 +41,7 @@ function OrderPayment(props: IOrderPayment) {
                 </div>
                 <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
                     <span className="mb-1 font-bold font-serif text-sm uppercase text-gray-600  block">
-                        TOAL ITEM PRICE
+                        {t("TOTAL ITEM PRICE")}
                     </span>
                     <span className="text-sm text-gray-500  font-semibold font-serif block">
                         {formatVND(
@@ -49,7 +51,7 @@ function OrderPayment(props: IOrderPayment) {
                 </div>
                 <div className="flex flex-col sm:flex-wrap">
                     <span className="mb-1 font-bold font-serif text-sm uppercase text-gray-600  block">
-                        TOTAL AMOUNT
+                        {t("TOTAL AMOUNT")}
                     </span>
                     <span className="text-xl font-serif font-bold text-red-500  block">
                         {formatVND(
